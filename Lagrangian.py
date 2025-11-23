@@ -1,5 +1,7 @@
 from pyomo.environ import ConcreteModel, Set, Param, Var, Objective, Constraint, Binary, minimize, SolverFactory
 import constraints as c
+import load_location as ll
+import load_scenario as ls
 
 def objective_lagrangian(m):
   MILP_objective = sum(m.x[a, (i, j), t] for a in m.agents for t in m.time_window
@@ -27,6 +29,11 @@ edges = [(1, 3), (3, 1), (2, 3), (3, 2), (3, 4), (4, 3), (3, 5), (5, 3),
          (1, 1), (2, 2), (3, 3), (4, 4), (5, 5)]
 start_nodes = {1:1,2:2}
 destination_nodes = {1:5,2:4}
+data = ll.load_json('../robust-rail-generator/data/locations/simple_service_location_solver.json')
+nodes, edges, facilities = ll.load_location(data)
+data = ll.load_json('../scenario-planning-inputs/Scenario_settings/SimpleService/scenario_no-service_solver.json')
+agents, start_nodes, destination_nodes, start_time, end_time = ls.load_scenario(data)
+time_window = range(int(start_time), int(int(end_time)/8000) + 1)
 
 model = ConcreteModel()
 
