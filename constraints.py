@@ -4,13 +4,13 @@ def inital_position_constraint(m, a):
   return m.p[a,m.start_nodes[a],0] == 1
 
 def location_constraint(m, a, t):
-  return sum(m.p[a,l,t] for l in m.nodes) == 1
+  return sum(m.p[a,i,t] for i in m.nodes) == 1
 
-def node_capacity_constraint(m, l, t):
-  return sum(m.p[a,l,t] for a in m.agents) <= 1
+def node_capacity_constraint(m, i, t):
+  return sum(m.p[a,i,t] for a in m.agents) <= 1
 
 def edge_capacity_constraint(m, i, j, t):
-  if i == j or j < i:
+  if j <= i:
     return Constraint.Skip
   return sum(m.x[a, (i,j), t] + m.x[a, (j,i), t] for a in m.agents) <= 1
 

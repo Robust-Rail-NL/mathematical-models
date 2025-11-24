@@ -20,6 +20,7 @@ nodes, edges, facilities = ll.load_location(data)
 data = ll.load_json('../scenario-planning-inputs/Scenario_settings/SimpleService/scenario_no-service_solver.json')
 agents, start_nodes, destination_nodes, start_time, end_time = ls.load_scenario(data)
 time_window = range(int(start_time), int(int(end_time)/8000) + 1)
+
 model = ConcreteModel()
 
 # Sets
