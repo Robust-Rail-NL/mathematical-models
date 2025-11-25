@@ -14,12 +14,21 @@ nodes = [1, 2, 3, 4, 5]
 edges = [(1, 3), (3, 1), (2, 3), (3, 2), (3, 4), (4, 3), (3, 5), (5, 3),
          (1, 1), (2, 2), (3, 3), (4, 4), (5, 5)]
 start_nodes = {1:1,2:2}
+arrival_time = {1:0, 2:0}
 destination_nodes = {1:5,2:4}
+departure_time = {1:3, 2:2}
+print("agents:", agents)
+print("start_nodes:", start_nodes)
+print("destination_nodes:", destination_nodes)
+print("start_time:", 0)
+print("end_time:", t_max)
+print("arrival_time:", arrival_time)
+print("departure_time:", departure_time)
 data = ll.load_json('../robust-rail-generator/data/locations/simple_service_location_solver.json')
 nodes, edges, facilities = ll.load_location(data)
 data = ll.load_json('../scenario-planning-inputs/Scenario_settings/SimpleService/scenario_no-service_solver.json')
-agents, start_nodes, destination_nodes, start_time, end_time = ls.load_scenario(data)
-time_window = range(int(start_time), int(int(end_time)/8000) + 1)
+agents, start_nodes, destination_nodes, start_time, end_time, arrival_time, departure_time = ls.load_scenario(data)
+time_window = range(int(start_time), int(int(end_time)) + 1)
 
 model = ConcreteModel()
 
@@ -29,7 +38,9 @@ model.time_window = Set(initialize=time_window)
 model.nodes = Set(initialize=nodes)
 model.edges = Set(initialize=edges, dimen=2)
 model.start_nodes = Param(model.agents, initialize=start_nodes)
+model.arrival_time = Param(model.agents, initialize=arrival_time)
 model.destination_nodes = Param(model.agents, initialize=destination_nodes)
+model.departure_time = Param(model.agents, initialize=departure_time)
 
 model.x = Var(model.agents, model.edges, model.time_window, domain=Binary)
 model.p = Var(model.agents, model.nodes, model.time_window, domain=Binary)
