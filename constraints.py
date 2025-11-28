@@ -30,12 +30,16 @@ def movement_constraint_arrival(m, a, i, t):
 #   return m.p[a,m.destination_nodes[a],m.departure_time[a]] == 1
 
 def match_agent_destination(m,a):
-  return sum(m.p[a,l,t] for l,t in m.departures) == 1
+  total = 0
+  for l,ty,t in m.departures:
+    if ty == m.train_types[a]:
+      total += m.p[a,l,t]
+  return total == 1
 
-def train_presence_constraint(m,a,l,t):
+def train_presence_constraint(m,a,l,ty,t):
   return m.p[a,l,t] <= m.y[a,t]
 
-def train_not_present_constraint(m,a,l,t):
+def train_not_present_constraint(m,a,l,ty,t):
   if t >= max(m.time_window):
     return Constraint.Skip
   return m.y[a,t+1] <= 1 - m.p[a,l,t]

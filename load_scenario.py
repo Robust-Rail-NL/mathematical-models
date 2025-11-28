@@ -102,28 +102,23 @@ def loadOutTrains(data):
   return out_trains
 
 def convert_to_input(scenario):
-  start_time = scenario.startTime
-  end_time = scenario.endTime
+  start_time = int(int(scenario.startTime)/60)
+  end_time = int(int(scenario.endTime)/60)
   agents = []
   start_nodes = {}
   arrival_time = {}
-  destination_nodes = {}
-  departure_time = {}
+  departures = []
+  train_types = {}
   for train in scenario.inTrains:
     agents.append(train.id)
     start_nodes[train.id] = train.firstParkingTrackPart
-    arrival_time[train.id] = int(int(train.arrival))
-    destination_nodes[train.id] = None
+    arrival_time[train.id] = int(int(train.arrival)/60)
+    train_types[train.id] = train.members[0].type.displayName
 
   for out_train in scenario.outTrains:
-    for in_train in scenario.inTrains:
-      if destination_nodes[in_train.id] is None:
-        in_type = in_train.members[0].type.displayName
-        out_type = out_train.trainUnits[0].type.displayName
-        if in_type == out_type:
-          destination_nodes[in_train.id] = out_train.lastParkingTrackPart
-          departure_time[in_train.id] = int(int(out_train.departure))
-  return agents, start_nodes, destination_nodes, start_time, end_time, arrival_time, departure_time
+    departures.append((out_train.lastParkingTrackPart, out_train.trainUnits[0].type.displayName, int(int(out_train.departure)/60)))
+     
+  return agents, start_nodes, arrival_time, departures, start_time, end_time, arrival_time, train_types
 
 def load_scenario(data):
     in_trains = loadInTrains(data)
@@ -135,8 +130,8 @@ def load_scenario(data):
         endTime=data["endTime"],
         inStanding=data.get("inStanding", {}),
         outStanding=data.get("outStanding", {}))
-    agents, start_nodes, destination_nodes, start_time, end_time, arrival_time, departure_time = convert_to_input(scenario)
-    return agents, start_nodes, destination_nodes, start_time, end_time, arrival_time, departure_time
+    agents, start_nodes, arrival_time, departures, start_time, end_time, arrival_time, train_types = convert_to_input(scenario)
+    return agents, start_nodes, arrival_time, departures, start_time, end_time, arrival_time, train_types
 
 
 

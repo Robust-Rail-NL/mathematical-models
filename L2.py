@@ -3,6 +3,7 @@ import constraints as c
 import load_location as ll
 import load_scenario as ls
 import random
+import time as time
 
 def objective_lagrangian(m):
   MILP_objective = sum(m.x[a, (i, j), t] for a in m.agents for t in m.time_window
@@ -22,18 +23,21 @@ def objective_lagrangian(m):
       edge_capacity_penalty += mu_value * m.edge_violation[i,j,t]
   return MILP_objective + node_capacity_penalty + edge_capacity_penalty
 
-data = ll.load_json('locations/five_tracks_location.json')
+data = ll.load_json('locations/six_tracks_location.json')
 nodes, edges, facilities = ll.load_location(data)
-data = ll.load_json('scenarios/five_tracks/three_trains.json')
-agents, start_nodes, destination_nodes, start_time, end_time = ls.load_scenario(data)
-time_window = range(int(start_time), int(int(end_time)/8000) + 1)
-#region
-# print("nodes", nodes)
-# print("edges", edges)
-# print("agents", agents)
-# print("start_nodes", start_nodes)
-# print("destination_nodes", destination_nodes)
-# print("time_window", time_window)
+data = ll.load_json('scenarios/six_tracks/four_trains_difficult.json')
+agents, start_nodes, arrival_time, departures, start_time, end_time, arrival_time, train_types = ls.load_scenario(data)
+time_window = range(start_time, end_time+1)
+
+#region print
+print("nodes:", nodes)
+print("edges:", edges)
+print("agents:", agents)
+print("start_nodes:", start_nodes)
+print("arrival_time:", arrival_time)
+print("departures:", departures)
+print("time_window:", time_window)
+print("train_types:", train_types)
 # agents = [1,2,3,4,5]
 # t_max = 7
 # time_window = range(0, t_max)
@@ -52,15 +56,15 @@ model.time_window = Set(initialize=time_window)
 model.nodes = Set(initialize=nodes)
 model.edges = Set(initialize=edges, dimen=2)
 model.start_nodes = Param(model.agents, initialize=start_nodes)
-model.destination_nodes = Param(model.agents, initialize=destination_nodes)
+model.arrival_time = Param(model.agents, initialize=arrival_time)
+model.departures = Set(initialize=departures, dimen=3)
+model.train_types = Param(model.agents, initialize=train_types)
 
 model.x = Var(model.agents, model.edges, model.time_window, domain=Binary)
 model.p = Var(model.agents, model.nodes, model.time_window, domain=Binary)
+model.y = Var(model.agents, model.time_window, domain=Binary)
 
-# model.lambda_values = Param(model.agents, model.nodes, model.time_window, initialize=0.01, mutable=True)
-# model.mu_values = Param(model.agents, model.edges, model.time_window, initialize=0.01, mutable=True)
 lambda_values = {(i, t): 0.0 for i in model.nodes for t in model.time_window}
-
 mu_values = {(i, j, t): 0.0 for (i, j) in model.edges for t in model.time_window}
 
 model.node_violation = Var(model.nodes, model.time_window, domain=NonNegativeReals)
@@ -84,7 +88,11 @@ model.initial = Constraint(model.agents, rule=c.inital_position_constraint)
 model.location = Constraint(model.agents, model.time_window, rule=c.location_constraint)
 model.movement_departure = Constraint(model.agents, model.nodes, model.time_window, rule=c.movement_constraint_departure)
 model.movement_arrival = Constraint(model.agents, model.nodes, model.time_window, rule=c.movement_constraint_arrival)
-model.destination_reached = Constraint(model.agents, rule=c.destination_reached_constraint)
+model.match_agent_destination = Constraint(model.agents, rule=c.match_agent_destination)
+model.train_presence = Constraint(model.agents, model.departures, rule=c.train_presence_constraint)
+model.train_not_present = Constraint(model.agents, model.departures, rule=c.train_not_present_constraint)
+model.train_presence_continuity = Constraint(model.agents, model.time_window, rule=c.train_presence_continuity_constraint)
+
 
 # # Solve using Gurobi
 solver = SolverFactory('gurobi')
@@ -93,9 +101,10 @@ penalty_multiplier_lambda = {(l,t): 0.5 for l in model.nodes for t in model.time
 penalty_multiplier_mu = {(i,j,t): 0.4 for (i,j) in model.edges for t in model.time_window}
 #
 n_iter = 1000
+start = time.time()
 for k in range(n_iter):
   result = solver.solve(model, tee=True, keepfiles=True)
-  #region
+  #region print
   # print(k)
   # print("x[a,(i,j),t] values:")
   # for a in model.agents:
@@ -169,7 +178,8 @@ for k in range(n_iter):
   if conflicts < 1:
     print("NO MORE CONFLICT")
     break
-
+end_time = time.time()
+print("Total time (seconds):", end_time - start)
 # Output
 # print("x[a,(i,j),t] values:")
 # for a in model.agents:
