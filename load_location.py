@@ -29,8 +29,10 @@ def load_json(file_path):
       return data
   except FileNotFoundError:
       print(f"Error: File '{file_path}' not found.")
+      exit()
   except json.JSONDecodeError:
       print(f"Error: File '{file_path}' is not a valid JSON.")
+      exit()
       
 def convert_to_graph(track_parts):
   nodes = []
