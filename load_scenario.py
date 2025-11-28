@@ -106,10 +106,13 @@ def convert_to_input(scenario):
   end_time = scenario.endTime
   agents = []
   start_nodes = {}
+  arrival_time = {}
   destination_nodes = {}
+  departure_time = {}
   for train in scenario.inTrains:
     agents.append(train.id)
     start_nodes[train.id] = train.firstParkingTrackPart
+    arrival_time[train.id] = int(int(train.arrival))
     destination_nodes[train.id] = None
 
   for out_train in scenario.outTrains:
@@ -119,7 +122,8 @@ def convert_to_input(scenario):
         out_type = out_train.trainUnits[0].type.displayName
         if in_type == out_type:
           destination_nodes[in_train.id] = out_train.lastParkingTrackPart
-  return agents, start_nodes, destination_nodes, start_time, end_time
+          departure_time[in_train.id] = int(int(out_train.departure))
+  return agents, start_nodes, destination_nodes, start_time, end_time, arrival_time, departure_time
 
 def load_scenario(data):
     in_trains = loadInTrains(data)
@@ -131,16 +135,18 @@ def load_scenario(data):
         endTime=data["endTime"],
         inStanding=data.get("inStanding", {}),
         outStanding=data.get("outStanding", {}))
-    agents, start_nodes, destination_nodes, start_time, end_time = convert_to_input(scenario)
-    return agents, start_nodes, destination_nodes, start_time, end_time
+    agents, start_nodes, destination_nodes, start_time, end_time, arrival_time, departure_time = convert_to_input(scenario)
+    return agents, start_nodes, destination_nodes, start_time, end_time, arrival_time, departure_time
 
 
 
 if __name__ == "__main__":
   data = load_json('../scenario-planning-inputs/Scenario_settings/SimpleService/scenario_no-service_solver.json')
-  agents, start_nodes, destination_nodes, start_time, end_time = load_scenario(data)
+  agents, start_nodes, destination_nodes, start_time, end_time, arrival_time, departure_time = load_scenario(data)
   print("Agents:", agents)
   print("Start Nodes:", start_nodes)
   print("Destination Nodes:", destination_nodes)
   print("Start Time:", start_time)
   print("End Time:", end_time)
+  print("Arrival Time:", arrival_time)
+  print("Departure Time:", departure_time)
