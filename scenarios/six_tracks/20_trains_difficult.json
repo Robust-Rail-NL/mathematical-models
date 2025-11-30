@@ -1,0 +1,931 @@
+{
+  "startTime": "0",
+  "endTime": "2400",
+  "inStanding": {},
+  "outStanding": {},
+
+  "in": {
+    "trains": [
+      {
+        "entryTrackPart": "13",
+        "arrival": "120",
+        "departure": "120",
+        "id": "11111",
+        "members": [{
+          "trainUnit": {
+            "id": "2422",
+            "type": {
+              "displayName": "SLT",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "4"
+      },
+
+      {
+        "entryTrackPart": "10",
+        "arrival": "60",
+        "departure": "60",
+        "id": "33333",
+        "members": [{
+          "trainUnit": {
+            "id": "2301",
+            "type": {
+              "displayName": "SNG",
+              "carriages": 3,
+              "length": 59.5,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "reversalDuration": "0",
+              "backNormTime": "0",
+              "backAdditionTime": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "5"
+      },
+
+      {
+        "entryTrackPart": "11",
+        "arrival": "0",
+        "departure": "0",
+        "id": "22222",
+        "members": [{
+          "trainUnit": {
+            "id": "2522",
+            "type": {
+              "displayName": "SLT2",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "2"
+      },
+
+      {
+        "entryTrackPart": "12",
+        "arrival": "60",
+        "departure": "60",
+        "id": "4444",
+        "members": [{
+          "trainUnit": {
+            "id": "2444",
+            "type": {
+              "displayName": "SLT3",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "3"
+      },
+
+      {
+        "entryTrackPart": "13",
+        "arrival": "600",
+        "departure": "600",
+        "id": "11111_1",
+        "members": [{
+          "trainUnit": {
+            "id": "2422_1",
+            "type": {
+              "displayName": "SLT4",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "4"
+      },
+
+      {
+        "entryTrackPart": "10",
+        "arrival": "540",
+        "departure": "540",
+        "id": "33333_1",
+        "members": [{
+          "trainUnit": {
+            "id": "2301_1",
+            "type": {
+              "displayName": "SNG2",
+              "carriages": 3,
+              "length": 59.5,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "reversalDuration": "0",
+              "backNormTime": "0",
+              "backAdditionTime": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "5"
+      },
+
+      {
+        "entryTrackPart": "11",
+        "arrival": "480",
+        "departure": "480",
+        "id": "22222_1",
+        "members": [{
+          "trainUnit": {
+            "id": "2522_1",
+            "type": {
+              "displayName": "SLT5",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "2"
+      },
+
+      {
+        "entryTrackPart": "12",
+        "arrival": "540",
+        "departure": "540",
+        "id": "4444_1",
+        "members": [{
+          "trainUnit": {
+            "id": "2444_1",
+            "type": {
+              "displayName": "SLT6",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "3"
+      },
+
+      {
+        "entryTrackPart": "13",
+        "arrival": "1080",
+        "departure": "1080",
+        "id": "11111_2",
+        "members": [{
+          "trainUnit": {
+            "id": "2422_2",
+            "type": {
+              "displayName": "SLT7",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "4"
+      },
+
+      {
+        "entryTrackPart": "10",
+        "arrival": "1020",
+        "departure": "1020",
+        "id": "33333_2",
+        "members": [{
+          "trainUnit": {
+            "id": "2301_2",
+            "type": {
+              "displayName": "SNG3",
+              "carriages": 3,
+              "length": 59.5,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "reversalDuration": "0",
+              "backNormTime": "0",
+              "backAdditionTime": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "5"
+      },
+
+      {
+        "entryTrackPart": "11",
+        "arrival": "960",
+        "departure": "960",
+        "id": "22222_2",
+        "members": [{
+          "trainUnit": {
+            "id": "2522_2",
+            "type": {
+              "displayName": "SLT8",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "2"
+      },
+
+      {
+        "entryTrackPart": "12",
+        "arrival": "1020",
+        "departure": "1020",
+        "id": "4444_2",
+        "members": [{
+          "trainUnit": {
+            "id": "2444_2",
+            "type": {
+              "displayName": "SLT9",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "3"
+      },
+
+      {
+        "entryTrackPart": "13",
+        "arrival": "1560",
+        "departure": "1560",
+        "id": "11111_3",
+        "members": [{
+          "trainUnit": {
+            "id": "2422_3",
+            "type": {
+              "displayName": "SLT10",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "4"
+      },
+
+      {
+        "entryTrackPart": "10",
+        "arrival": "1500",
+        "departure": "1500",
+        "id": "33333_3",
+        "members": [{
+          "trainUnit": {
+            "id": "2301_3",
+            "type": {
+              "displayName": "SNG4",
+              "carriages": 3,
+              "length": 59.5,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "reversalDuration": "0",
+              "backNormTime": "0",
+              "backAdditionTime": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "5"
+      },
+
+      {
+        "entryTrackPart": "11",
+        "arrival": "1440",
+        "departure": "1440",
+        "id": "22222_3",
+        "members": [{
+          "trainUnit": {
+            "id": "2522_3",
+            "type": {
+              "displayName": "SLT11",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "2"
+      },
+
+      {
+        "entryTrackPart": "12",
+        "arrival": "1500",
+        "departure": "1500",
+        "id": "4444_3",
+        "members": [{
+          "trainUnit": {
+            "id": "2444_3",
+            "type": {
+              "displayName": "SLT12",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "3"
+      },
+
+      {
+        "entryTrackPart": "13",
+        "arrival": "2040",
+        "departure": "2040",
+        "id": "11111_4",
+        "members": [{
+          "trainUnit": {
+            "id": "2422_4",
+            "type": {
+              "displayName": "SLT13",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "4"
+      },
+
+      {
+        "entryTrackPart": "10",
+        "arrival": "1980",
+        "departure": "1980",
+        "id": "33333_4",
+        "members": [{
+          "trainUnit": {
+            "id": "2301_4",
+            "type": {
+              "displayName": "SNG5",
+              "carriages": 3,
+              "length": 59.5,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "reversalDuration": "0",
+              "backNormTime": "0",
+              "backAdditionTime": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "5"
+      },
+
+      {
+        "entryTrackPart": "11",
+        "arrival": "1920",
+        "departure": "1920",
+        "id": "22222_4",
+        "members": [{
+          "trainUnit": {
+            "id": "2522_4",
+            "type": {
+              "displayName": "SLT14",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "2"
+      },
+
+      {
+        "entryTrackPart": "12",
+        "arrival": "1980",
+        "departure": "1980",
+        "id": "4444_4",
+        "members": [{
+          "trainUnit": {
+            "id": "2444_4",
+            "type": {
+              "displayName": "SLT15",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            }
+          },
+          "tasks": []
+        }],
+        "firstParkingTrackPart": "3"
+      }
+    ]
+  },
+
+  "out": { 
+    "trainRequests": [
+        {
+          "leaveTrackPart": "12",
+          "arrival": "240",
+          "departure": "240",
+          "displayName": "33334",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SNG",
+              "carriages": 3,
+              "length": 59.5,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "reversalDuration": "0",
+              "backNormTime": "0",
+              "backAdditionTime": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "3",
+          "standingIndex": 0.0
+        },
+
+        {
+          "leaveTrackPart": "12",
+          "arrival": "420",
+          "departure": "420",
+          "displayName": "11112",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SLT",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "2",
+          "standingIndex": 0.0
+        },
+
+        {
+          "leaveTrackPart": "14",
+          "arrival": "360",
+          "departure": "360",
+          "displayName": "11122",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SLT2",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "6",
+          "standingIndex": 0.0
+        },
+
+        {
+          "leaveTrackPart": "10",
+          "arrival": "300",
+          "departure": "300",
+          "displayName": "11144",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SLT3",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "5",
+          "standingIndex": 0.0
+        },
+        {
+          "leaveTrackPart": "12",
+          "arrival": "720",
+          "departure": "720",
+          "displayName": "33334_1",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SNG2",
+              "carriages": 3,
+              "length": 59.5,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "reversalDuration": "0",
+              "backNormTime": "0",
+              "backAdditionTime": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "3",
+          "standingIndex": 0.0
+        },
+
+        {
+          "leaveTrackPart": "12",
+          "arrival": "900",
+          "departure": "900",
+          "displayName": "11112_1",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SLT4",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "2",
+          "standingIndex": 0.0
+        },
+
+        {
+          "leaveTrackPart": "14",
+          "arrival": "840",
+          "departure": "840",
+          "displayName": "11122_1",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SLT5",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "6",
+          "standingIndex": 0.0
+        },
+
+        {
+          "leaveTrackPart": "10",
+          "arrival": "780",
+          "departure": "780",
+          "displayName": "11144_1",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SLT6",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "5",
+          "standingIndex": 0.0
+        },
+
+        {
+          "leaveTrackPart": "12",
+          "arrival": "1200",
+          "departure": "1200",
+          "displayName": "33334_2",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SNG3",
+              "carriages": 3,
+              "length": 59.5,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "reversalDuration": "0",
+              "backNormTime": "0",
+              "backAdditionTime": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "3",
+          "standingIndex": 0.0
+        },
+
+        {
+          "leaveTrackPart": "12",
+          "arrival": "1380",
+          "departure": "1380",
+          "displayName": "11112_2",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SLT7",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "2",
+          "standingIndex": 0.0
+        },
+
+        {
+          "leaveTrackPart": "14",
+          "arrival": "1320",
+          "departure": "1320",
+          "displayName": "11122_2",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SLT8",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "6",
+          "standingIndex": 0.0
+        },
+        {
+          "leaveTrackPart": "10",
+          "arrival": "1260",
+          "departure": "1260",
+          "displayName": "11144_2",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SLT9",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "5",
+          "standingIndex": 0.0
+        },
+        {
+          "leaveTrackPart": "12",
+          "arrival": "1680",
+          "departure": "1680",
+          "displayName": "33334_3",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SNG4",
+              "carriages": 3,
+              "length": 59.5,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "reversalDuration": "0",
+              "backNormTime": "0",
+              "backAdditionTime": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "3",
+          "standingIndex": 0.0
+        },
+
+        {
+          "leaveTrackPart": "12",
+          "arrival": "1860",
+          "departure": "1860",
+          "displayName": "11112_3",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SLT10",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "2",
+          "standingIndex": 0.0
+        },
+
+        {
+          "leaveTrackPart": "14",
+          "arrival": "1800",
+          "departure": "1800",
+          "displayName": "11122_3",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SLT11",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "6",
+          "standingIndex": 0.0
+        },
+
+        {
+          "leaveTrackPart": "10",
+          "arrival": "1740",
+          "departure": "1740",
+          "displayName": "11144_3",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SLT12",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "5",
+          "standingIndex": 0.0
+        },
+        {
+          "leaveTrackPart": "12",
+          "arrival": "2160",
+          "departure": "2160",
+          "displayName": "33334_4",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SNG5",
+              "carriages": 3,
+              "length": 59.5,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "reversalDuration": "0",
+              "backNormTime": "0",
+              "backAdditionTime": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "3",
+          "standingIndex": 0.0
+        },
+
+        {
+          "leaveTrackPart": "12",
+          "arrival": "2340",
+          "departure": "2340",
+          "displayName": "11112_4",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SLT13",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "2",
+          "standingIndex": 0.0
+        },
+
+        {
+          "leaveTrackPart": "14",
+          "arrival": "2280",
+          "departure": "2280",
+          "displayName": "11122_4",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SLT14",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "6",
+          "standingIndex": 0.0
+        },
+
+        {
+          "leaveTrackPart": "10",
+          "arrival": "2220",
+          "departure": "2220",
+          "displayName": "11144_4",
+          "trainUnits": [{
+            "type": {
+              "displayName": "SLT15",
+              "carriages": 4,
+              "length": 69.36,
+              "combineDuration": "180",
+              "splitDuration": "120",
+              "backNormTime": "120",
+              "backAdditionTime": "16",
+              "reversalDuration": "0"
+            },
+            "id": ""
+          }],
+          "lastParkingTrackPart": "5",
+          "standingIndex": 0.0
+        }
+      ]
+    }
+  }
+

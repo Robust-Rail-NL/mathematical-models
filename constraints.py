@@ -5,7 +5,7 @@ def inital_position_constraint(m, a):
 
 def location_constraint(m, a, t):
   if t < m.arrival_time[a]:# or t >= m.departure_time[a]:
-    return Constraint.Skip
+    return sum(m.p[a,i,t] for i in m.nodes) == 0
   return sum(m.p[a,i,t] for i in m.nodes) == m.y[a,t]
 
 def node_capacity_constraint(m, i, t):

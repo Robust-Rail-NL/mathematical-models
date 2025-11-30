@@ -2,30 +2,17 @@ from pyomo.environ import ConcreteModel, Set, Param, Var, Objective, Constraint,
 import constraints as c
 import load_location as ll
 import load_scenario as ls
-import time as time
+import time
 
 def objective(m):
   return sum(m.x[a, (i, j), t] for a in m.agents for t in m.time_window
             for (i, j) in m.edges if i != j)
 
-departures = [(2,'SNG',4), (3,'SLT',5), (6,'SLT2',5)]
-train_types = {1:'SNG', 2:'SLT', 3:'SLT2'}
 data = ll.load_json('locations/six_tracks_location.json')
 nodes, edges, facilities = ll.load_location(data)
-data = ll.load_json('scenarios/six_tracks/four_trains_difficult.json')
+data = ll.load_json('scenarios/six_tracks/four_trains.json')
 agents, start_nodes, arrival_time, departures, start_time, end_time, arrival_time, train_types = ls.load_scenario(data)
 time_window = range(start_time, end_time+1)
-#region print
-print("nodes:", nodes)
-print("edges:", edges)
-print("agents:", agents)
-print("start_nodes:", start_nodes)
-print("arrival_time:", arrival_time)
-print("departures:", departures)
-print("time_window:", time_window)
-print("train_types:", train_types)
-#endregion
-
 
 model = ConcreteModel()
 
@@ -90,3 +77,11 @@ print("Objective (cost):", model.cost())
 print("Time taken (seconds):", end - start)
 
 
+print("nodes:", nodes)
+print("edges:", edges)
+print("agents:", agents)
+print("start_nodes:", start_nodes)
+print("arrival_time:", arrival_time)
+print("departures:", departures)
+print("time_window:", time_window)
+print("train_types:", train_types)
