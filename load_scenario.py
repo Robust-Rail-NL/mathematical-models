@@ -118,7 +118,7 @@ def convert_to_input(scenario):
   for out_train in scenario.outTrains:
     departures.append((out_train.lastParkingTrackPart, out_train.trainUnits[0].type.displayName, int(int(out_train.departure)/60)))
      
-  return agents, start_nodes, arrival_time, departures, start_time, end_time, arrival_time, train_types
+  return agents, start_nodes, arrival_time, departures, start_time, end_time, train_types
 
 def load_scenario(data):
     in_trains = loadInTrains(data)
@@ -130,8 +130,8 @@ def load_scenario(data):
         endTime=data["endTime"],
         inStanding=data.get("inStanding", {}),
         outStanding=data.get("outStanding", {}))
-    agents, start_nodes, arrival_time, departures, start_time, end_time, arrival_time, train_types = convert_to_input(scenario)
-    return agents, start_nodes, arrival_time, departures, start_time, end_time, arrival_time, train_types
+    agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = convert_to_input(scenario)
+    return agents, start_nodes, arrival_time, departures, start_time, end_time, train_types
 
 
 

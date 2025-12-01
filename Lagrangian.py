@@ -26,7 +26,7 @@ def objective_lagrangian(m):
 data = ll.load_json('locations/six_tracks_location.json')
 nodes, edges, facilities = ll.load_location(data)
 data = ll.load_json('scenarios/six_tracks/four_trains.json')
-agents, start_nodes, arrival_time, departures, start_time, end_time, arrival_time, train_types = ls.load_scenario(data)
+agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = ls.load_scenario(data)
 time_window = range(start_time, end_time+1)
 
 model = ConcreteModel()
@@ -114,10 +114,13 @@ for k in range(n_iter):
   conflicts = 0
   for l in model.nodes:
     for t in model.time_window:
-      # r = random.uniform(0.9, 1.1)
-      # penalty = r*penalty_multiplier_lambda[l,t] * (sum(model.p[a2,l,t].value for a2 in model.agents) - 1)
-      penalty = penalty_multiplier_lambda[l,t] * (sum(model.p[a,l,t].value for a in model.agents) - 1)
-      if penalty > 0.01:
+      r = random.uniform(0.9, 1.1)
+      penalty = r*penalty_multiplier_lambda[l,t] * (sum(model.p[a2,l,t].value for a2 in model.agents) - 1)
+      # penalty = penalty_multiplier_lambda[l,t] * (sum(model.p[a,l,t].value for a in model.agents) - 1)
+      penalty = max(0.01, penalty)
+      # if k >=170:
+      #   print("huh",sum(model.p[a,l,t].value for a in model.agents))
+      if penalty > 0:
         model.lambda_values[l,t] = max(0, model.lambda_values[l,t].value + penalty)
         conflicts +=1
       # elif penalty <= 0:
@@ -126,10 +129,11 @@ for k in range(n_iter):
     if j <= i:
       continue
     for t in model.time_window:
-      # r = random.uniform(0.9, 1.1)
-      # penalty = r*penalty_multiplier_mu[i,j,t] * (sum(model.x[a2,(i,j),t].value + model.x[a2,(j,i),t].value for a2 in model.agents) - 1)
-      penalty = penalty_multiplier_mu[i,j,t] * (sum(model.x[a,(i,j),t].value + model.x[a,(j,i),t].value for a in model.agents) - 1)
-      if penalty > 0.01:
+      r = random.uniform(0.9, 1.1)
+      penalty = r*penalty_multiplier_mu[i,j,t] * (sum(model.x[a2,(i,j),t].value + model.x[a2,(j,i),t].value for a2 in model.agents) - 1)
+      # penalty = penalty_multiplier_mu[i,j,t] * (sum(model.x[a,(i,j),t].value + model.x[a,(j,i),t].value for a in model.agents) - 1)
+      penalty = max(0.01, penalty)
+      if penalty > 0:
         model.mu_values[i,j,t] = max(0, model.mu_values[i,j,t].value + penalty)
         conflicts +=1
       # elif penalty <= 0:
@@ -139,7 +143,6 @@ for k in range(n_iter):
     print("NO MORE CONFLICT")
     break
 end_time = time.time()
-print("Total time (seconds):", end_time - start)
 # Output
 # print("x[a,(i,j),t] values:")
 # for a in model.agents:
@@ -148,14 +151,16 @@ print("Total time (seconds):", end_time - start)
 #             val = model.x[a, (i,j), t].value
 #             if val is not None and val > 0:
 #                 print(f"x[{a},{i}->{j},{t}] = {val}")
-# print("\np[a,n,t] values:")
-# for a in model.agents:
-#     for n in model.nodes:
-#         for t in model.time_window:
-#             val = model.p[a, n, t].value
-#             if val is not None and val > 0:
-#                 print(f"p[{a},{n},{t}] = {val}")
-# print("Objective (cost):", model.cost())
+print("\np[a,n,t] values:")
+for a in model.agents:
+    for n in model.nodes:
+        for t in model.time_window:
+            val = model.p[a, n, t].value
+            if val is not None and val > 0:
+                print(f"p[{a},{n},{t}] = {val}")
+
+print("Total time (seconds):", end_time - start)
+print("Objective (cost):", model.cost())
 
 print("nodes:", nodes)
 print("edges:", edges)
