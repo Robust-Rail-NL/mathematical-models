@@ -30,7 +30,7 @@ agents, start_nodes, arrival_time, departures, start_time, end_time, train_types
 time_window = range(start_time, end_time+1)
 
 lambda_values = {(a,i,t): 0.0 for a in agents for i in nodes for t in time_window}
-mu_values = {(a,i,j,t): 0.0 for a in agents for (i, j) in edges if i < j for t in time_window}
+mu_values = {(a,i,j,t): 0.0 for a in agents for (i, j) in edges for t in time_window}
 # lambda_values = {(i,t): 0.0 for i in nodes for t in time_window}
 # mu_values = {(i,j,t): 0.0 for (i, j) in edges for t in time_window}
 
@@ -97,12 +97,12 @@ def solve_agent(a, m):
   
   return x_values, p_values, y_values, value(objective_value)
 
-penalty_multiplier_lambda = {(l,t): 1.6 for l in nodes for t in time_window}
-penalty_multiplier_mu = {(i,j,t): 2 for (i,j) in edges for t in time_window}
+penalty_multiplier_lambda = {(l,t): 8 for l in nodes for t in time_window}
+penalty_multiplier_mu = {(i,j,t): 10 for (i,j) in edges for t in time_window}
 violation_counts_lambda = {(l,t): 1 for l in nodes for t in time_window}
 violation_counts_mu = {(i,j,t): 1 for (i,j) in edges for t in time_window}
 
-n_iter = 25
+n_iter = 50
 start = time.time()
 
 models = {}
@@ -261,10 +261,3 @@ print("arrival_time:", arrival_time)
 print("departures:", departures)
 print("time_window:", time_window)
 print("train_types:", train_types)
-
-# no random no solution
-# no agent specific way less solution
-# decreasing the penalty seems to have negative effects
-# having a larger time window makes three_trains five tracks easier to solve
-# only punish one agent
-# penalize one agent more than the other for the same l,t
