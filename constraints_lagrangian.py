@@ -9,7 +9,7 @@ def location_constraint(m, t):
   return sum(m.p[i,t] for i in m.nodes) == m.y[t]
 
 def movement_constraint_departure(m, i, t):
-  if t == max(m.time_window) or t < m.arrival_time:# or t >= m.departure_time[a]:
+  if t == max(m.time_window)+1 or t < m.arrival_time:# or t >= m.departure_time[a]:
     return Constraint.Skip
   return (m.p[i,t] == sum(m.x[(i,j),t] for j in m.nodes if (i,j) in m.edges))
 

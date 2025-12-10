@@ -4,11 +4,12 @@ import load_location as ll
 import load_scenario as ls
 import random
 import time
+import math
 
 # random.seed(41)
 
 def objective_lagrangian(m):
-  MILP_objective = sum(m.x[(i, j), t] for t in m.time_window
+  MILP_objective = sum(m.r[(i,j),t]*m.x[(i, j), t] for t in m.time_window
             for (i, j) in m.edges if i != j)
   node_capacity_penalty = 0
   for i in m.nodes:
@@ -25,28 +26,15 @@ def objective_lagrangian(m):
       edge_capacity_penalty += mu_value * (m.x[(i,j),t] + m.x[(j,i),t])
   return MILP_objective + node_capacity_penalty + edge_capacity_penalty
 
-data = ll.load_json('locations/four_tracks_location.json')
+data = ll.load_json('locations/circle_location.json')
 nodes, edges, facilities = ll.load_location(data)
-data = ll.load_json('scenarios/four_tracks/two_trains.json')
+data = ll.load_json('scenarios/circle/four_trains.json')
 agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = ls.load_scenario(data)
 time_window = range(start_time, end_time+1)
 
-lambda_values = {(a,i,t): 0.0 for a in agents for i in nodes for t in time_window}
-mu_values = {(a,i,j,t): 0.0 for a in agents for (i, j) in edges for t in time_window}
-lambda_violations = {(a,i,t): False for a in agents for i in nodes for t in time_window}
-mu_violations = {(a,i,j,t): False for a in agents for (i, j) in edges for t in time_window}
-# lambda_values = {(i,t): 0.0 for i in nodes for t in time_window}
-# mu_values = {(i,j,t): 0.0 for (i, j) in edges for t in time_window}
-
-print("nodes:", nodes)
-print("edges:", edges)
-print("agents:", agents)
-print("start_nodes:", start_nodes)
-print("arrival_time:", arrival_time)
-print("departures:", departures)
-print("time_window:", time_window)
-print("train_types:", train_types)
-
+lambda_values = {(i,t): 0.0 for i in nodes for t in time_window}
+mu_values = {(i,j,t): 0.0 for (i, j) in edges for t in time_window}   
+r = {(i,j,t): random.uniform(0.99,1.01) for (i, j) in edges for t in time_window} 
 
 def create_model(a):
   model = ConcreteModel()
@@ -65,6 +53,7 @@ def create_model(a):
 
   model.lambda_values = Param(model.nodes, model.time_window, mutable=True, initialize=0.0)
   model.mu_values = Param(model.edges, model.time_window, mutable=True, initialize=0.0)
+  model.r = Param(model.edges, model.time_window, mutable=True, initialize=r)
   
   # Objective
   model.cost = Objective(rule=objective_lagrangian, sense=minimize)
@@ -84,13 +73,12 @@ def create_model(a):
 def solve_agent(a, m):
   for t in time_window:   
     for l in nodes:
-      m.lambda_values[l,t] = lambda_values[a,l,t]
-      # m.lambda_values[l,t] = lambda_values[l,t]
+      m.lambda_values[l,t] = lambda_values[l,t]
     for i,j in edges:
+      m.r[(i,j),t] = random.uniform(0.99,1.01)
       if i < j:
-        m.mu_values[i,j,t] = mu_values[a,i,j,t]
-      # m.mu_values[i,j,t] = mu_values[i,j,t]
-  
+        m.mu_values[i,j,t] = mu_values[i,j,t]
+
   # Solve
   solver = SolverFactory('gurobi')
   solver.solve(m, warmstart=True, keepfiles=False)
@@ -101,14 +89,9 @@ def solve_agent(a, m):
   
   return x_values, p_values, y_values, value(objective_value)
 
-penalty_multiplier_lambda = {(l,t): 8 for l in nodes for t in time_window}
-penalty_multiplier_mu = {(i,j,t): 10 for (i,j) in edges for t in time_window}
-violation_counts_lambda = {(l,t): 0 for l in nodes for t in time_window}
-violation_counts_mu = {(i,j,t): 0 for (i,j) in edges for t in time_window}
-
-n_iter = 100
+n_iter = 1000
 start = time.time()
-
+objectives = []
 models = {}
 for a in agents:
   models[a] = create_model(a)
@@ -117,10 +100,10 @@ for a in agents:
 x_values, p_values, y_values, objective_values = {}, {}, {}, {}
 for k in range(n_iter):
   x_values, p_values, y_values, objective_values = {}, {}, {}, {}
+  print(k)
   for a in agents:
     x_values[a], p_values[a], y_values[a], objective_values[a]= solve_agent(a, models[a])
   #region print
-  print(k)
   # print("x[a,(i,j),t] values:")
   # for a in agents:
   #     for (i,j) in edges:
@@ -135,118 +118,55 @@ for k in range(n_iter):
         val = p_values[a][n][t]
         if val is not None and val > 0:
             print(f"p[{a},{n},{t}] = {val}")
-  for a in agents:
-    for i in nodes:
-      for t in time_window:
-        if lambda_values[a,i,t] > 0:
-          print(f"Lambda[{a},{i},{t}] = {lambda_values[a,i,t]}")
-  
-  for a in agents:        
-    for (i,j) in edges:
-      if j <= i:
-        continue
-      for t in time_window:
-        if mu_values[a,i,j,t] > 0:
-          print(f"Mu[{a},{i},{j},{t}] = {mu_values[a,i,j,t]}")  
-  #endregion  
-  
-  for l in nodes:
+  for i in nodes:
     for t in time_window:
-      penalty_multiplier_lambda[l,t] *= 1/(violation_counts_lambda[l,t]/15+1)
+      if lambda_values[i,t] > 0:
+        print(f"Lambda[{i},{t}] = {lambda_values[i,t]}")
+         
   for (i,j) in edges:
     if j <= i:
       continue
     for t in time_window:
-      penalty_multiplier_mu[i,j,t] *= 1/(violation_counts_mu[i,j,t]/15+1)
+      if mu_values[i,j,t] > 0:
+        print(f"Mu[{i},{j},{t}] = {mu_values[i,j,t]}")  
+  obj = 0
+  for a in agents:
+    obj += objective_values[a]
+  obj -= sum(lambda_values[l,t] for l in nodes for t in time_window) - sum(mu_values[i,j,t] for i,j in edges for t in time_window)
+  objectives.append(obj)     
+  print("objective", obj)     
+  #endregion
   
   conflicts = 0
-  updated = False
-  for a1 in agents:
-    for l in nodes:
-      for t in time_window:
-        r = random.uniform(0.1, 8)
-        penalty = r*penalty_multiplier_lambda[l,t] * (sum(p_values[a][l][t] for a in agents)-1)
-        violation = (sum(p_values[a][l][t] for a in agents) - 1)
-        # penalty = penalty_multiplier_lambda[l,t] * (sum(p_values[a][l][t] for a in agents) - 1)
-        if violation > 0 and p_values[a1][l][t] != 0:
-          lambda_values[a1,l,t] = max(0.01, lambda_values[a1,l,t] + penalty)
-          # if lambda_violations[a1,l,t]:
-          #   lambda_values[a1,l,t] = max(0.01, 1.1*lambda_values[a1,l,t])
-          # lambda_violations[a1,l,t] = True
-          conflicts +=1
-          if not updated:
-            violation_counts_lambda[l,t] += 1
-            updated = True
-        elif violation < 0 and lambda_values[a1,l,t] != 0:
-          lambda_values[a1,l,t] = max(0.01, lambda_values[a1,l,t]-1)
-        # if p_values[a1][l][t] == 1:
-        #   penalty = r*penalty_multiplier_lambda[l,t]
-        #   lambda_values[a1,l,t] = max(0.01, lambda_values[a1,l,t] + penalty)
-  updated = False
-  for a1 in agents:
-    for (i,j) in edges:
-      if j <= i:
-        continue
-      for t in time_window:
-        r = random.uniform(0.1, 8)
-        penalty = r*penalty_multiplier_mu[i,j,t] * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents)-1)
-        violation = (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents)-1)
-        # penalty = penalty_multiplier_mu[i,j,t] * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
-        if violation > 0 and x_values[a1][(i,j)][t] + x_values[a1][(j,i)][t] != 0:
-          mu_values[a1,i,j,t] = max(0.01, mu_values[a1,i,j,t] + penalty)
-          # if mu_violations[a1,i,j,t]:
-          #   mu_values[a1,i,j,t] = max(0.01, 1.1*mu_values[a1,i,j,t])
-          # mu_violations[a1,i,j,t] = True
-          conflicts +=1
-          if not updated:
-            violation_counts_mu[i,j,t] += 1
-            updated = True
-        elif violation < 0 and mu_values[a1,i,j,t] != 0:
-          mu_values[a1,i,j,t] = max(0.01, mu_values[a1,i,j,t]-1)    
-        # if x_values[a1][(i,j)][t] + x_values[a1][(j,i)][t] == 1:
-        #   penalty = r*penalty_multiplier_mu[i,j,t]
-        #   mu_values[a1,i,j,t] = max(0.01, mu_values[a1,i,j,t] + penalty)
-  
-  #region not agent specific
-  # for l in nodes:
-  #   for t in time_window:
-  #     r = random.uniform(0.8, 1.2)
-  #     penalty = r*penalty_multiplier_lambda[l,t] * (sum(p_values[a][l][t] for a in agents)-1)
-  #     violation = (sum(p_values[a][l][t] for a in agents) - 1)
-  #     # penalty = penalty_multiplier_lambda[l,t] * (sum(p_values[a][l][t] for a in agents) - 1)
-  #     if violation > 0:
-  #       lambda_values[l,t] = max(0.01, lambda_values[l,t] + penalty)
-  #       conflicts +=1
-  #       if not updated:
-  #         violation_counts_lambda[l,t] += 1
-  #         updated = True
-  #     elif violation <= 0 and lambda_values[l,t] != 0:
-  #       lambda_values[l,t] = max(0.01, lambda_values[l,t]/2)
-  # updated = False
-  # for (i,j) in edges:
-  #   if j <= i:
-  #     continue
-  #   for t in time_window:
-  #     r = random.uniform(0.8, 1.2)
-  #     penalty = r*penalty_multiplier_mu[i,j,t] * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents)-1)
-  #     violation = (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents)-1)
-  #     # penalty = penalty_multiplier_mu[i,j,t] * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
-  #     if violation > 0:
-  #       mu_values[i,j,t] = max(0.01, mu_values[i,j,t] + penalty)
-  #       conflicts +=1
-  #       if not updated:
-  #         violation_counts_mu[i,j,t] += 1
-  #         updated = True
-  #     elif violation <= 0 and mu_values[i,j,t] != 0:
-  #       mu_values[i,j,t] = max(0.01, mu_values[i,j,t]/2)     
-  #endregion
+  for l in nodes:
+    for t in time_window:
+      penalty = 1/(math.sqrt(k+1)) * (sum(p_values[a][l][t] for a in agents) - 1)
+      penalty = 1/(k+1) * (sum(p_values[a][l][t] for a in agents) - 1)
+      if penalty > 0:
+        lambda_values[l,t] = max(0.0, lambda_values[l,t] + penalty)
+        conflicts += 1
+      elif penalty < 0:
+        lambda_values[l,t] = max(0.0, lambda_values[l,t] + penalty)
 
-    # penalty per var
+  for (i,j) in edges:
+    if j <= i:
+      continue
+    for t in time_window:
+      penalty = 1/(math.sqrt(k+1)) * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
+      penalty = 1/(k+1) * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
+      if penalty > 0:
+        mu_values[i,j,t] = max(0.0, mu_values[i,j,t] + penalty)
+        conflicts += 1
+      elif penalty < 0:
+        mu_values[i,j,t] = max(0.0, mu_values[i,j,t] + penalty)    
+        
   if conflicts < 1:
     print("NO MORE CONFLICT")
     break
-end_time = time.time()
 
+
+end_time = time.time()
+print(objectives)
 # Output
 print("x[a,(i,j),t] values:")
 for a in agents:
@@ -275,12 +195,3 @@ print("arrival_time:", arrival_time)
 print("departures:", departures)
 print("time_window:", time_window)
 print("train_types:", train_types)
-
-# no random no solution
-# more random sometimes more solutions
-# no agent specific way less solutions
-# having a larger time window makes three_trains five tracks easier to solve
-# two_trains more time way easier
-# penalize one agent more than the other for the same l,t
-# more penalty if twice violated in a row
-# decreasing the penalty negative effects but not always

@@ -8,9 +8,9 @@ def objective(m):
   return sum(m.x[a, (i, j), t] for a in m.agents for t in m.time_window
             for (i, j) in m.edges if i != j)
 
-data = ll.load_json('locations/four_tracks_location.json')
+data = ll.load_json('locations/circle_location.json')
 nodes, edges, facilities = ll.load_location(data)
-data = ll.load_json('scenarios/four_tracks/two_trains.json')
+data = ll.load_json('scenarios/circle/four_trains.json')
 agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = ls.load_scenario(data)
 time_window = range(start_time, end_time+1)
 
@@ -32,7 +32,6 @@ model.y = Var(model.agents, model.time_window, domain=Binary)
 
 # Objective
 model.cost = Objective(rule=objective, sense=minimize)
-
 
 # Constraint
 model.initial = Constraint(model.agents, rule=c.inital_position_constraint)

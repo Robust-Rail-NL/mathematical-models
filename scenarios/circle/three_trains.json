@@ -2,7 +2,7 @@
     "in": {
         "trains": [
             {
-                "entryTrackPart": "13",
+                "entryTrackPart": "11",
                 "arrival": "0",
                 "departure": "0",
                 "id": "11111",
@@ -24,19 +24,19 @@
                         "tasks": []
                     }
                 ],
-                "firstParkingTrackPart": "4"
+                "firstParkingTrackPart": "1"
             },
             {
-                "entryTrackPart": "10",
-                "arrival": "0",
-                "departure": "0",
-                "id": "33333",
+                "entryTrackPart": "11",
+                "arrival": "60",
+                "departure": "60",
+                "id": "22222",
                 "members": [
                     {
                         "trainUnit": {
                             "id": "2301",
                             "type": {
-                                "displayName": "SNG",
+                                "displayName": "SLT1",
                                 "carriages": 3,
                                 "length": 59.5,
                                 "combineDuration": "180",
@@ -49,13 +49,13 @@
                         "tasks": []
                     }
                 ],
-                "firstParkingTrackPart": "5"
+                "firstParkingTrackPart": "1"
             },
             {
                 "entryTrackPart": "11",
-                "arrival": "0",
-                "departure": "0",
-                "id": "22222",
+                "arrival": "120",
+                "departure": "120",
+                "id": "33333",
                 "members": [
                     {
                         "trainUnit": {
@@ -74,64 +74,16 @@
                         "tasks": []
                     }
                 ],
-                "firstParkingTrackPart": "2"
-            },
-            {
-                "entryTrackPart": "12",
-                "arrival": "0",
-                "departure": "0",
-                "id": "4444",
-                "members": [
-                    {
-                        "trainUnit": {
-                            "id": "2444",
-                            "type": {
-                                "displayName": "SLT3",
-                                "carriages": 4,
-                                "length": 69.36,
-                                "combineDuration": "180",
-                                "splitDuration": "120",
-                                "backNormTime": "120",
-                                "backAdditionTime": "16",
-                                "reversalDuration": "0"
-                            }
-                        },
-                        "tasks": []
-                    }
-                ],
-                "firstParkingTrackPart": "3"
+                "firstParkingTrackPart": "1"
             }
         ]
     },
     "out": {
         "trainRequests": [
             {
-                "leaveTrackPart": "12",
-                "arrival": "600",
-                "departure": "600",
-                "displayName": "33334",
-                "trainUnits": [
-                    {
-                        "type": {
-                            "displayName": "SNG",
-                            "carriages": 3,
-                            "length": 59.5,
-                            "combineDuration": "180",
-                            "splitDuration": "120",
-                            "reversalDuration": "0",
-                            "backNormTime": "0",
-                            "backAdditionTime": "0"
-                        },
-                        "id": ""
-                    }
-                ],
-                "lastParkingTrackPart": "3",
-                "standingIndex": 0.0
-            },
-            {
-                "leaveTrackPart": "12",
-                "arrival": "600",
-                "departure": "600",
+                "leaveTrackPart": "11",
+                "arrival": "180",
+                "departure": "180",
                 "displayName": "11112",
                 "trainUnits": [
                     {
@@ -148,13 +100,36 @@
                         "id": ""
                     }
                 ],
-                "lastParkingTrackPart": "2",
+                "lastParkingTrackPart": "1",
                 "standingIndex": 0.0
             },
             {
-                "leaveTrackPart": "14",
-                "arrival": "600",
-                "departure": "600",
+                "leaveTrackPart": "11",
+                "arrival": "240",
+                "departure": "240",
+                "displayName": "33334",
+                "trainUnits": [
+                    {
+                        "type": {
+                            "displayName": "SLT1",
+                            "carriages": 3,
+                            "length": 59.5,
+                            "combineDuration": "180",
+                            "splitDuration": "120",
+                            "reversalDuration": "0",
+                            "backNormTime": "0",
+                            "backAdditionTime": "0"
+                        },
+                        "id": ""
+                    }
+                ],
+                "lastParkingTrackPart": "1",
+                "standingIndex": 0.0
+            },
+            {
+                "leaveTrackPart": "11",
+                "arrival": "300",
+                "departure": "300",
                 "displayName": "11122",
                 "trainUnits": [
                     {
@@ -171,35 +146,12 @@
                         "id": ""
                     }
                 ],
-                "lastParkingTrackPart": "6",
-                "standingIndex": 0.0
-            },
-            {
-                "leaveTrackPart": "10",
-                "arrival": "600",
-                "departure": "600",
-                "displayName": "11144",
-                "trainUnits": [
-                    {
-                        "type": {
-                            "displayName": "SLT3",
-                            "carriages": 4,
-                            "length": 69.36,
-                            "combineDuration": "180",
-                            "splitDuration": "120",
-                            "backNormTime": "120",
-                            "backAdditionTime": "16",
-                            "reversalDuration": "0"
-                        },
-                        "id": ""
-                    }
-                ],
-                "lastParkingTrackPart": "4",
+                "lastParkingTrackPart": "1",
                 "standingIndex": 0.0
             }
         ]
     },
-    "endTime": "600",
+    "endTime": "300",
     "startTime": "0",
     "inStanding": {},
     "outStanding": {}
