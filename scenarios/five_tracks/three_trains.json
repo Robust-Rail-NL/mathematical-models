@@ -3,8 +3,8 @@
         "trains": [
             {
                 "entryTrackPart": "13",
-                "arrival": "0",
-                "departure": "0",
+                "arrival": "120",
+                "departure": "120",
                 "id": "11111",
                 "members": [
                     {
@@ -53,8 +53,8 @@
             },
             {
                 "entryTrackPart": "12",
-                "arrival": "0",
-                "departure": "0",
+                "arrival": "60",
+                "departure": "60",
                 "id": "22222",
                 "members": [
                     {
@@ -82,8 +82,8 @@
         "trainRequests": [
             {
                 "leaveTrackPart": "12",
-                "arrival": "240",
-                "departure": "240",
+                "arrival": "600",
+                "departure": "600",
                 "displayName": "33334",
                 "trainUnits": [
                     {
@@ -100,13 +100,13 @@
                         "id": ""
                     }
                 ],
-                "lastParkingTrackPart": "2",
+                "lastParkingTrackPart": "3",
                 "standingIndex": 0.0
             },
             {
                 "leaveTrackPart": "12",
-                "arrival": "240",
-                "departure": "240",
+                "arrival": "600",
+                "departure": "600",
                 "displayName": "11112",
                 "trainUnits": [
                     {
@@ -123,13 +123,13 @@
                         "id": ""
                     }
                 ],
-                "lastParkingTrackPart": "3",
+                "lastParkingTrackPart": "2",
                 "standingIndex": 0.0
             },
             {
                 "leaveTrackPart": "10",
-                "arrival": "240",
-                "departure": "240",
+                "arrival": "600",
+                "departure": "600",
                 "displayName": "11222",
                 "trainUnits": [
                     {
@@ -151,7 +151,7 @@
             }
         ]
     },
-    "endTime": "240",
+    "endTime": "600",
     "startTime": "0",
     "inStanding": {},
     "outStanding": {}

@@ -7,10 +7,10 @@ import time
 def objective(m):
   return sum(m.x[a, (i, j), t] for a in m.agents for t in m.time_window
             for (i, j) in m.edges if i != j)
-
-data = ll.load_json('locations/circle_location.json')
+  
+data = ll.load_json('locations/five_tracks_location.json')
 nodes, edges, facilities = ll.load_location(data)
-data = ll.load_json('scenarios/circle/four_trains.json')
+data = ll.load_json('scenarios/five_tracks/three_trains.json')
 agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = ls.load_scenario(data)
 time_window = range(start_time, end_time+1)
 

@@ -3,8 +3,8 @@
         "trains": [
             {
                 "entryTrackPart": "13",
-                "arrival": "120",
-                "departure": "120",
+                "arrival": "0",
+                "departure": "0",
                 "id": "11111",
                 "members": [
                     {
@@ -28,8 +28,8 @@
             },
             {
                 "entryTrackPart": "10",
-                "arrival": "60",
-                "departure": "60",
+                "arrival": "0",
+                "departure": "0",
                 "id": "33333",
                 "members": [
                     {
@@ -78,8 +78,8 @@
             },
             {
                 "entryTrackPart": "12",
-                "arrival": "60",
-                "departure": "60",
+                "arrival": "0",
+                "departure": "0",
                 "id": "4444",
                 "members": [
                     {
@@ -107,8 +107,8 @@
         "trainRequests": [
             {
                 "leaveTrackPart": "12",
-                "arrival": "240",
-                "departure": "240",
+                "arrival": "600",
+                "departure": "600",
                 "displayName": "33334",
                 "trainUnits": [
                     {
@@ -130,8 +130,8 @@
             },
             {
                 "leaveTrackPart": "12",
-                "arrival": "420",
-                "departure": "420",
+                "arrival": "600",
+                "departure": "600",
                 "displayName": "11112",
                 "trainUnits": [
                     {
@@ -153,8 +153,8 @@
             },
             {
                 "leaveTrackPart": "14",
-                "arrival": "360",
-                "departure": "360",
+                "arrival": "600",
+                "departure": "600",
                 "displayName": "11122",
                 "trainUnits": [
                     {
@@ -176,8 +176,8 @@
             },
             {
                 "leaveTrackPart": "10",
-                "arrival": "300",
-                "departure": "300",
+                "arrival": "600",
+                "departure": "600",
                 "displayName": "11144",
                 "trainUnits": [
                     {
@@ -194,12 +194,12 @@
                         "id": ""
                     }
                 ],
-                "lastParkingTrackPart": "5",
+                "lastParkingTrackPart": "4",
                 "standingIndex": 0.0
             }
         ]
     },
-    "endTime": "420",
+    "endTime": "600",
     "startTime": "0",
     "inStanding": {},
     "outStanding": {}

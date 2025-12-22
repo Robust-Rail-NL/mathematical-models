@@ -51,6 +51,28 @@ def convert_to_graph(track_parts):
     edges.append((node, node))  # Add self-loop
   return nodes, edges
 
+# def convert_to_graph(track_parts):
+#   nodes = []
+#   edges_start = []
+#   switches = []
+#   for track_part in track_parts:
+#       if track_part.type == "RailRoad":
+#           nodes.append(track_part.id)
+#       if track_part.type == "Switch":
+#         nodes.append(track_part.id)
+#         switches.append(track_part.id)
+#         for i in track_part.aSide:
+#           edges_start.append((track_part.id, i))
+#         for i in track_part.bSide:
+#           edges_start.append((track_part.id, i))
+#   edges = edges_start.copy()
+#   for edge in edges_start:
+#     edges.append((edge[1], edge[0]))  # Add reverse direction
+#   for node in nodes:
+#     if node not in switches:
+#       edges.append((node, node))  # Add self-loop, TODO remove self loop for switches
+#   return nodes, edges
+
 def load_location(data):
   track_Parts = []
   facilities = []
@@ -75,7 +97,7 @@ def load_location(data):
   return nodes, edges, facilities
   
 if __name__ == "__main__":
-  data = load_json('../robust-rail-generator/data/locations/simple_service_location_solver.json')
+  data = load_json('locations/ten_tracks_location.json')
   # data = load_json('../robust-rail-generator/data/locations/kleineBinckhorst_solver.json')
   nodes, edges, facilities = load_location(data)
   print("Nodes:", nodes)

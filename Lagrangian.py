@@ -26,17 +26,20 @@ def objective_lagrangian(m):
       edge_capacity_penalty += mu_value * (m.x[(i,j),t] + m.x[(j,i),t])
   return MILP_objective + node_capacity_penalty + edge_capacity_penalty
 
-data = ll.load_json('locations/circle_location.json')
-nodes, edges, facilities = ll.load_location(data)
-data = ll.load_json('scenarios/circle/four_trains.json')
-agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = ls.load_scenario(data)
-time_window = range(start_time, end_time+1)
+def setup(location, scenario):
+  data = ll.load_json(location)
+  nodes, edges, facilities = ll.load_location(data)
+  data = ll.load_json(scenario)
+  agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = ls.load_scenario(data)
+  time_window = range(start_time, end_time+1)
 
-lambda_values = {(i,t): 0.0 for i in nodes for t in time_window}
-mu_values = {(i,j,t): 0.0 for (i, j) in edges for t in time_window}   
-r = {(i,j,t): random.uniform(0.99,1.01) for (i, j) in edges for t in time_window} 
+  lambda_values = {(i,t): 0.0 for i in nodes for t in time_window}
+  mu_values = {(i,j,t): 0.0 for (i, j) in edges for t in time_window}   
+  r = {(i,j,t): random.uniform(0.99,1.01) for (i, j) in edges for t in time_window}
+  
+  return nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, r
 
-def create_model(a):
+def create_model(a, nodes, edges, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, r):
   model = ConcreteModel()
   
   model.time_window = Set(initialize=time_window)
@@ -51,8 +54,8 @@ def create_model(a):
   model.p = Var(model.nodes, model.time_window, domain=Binary)
   model.y = Var(model.time_window, domain=Binary)
 
-  model.lambda_values = Param(model.nodes, model.time_window, mutable=True, initialize=0.0)
-  model.mu_values = Param(model.edges, model.time_window, mutable=True, initialize=0.0)
+  model.lambda_values = Param(model.nodes, model.time_window, mutable=True, initialize=lambda_values)
+  model.mu_values = Param(model.edges, model.time_window, mutable=True, initialize=mu_values)
   model.r = Param(model.edges, model.time_window, mutable=True, initialize=r)
   
   # Objective
@@ -70,12 +73,12 @@ def create_model(a):
   
   return model
 
-def solve_agent(a, m):
+def solve_agent(a, m, nodes, edges, time_window, lambda_values, mu_values):
   for t in time_window:   
     for l in nodes:
       m.lambda_values[l,t] = lambda_values[l,t]
     for i,j in edges:
-      m.r[(i,j),t] = random.uniform(0.99,1.01)
+      m.r[(i,j),t] = random.uniform(0.9,1.1)
       if i < j:
         m.mu_values[i,j,t] = mu_values[i,j,t]
 
@@ -89,109 +92,163 @@ def solve_agent(a, m):
   
   return x_values, p_values, y_values, value(objective_value)
 
-n_iter = 1000
-start = time.time()
-objectives = []
-models = {}
-for a in agents:
-  models[a] = create_model(a)
-  
 
-x_values, p_values, y_values, objective_values = {}, {}, {}, {}
-for k in range(n_iter):
+def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, r):
+  n_iter = 1000
+  start = time.time()
+  objectives = []
+  models = {}
+  for a in agents:
+    models[a] = create_model(a, nodes, edges, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, r)
+    
+
   x_values, p_values, y_values, objective_values = {}, {}, {}, {}
-  print(k)
-  for a in agents:
-    x_values[a], p_values[a], y_values[a], objective_values[a]= solve_agent(a, models[a])
-  #region print
-  # print("x[a,(i,j),t] values:")
-  # for a in agents:
-  #     for (i,j) in edges:
-  #         for t in time_window:
-  #             val = x_values[a][(i,j)][t]
-  #             if val is not None and val > 0:
-  #                 print(f"x[{a},{i}->{j},{t}] = {val}")
-  print("\np[a,n,t] values:")
-  for a in agents:
-    for n in nodes:
+  for k in range(n_iter):
+    x_values, p_values, y_values, objective_values = {}, {}, {}, {}
+    if __name__ == "__main__":
+      print(k)
+    
+    for a in agents:
+      x_values[a], p_values[a], y_values[a], objective_values[a]= solve_agent(a, models[a], nodes, edges, time_window, lambda_values, mu_values)
+    #region print
+    # if __name__ == "__main__":
+      # print("x[a,(i,j),t] values:")
+      # for a in agents:
+      #     for (i,j) in edges:
+      #         for t in time_window:
+      #             val = x_values[a][(i,j)][t]
+      #             if val is not None and val > 0:
+      #                 print(f"x[{a},{i}->{j},{t}] = {val}")
+      # print("\np[a,n,t] values:")
+      # for a in agents:
+      #   for n in nodes:
+      #     for t in time_window:
+      #       val = p_values[a][n][t]
+      #       if val is not None and val > 0:
+      #           print(f"p[{a},{n},{t}] = {val}")
+      # for i in nodes:
+      #   for t in time_window:
+      #     if lambda_values[i,t] > 0:
+      #       print(f"Lambda[{i},{t}] = {lambda_values[i,t]}")
+      # for (i,j) in edges:
+      #   if j <= i:
+      #     continue
+      #   for t in time_window:
+      #     if mu_values[i,j,t] > 0:
+      #       print(f"Mu[{i},{j},{t}] = {mu_values[i,j,t]}")    
+    # print("objective", obj)     
+    #endregion
+    obj = 0
+    for a in agents:
+      obj += objective_values[a]
+    obj -= sum(lambda_values[l,t] for l in nodes for t in time_window) - sum(mu_values[i,j,t] for i,j in edges for t in time_window)
+    objectives.append(obj)   
+    
+    conflicts = 0
+    for l in nodes:
       for t in time_window:
-        val = p_values[a][n][t]
-        if val is not None and val > 0:
-            print(f"p[{a},{n},{t}] = {val}")
-  for i in nodes:
-    for t in time_window:
-      if lambda_values[i,t] > 0:
-        print(f"Lambda[{i},{t}] = {lambda_values[i,t]}")
-         
-  for (i,j) in edges:
-    if j <= i:
-      continue
-    for t in time_window:
-      if mu_values[i,j,t] > 0:
-        print(f"Mu[{i},{j},{t}] = {mu_values[i,j,t]}")  
-  obj = 0
-  for a in agents:
-    obj += objective_values[a]
-  obj -= sum(lambda_values[l,t] for l in nodes for t in time_window) - sum(mu_values[i,j,t] for i,j in edges for t in time_window)
-  objectives.append(obj)     
-  print("objective", obj)     
-  #endregion
-  
-  conflicts = 0
-  for l in nodes:
-    for t in time_window:
-      penalty = 1/(math.sqrt(k+1)) * (sum(p_values[a][l][t] for a in agents) - 1)
-      penalty = 1/(k+1) * (sum(p_values[a][l][t] for a in agents) - 1)
-      if penalty > 0:
-        lambda_values[l,t] = max(0.0, lambda_values[l,t] + penalty)
-        conflicts += 1
-      elif penalty < 0:
-        lambda_values[l,t] = max(0.0, lambda_values[l,t] + penalty)
+        # penalty = 1/(math.sqrt(k+1)) * (sum(p_values[a][l][t] for a in agents) - 1)
+        penalty = 1/(k+1) * (sum(p_values[a][l][t] for a in agents) - 1)
+        if penalty > 0:
+          lambda_values[l,t] = max(0.0, lambda_values[l,t] + penalty)
+          conflicts += 1
+        elif penalty < 0:
+          lambda_values[l,t] = max(0.0, lambda_values[l,t] + penalty)
 
-  for (i,j) in edges:
-    if j <= i:
-      continue
-    for t in time_window:
-      penalty = 1/(math.sqrt(k+1)) * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
-      penalty = 1/(k+1) * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
-      if penalty > 0:
-        mu_values[i,j,t] = max(0.0, mu_values[i,j,t] + penalty)
-        conflicts += 1
-      elif penalty < 0:
-        mu_values[i,j,t] = max(0.0, mu_values[i,j,t] + penalty)    
-        
-  if conflicts < 1:
-    print("NO MORE CONFLICT")
-    break
-
-
-end_time = time.time()
-print(objectives)
-# Output
-print("x[a,(i,j),t] values:")
-for a in agents:
     for (i,j) in edges:
-        for t in time_window:
-            val = x_values[a][(i,j)][t]
-            if val is not None and val > 0:
+      if j <= i:
+        continue
+      for t in time_window:
+        # penalty = 1/(math.sqrt(k+1)) * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
+        penalty = 1/(k+1) * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
+        if penalty > 0:
+          mu_values[i,j,t] = max(0.0, mu_values[i,j,t] + penalty)
+          conflicts += 1
+        elif penalty < 0:
+          mu_values[i,j,t] = max(0.0, mu_values[i,j,t] + penalty)
+    if __name__ == "__main__":
+      if k%10 == 0:
+        print("conflicts", conflicts)
+
+      if conflicts <= 2:
+        print("x[a,(i,j),t] values:")
+        for a in agents:
+          for (i,j) in edges:
+            for t in time_window:
+              val = x_values[a][(i,j)][t]
+              if val is not None and val > 0:
                 print(f"x[{a},{i}->{j},{t}] = {val}")
-# print("\np[a,n,t] values:")
-# for a in agents:
-#     for n in nodes:
-#         for t in time_window:
-#             val = p_values[a][n][t]
-#             if val is not None and val > 0:
-#                 print(f"p[{a},{n},{t}] = {val}")
-# print("Total time (seconds):", end_time - start)
-# # print("Objective (cost):", sum(objective_values[a] for a in agents) -
-# #                           sum(lambda_values[l,t] for l in nodes for t in time_window) -
-# #                           sum(mu_values[i,j,t] for i,j in edges for t in time_window))
-print("conflicts:", conflicts)
-print("nodes:", nodes)
-print("edges:", edges)
-print("agents:", agents)
-print("start_nodes:", start_nodes)
-print("arrival_time:", arrival_time)
-print("departures:", departures)
-print("time_window:", time_window)
-print("train_types:", train_types)
+        print("\np[a,n,t] values:")
+        for a in agents:
+          for n in nodes:
+            for t in time_window:
+              val = p_values[a][n][t]
+              if val is not None and val > 0:
+                  print(f"p[{a},{n},{t}] = {val}")
+        for i in nodes:
+          for t in time_window:
+            if lambda_values[i,t] > 0:
+              print(f"Lambda[{i},{t}] = {lambda_values[i,t]}")
+        print("\nmu[i,j,t] values:")
+        for (i,j) in edges:
+          if j <= i:
+            continue
+          for t in time_window:
+            if mu_values[i,j,t] > 0:
+              print(f"Mu[{i},{j},{t}] = {mu_values[i,j,t]}")              
+        print("conflicts", conflicts)
+    if conflicts < 1:
+      print("NO MORE CONFLICT")
+      break
+
+  end_time = time.time()
+  if __name__ == "__main__":
+    print(objectives)
+    # Output
+    print("\np[a,n,t] values:")
+    for a in agents:
+      for n in nodes:
+        for t in time_window:
+          val = p_values[a][n][t]
+          if val is not None and val > 0:
+              print(f"p[{a},{n},{t}] = {val}")
+    for i in nodes:
+      for t in time_window:
+        if lambda_values[i,t] > 0:
+          print(f"Lambda[{i},{t}] = {lambda_values[i,t]}")
+    print("x[a,(i,j),t] values:")
+    for a in agents:
+      for (i,j) in edges:
+        for t in time_window:
+          val = x_values[a][(i,j)][t]
+          if val is not None and val > 0:
+            print(f"x[{a},{i}->{j},{t}] = {val}")
+    # print("\np[a,n,t] values:")
+    # for a in agents:
+    #     for n in nodes:
+    #         for t in time_window:
+    #             val = p_values[a][n][t]
+    #             if val is not None and val > 0:
+    #                 print(f"p[{a},{n},{t}] = {val}")
+    # print("Total time (seconds):", end_time - start)
+    # # print("Objective (cost):", sum(objective_values[a] for a in agents) -
+    # #                           sum(lambda_values[l,t] for l in nodes for t in time_window) -
+    # #                           sum(mu_values[i,j,t] for i,j in edges for t in time_window))
+    print("conflicts:", conflicts)
+    print("nodes:", nodes)
+    print("edges:", edges)
+    print("agents:", agents)
+    print("start_nodes:", start_nodes)
+    print("arrival_time:", arrival_time)
+    print("departures:", departures)
+    print("time_window:", time_window)
+    print("train_types:", train_types)
+    print("", objective_values)
+  print("Total time (seconds):", end_time - start)
+  print(k)
+
+if __name__ == "__main__":
+  location = 'locations/8_tracks_location.json'
+  scenario = 'scenarios/8_tracks/7_trains.json'
+  nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, r = setup(location, scenario)
+  Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, r)

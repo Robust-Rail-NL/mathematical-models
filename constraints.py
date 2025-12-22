@@ -40,7 +40,7 @@ def train_presence_constraint(m,a,l,ty,t):
   return m.p[a,l,t] <= m.y[a,t]
 
 def train_not_present_constraint(m,a,l,ty,t):
-  if t >= max(m.time_window):
+  if t >= max(m.time_window) or ty != m.train_types[a]:
     return Constraint.Skip
   return m.y[a,t+1] <= 1 - m.p[a,l,t]
 
