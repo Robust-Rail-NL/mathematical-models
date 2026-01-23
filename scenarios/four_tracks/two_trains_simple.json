@@ -80,8 +80,8 @@
             },
             {
                 "leaveTrackPart": "10",
-                "arrival": "180",
-                "departure": "180",
+                "arrival": "120",
+                "departure": "120",
                 "displayName": "11222",
                 "trainUnits": [
                     {

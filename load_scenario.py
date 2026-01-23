@@ -3,63 +3,87 @@ from dataclasses import dataclass
 
 @dataclass
 class TrainUnitType:
-  displayName: str
-  carriages: int
-  length: float
-  combineDuration: str
-  splitDuration: str
-  backNormTime: str
-  backAdditionTime: str
-  reversalDuration: str
+  displayName: str = ""
+  carriages: int = 0
+  length: float = 0.0
+  combineDuration: str = "0"
+  splitDuration: str = "0"
+  backNormTime: str = "0"
+  backAdditionTime: str = "0"
+  reversalDuration: str = "0"
 
 @dataclass
 class TrainUnit:
-  id: str
   type: TrainUnitType
+  id: str = "" 
 
 @dataclass
 class InTrain:
-  id: str
-  entryTrackPart: str
-  arrival: str
-  departure: str
-  firstParkingTrackPart: str
   members: []
+  id: str = ""
+  entryTrackPart: str = ""
+  arrival: str = "0"
+  departure: str = "0"
+  firstParkingTrackPart: str = ""
   
 @dataclass
 class OutTrain:
-  id: str  # displayName
-  leaveTrackPart: str
-  arrival: str
-  departure: str
-  lastParkingTrackPart: str
   trainUnits: []
-  standingIndex: float
+  id: str = ""  # displayName
+  leaveTrackPart: str = ""
+  arrival: str = "0"
+  departure: str = "0"
+  lastParkingTrackPart: str = ""
+  standingIndex: float = 0.0
 
 @dataclass
 class Scenario:
   inTrains: []
   outTrains: []
-  startTime: str
-  endTime: str
   inStanding: {}
   outStanding: {}
+  startTime: str = "0"
+  endTime: str = "0"
 
 def loadInTrains(data):
   in_trains = []
   for train in data["in"]["trains"]:
     members = []
     for member in train["members"]:
+      t = member.get("trainUnit", {})
+      ty = t.get("type", {})
+
       tu_type = TrainUnitType(
-        displayName=member["trainUnit"]["type"]["displayName"],
-        carriages=member["trainUnit"]["type"]["carriages"],
-        length=member["trainUnit"]["type"]["length"],
-        combineDuration=member["trainUnit"]["type"]["combineDuration"],
-        splitDuration=member["trainUnit"]["type"]["splitDuration"],
-        backNormTime=member["trainUnit"]["type"]["backNormTime"],
-        backAdditionTime=member["trainUnit"]["type"]["backAdditionTime"],
-        reversalDuration=member["trainUnit"]["type"]["reversalDuration"])
-      members.append(TrainUnit(id=member["trainUnit"]["id"], type=tu_type))
+          displayName=ty.get("displayName", ""),
+          carriages=ty.get("carriages", 0),
+          length=ty.get("length", 0.0),
+          combineDuration=ty.get("combineDuration", "0"),
+          splitDuration=ty.get("splitDuration", "0"),
+          backNormTime=ty.get("backNormTime", "0"),
+          backAdditionTime=ty.get("backAdditionTime", "0"),
+          reversalDuration=ty.get("reversalDuration", "0"),
+      )
+      tu_type.displayName = (
+        f"{tu_type.displayName}|"
+        f"{tu_type.carriages}|"
+        f"{tu_type.length}|"
+        f"{tu_type.combineDuration}|"
+        f"{tu_type.splitDuration}|"
+        f"{tu_type.backNormTime}|"
+        f"{tu_type.backAdditionTime}|"
+        f"{tu_type.reversalDuration}"
+      )
+      members.append(TrainUnit(id=t.get("id", ""), type=tu_type))
+      # tu_type = TrainUnitType(
+      #   displayName=member["trainUnit"]["type"]["displayName"],
+      #   carriages=member["trainUnit"]["type"]["carriages"],
+      #   length=member["trainUnit"]["type"]["length"],
+      #   combineDuration=member["trainUnit"]["type"]["combineDuration"],
+      #   splitDuration=member["trainUnit"]["type"]["splitDuration"],
+      #   backNormTime=member["trainUnit"]["type"]["backNormTime"],
+      #   backAdditionTime=member["trainUnit"]["type"]["backAdditionTime"],
+      #   reversalDuration=member["trainUnit"]["type"]["reversalDuration"])
+      # members.append(TrainUnit(id=member["trainUnit"]["id"], type=tu_type))
     
     in_trains.append(
       InTrain(
@@ -77,16 +101,40 @@ def loadOutTrains(data):
   for train in data["out"]["trainRequests"]:
     units = []
     for unit in train["trainUnits"]:
+      ty = unit.get("type", {})
+
       tu_type = TrainUnitType(
-        displayName=unit["type"]["displayName"],
-        carriages=unit["type"]["carriages"],
-        length=unit["type"]["length"],
-        combineDuration=unit["type"]["combineDuration"],
-        splitDuration=unit["type"]["splitDuration"],
-        backNormTime=unit["type"]["backNormTime"],
-        backAdditionTime=unit["type"]["backAdditionTime"],
-        reversalDuration=unit.get("reversalDuration", "0"))
+          displayName=ty.get("displayName", ""),
+          carriages=ty.get("carriages", 0),
+          length=ty.get("length", 0.0),
+          combineDuration=ty.get("combineDuration", "0"),
+          splitDuration=ty.get("splitDuration", "0"),
+          backNormTime=ty.get("backNormTime", "0"),
+          backAdditionTime=ty.get("backAdditionTime", "0"),
+          reversalDuration=ty.get("reversalDuration", "0"),
+      )
+      tu_type.displayName = (
+        f"{tu_type.displayName}|"
+        f"{tu_type.carriages}|"
+        f"{tu_type.length}|"
+        f"{tu_type.combineDuration}|"
+        f"{tu_type.splitDuration}|"
+        f"{tu_type.backNormTime}|"
+        f"{tu_type.backAdditionTime}|"
+        f"{tu_type.reversalDuration}"
+      )
+
       units.append(TrainUnit(id=unit.get("id", ""), type=tu_type))
+      # tu_type = TrainUnitType(
+      #   displayName=unit["type"]["displayName"],
+      #   carriages=unit["type"]["carriages"],
+      #   length=unit["type"]["length"],
+      #   combineDuration=unit["type"]["combineDuration"],
+      #   splitDuration=unit["type"]["splitDuration"],
+      #   backNormTime=unit["type"]["backNormTime"],
+      #   backAdditionTime=unit["type"]["backAdditionTime"],
+      #   reversalDuration=unit.get("reversalDuration", "0"))
+      # units.append(TrainUnit(id=unit.get("id", ""), type=tu_type))
 
     out_trains.append(
       OutTrain(
@@ -136,7 +184,9 @@ def load_scenario(data):
 
 
 if __name__ == "__main__":
-  data = load_json('../scenario-planning-inputs/Scenario_settings/SimpleService/scenario_no-service_solver.json')
+  # data = load_json('../scenario-planning-inputs/Scenario_settings/SimpleService/scenario_no-service_solver.json')
+  data = load_json('scenarios/four_tracks/two_trains.json')
+  # data = load_json('scenarios/kleinebinckhorst/test.json')
   agents, start_nodes, destination_nodes, start_time, end_time, arrival_time, departure_time = load_scenario(data)
   print("Agents:", agents)
   print("Start Nodes:", start_nodes)
