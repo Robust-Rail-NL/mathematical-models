@@ -93,7 +93,7 @@ def solve_agent(k, a, m, nodes, edges, time_window, lambda_values, mu_values, co
       m.c[(i,j),t] = cost[i,j,t]
       if i < j:
         m.mu_values[a,i,j,t] = mu_values[a,i,j,t]
-  if k%50 == 0 and k > 0:
+  if k%100 == 0 and k > 0:
     m.multiplyer = m.multiplyer.value/10
   # Solve
   solver = SolverFactory('gurobi')
@@ -108,15 +108,15 @@ def solve_agent(k, a, m, nodes, edges, time_window, lambda_values, mu_values, co
 
 def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, r, cost):
   n_iter = 1000
-  start = time.time()
   objectives = []
   models = {}
   obj = 0
   n_agents = len(agents)
   for a in agents:
     models[a] = create_model(agents, a, nodes, edges, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, r, cost)
-    
+  
   x_values, p_values, y_values, objective_values = {}, {}, {}, {}
+  start = time.time()
   for k in range(n_iter):
     x_values, p_values, y_values, objective_values = {}, {}, {}, {}
     if __name__ == "__main__":

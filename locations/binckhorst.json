@@ -52,9 +52,9 @@
             ],
             "length": 1.0,
             "name": "rail_15",
-            "parkingAllowed": true,
+            "parkingAllowed": false,
             "type": "RailRoad",
-            "sawMovementAllowed": true
+            "sawMovementAllowed": false
         },
         {
             "id": "906",
@@ -402,9 +402,9 @@
             ],
             "length": 0.0,
             "name": "rail_556",
-            "parkingAllowed": true,
+            "parkingAllowed": false,
             "type": "RailRoad",
-            "sawMovementAllowed": true
+            "sawMovementAllowed": false
         },
         {
             "id": "559",
@@ -416,9 +416,9 @@
             ],
             "length": 0.0,
             "name": "rail_559",
-            "parkingAllowed": true,
+            "parkingAllowed": false,
             "type": "RailRoad",
-            "sawMovementAllowed": true
+            "sawMovementAllowed": false
         },
         {
             "id": "104",
