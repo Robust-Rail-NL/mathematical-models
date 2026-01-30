@@ -5,6 +5,7 @@ import load_scenario as ls
 import random
 import time
 import math
+from collections import defaultdict
 
 # random.seed(41)
 
@@ -13,25 +14,34 @@ def objective_lagrangian(m):
   #           for (i, j) in m.edges if i != j)
   # MILP_objective = sum(m.r[(i,j),t]*m.x[(i, j), t] for t in m.time_window
             # for (i, j) in m.edges if i != j)
-  MILP_objective = sum(m.x[(i, j), t] for t in m.time_window
-            for (i, j) in m.edges if i != j)
-  # MILP_objective *= m.multiplyer
-  node_capacity_penalty = 0
-  node_admm_penalty = 0
-  for i in m.nodes:
-    for t in m.time_window:
-      node_capacity_penalty += m.lambda_values[m.a,i,t] * m.p[i,t] 
-      node_admm_penalty += (m.rho * m.node_admm[i,t] - m.rho/2) * m.p[i,t]
-  edge_capacity_penalty = 0
-  edge_admm_penalty = 0
-  for e in m.edges:
-    i, j = e
-    if j <= i:
-      continue
-    for t in m.time_window:
-      edge_capacity_penalty += m.mu_values[m.a,i,j,t] * (m.x[(i,j),t] + m.x[(j,i),t])
-      edge_admm_penalty += (m.rho * m.edge_admm[i,j,t] - m.rho/2) * (m.x[(i,j),t] + m.x[(j,i),t])
-  return MILP_objective + node_capacity_penalty + edge_capacity_penalty + node_admm_penalty + edge_admm_penalty
+  # MILP_objective = sum(m.x[(i, j), t] for t in m.time_window
+            # for (i, j) in m.edges if i != j)
+  # MILP_objective = 0
+  # node_capacity_penalty = 0
+  # node_admm_penalty = 0
+  # edge_capacity_penalty = 0
+  # edge_admm_penalty = 0
+  # for t in m.time_window:
+  #   for e in m.edges:
+  #     i, j = e
+  #     if j <= i:
+  #       continue
+  #     MILP_objective += m.x[(i, j), t] + m.x[(j, i), t]
+  #     edge_capacity_penalty += m.mu_values[m.a,i,j,t] * (m.x[(i,j),t] + m.x[(j,i),t])
+  #     edge_admm_penalty += (m.rho * m.edge_admm[i,j,t] - m.rho/2) * (m.x[(i,j),t] + m.x[(j,i),t])
+  #   for i in m.nodes:
+  #     node_capacity_penalty += m.lambda_values[m.a,i,t] * m.p[i,t] 
+  #     node_admm_penalty += (m.rho * m.node_admm[i,t] - m.rho/2) * m.p[i,t]
+  objective = 0
+  for t in m.time_window:
+    for e in m.edges:
+      i, j = e
+      if j <= i:
+        continue
+      objective += (1 + m.mu_values[m.a,i,j,t] + m.rho * m.edge_admm[i,j,t] - m.rho/2) * (m.x[(i, j), t] + m.x[(j, i), t])
+    for i in m.nodes:
+      objective += (m.lambda_values[m.a,i,t] + m.rho * m.node_admm[i,t] - m.rho/2) * m.p[i,t]
+  return objective
 
 def setup(location, scenario):
   data = ll.load_json(location)
@@ -45,12 +55,14 @@ def setup(location, scenario):
   node_admm_values = {(a,i,t): 0.0 for a in agents for i in nodes for t in time_window}
   edge_admm_values = {(a,i,j,t): 0.0 for a in agents for (i, j) in edges for t in time_window}
   rho = 0.5
-  r = {(i,j,t): random.uniform(0.99,1.01) for (i, j) in edges for t in time_window}
-  cost = {(i,j,t): 1.0 for (i, j) in edges for t in time_window} 
+  # r = {(i,j,t): random.uniform(0.99,1.01) for (i, j) in edges for t in time_window}
+  # cost = {(i,j,t): 1.0 for (i, j) in edges for t in time_window}
+  r = 0
+  cost = 0
     
   return nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, r, cost, rho
 
-def create_model(agents, a, nodes, edges, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, r, cost, rho):
+def create_model(agents, a, nodes, edges, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, r, cost, rho):
   model = ConcreteModel()
   
   model.a = Param(initialize=a)
@@ -108,74 +120,39 @@ def solve_agent(k, a, m, nodes, edges, time_window, lambda_values, mu_values, no
   # Solve
   solver = SolverFactory('gurobi')
   solver.solve(m, warmstart=True, keepfiles=False)
-  x_values = {(i,j): { t: (m.x[(i,j),t].value) for t in m.time_window} for (i,j) in m.edges}
-  p_values = {l: { t: (m.p[l,t].value) for t in m.time_window} for l in m.nodes}
-  y_values = {t: (m.y[t].value) for t in m.time_window}
+  x_values = {(i,j): { t: m.x[(i,j),t].value for t in m.time_window} for (i,j) in m.edges}
+  p_values = {l: { t: m.p[l,t].value for t in m.time_window} for l in m.nodes}
+  y_values = {t: m.y[t].value for t in m.time_window}
   objective_value = m.cost
   
   return x_values, p_values, y_values, value(objective_value)
 
 def update_admm_values(agents, a, nodes, edges, time_window, x_values, p_values, node_admm_values, edge_admm_values):
-  # print(a)
   for a1 in agents:
     if a == a1:
       continue
     for t in time_window:
       for l in nodes:
         node_admm_values[a,l,t] += p_values[a1][l][t]
-        # node_admm_values[a,l,t] += p_values[a1,l,t]
       for (i,j) in edges:
         if i < j:
           edge_admm_values[a,i,j,t] += x_values[a1][(i,j)][t] + x_values[a1][(j,i)][t]
-        
   return node_admm_values, edge_admm_values
 
 
 def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, r, cost, rho):
-  n_iter = 1000
+  n_iter = 100
   objectives = []
   models = {}
   obj = 0
-  n_agents = len(agents)
   for a in agents:
-    models[a] = create_model(agents, a, nodes, edges, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, r, cost, rho)
-  
-  # p_values = {(a,l,t): 0.0 for a in agents for l in nodes for t in time_window}
-  # x_values = {(a,(i,j),t): 0.0 for a in agents for (i,j) in edges for t in time_window}
-  # y_values = {(a,t): 0.0 for a in agents for t in time_window}
-  # objective_values = {a: 0.0 for a in agents}
-  # print(p_values)
-  # x_values, p_values, y_values, objective_values = {}, {}, {}, {}
-  # # for a in agents:
-  # #   p_values[a] = {}
-  # #   x_values[a] = {}
-  # #   for n in nodes:
-  # #     p_values[a][n] = {}
-  # #     for t in time_window:
-  # #       print("a,n,t", a, n, t)
-  # #       p_values[a][n][t] = 0
-  # #   for (i, j) in edges:
-  # #     x_values[a][(i,j)] = {}
-  # #     for t in time_window:
-  # #       x_values[a][(i,j)][t] = 0
-  # # print(p_values)
-  # # print(p_values['33333', '1', 0])
+    models[a] = create_model(agents, a, nodes, edges, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, r, cost, rho)
   start = time.time()
   for k in range(n_iter):
-    x_values, p_values, y_values, objective_values = {}, {}, {}, {}
-    for a in agents:
-      p_values[a] = {}
-      x_values[a] = {}
-      for n in nodes:
-        p_values[a][n] = {}
-        for t in time_window:
-          p_values[a][n][t] = 0
-      for (i, j) in edges:
-        x_values[a][(i,j)] = {}
-        x_values[a][(j,i)] = {}
-        for t in time_window:
-          x_values[a][(i,j)][t] = 0
-          x_values[a][(j,i)][t] = 0
+    x_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+    p_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+    y_values = {}
+    objective_values = {}
     if __name__ == "__main__":
       print(k)
     
@@ -214,47 +191,34 @@ def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, star
     obj = 0
     for a in agents:
       obj += objective_values[a]
-    # obj -= sum(lambda_values[a,l,t] for l in nodes for t in time_window) - sum(mu_values[i,j,t] for i,j in edges for t in time_window)
     objectives.append(obj)   
     
     conflicts = 0
+    p_penalty = {(l, t): sum(p_values[a][l][t] for a in agents) for l in nodes for t in time_window}
+    x_penalty = {(i, j, t): sum(x_values[a][(i, j)][t] + x_values[a][(j, i)][t] for a in agents)
+                 for (i, j) in edges if i < j for t in time_window}
     for a in agents:
-      for l in nodes:
-        for t in time_window:
+      for t in time_window:
+        for l in nodes:
           # penalty = 1/(math.sqrt(k+1)) * (sum(p_values[a][l][t] for a in agents) - 1)
           # penalty = 1/(k+1) * (sum(p_values[a][l][t] for a in agents) - 1)
-          penalty = rho * (sum(p_values[a][l][t] for a in agents) - 1)
+          penalty = rho * (p_penalty[l,t] - 1)
           if penalty > 0:
             lambda_values[a,l,t] = max(0.0, lambda_values[a,l,t] + penalty)
             conflicts += 1
           elif penalty < 0:
             lambda_values[a,l,t] = max(0.0, lambda_values[a,l,t] + penalty)
-
-    for a in agents:
-      for (i,j) in edges:
-        if j <= i:
-          continue
-        for t in time_window:
+        for (i,j) in edges:
+          if j <= i:
+            continue
           # penalty = 1/(math.sqrt(k+1)) * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
           # penalty = 1/(k+1) * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
-          penalty = rho * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
+          penalty = rho * (x_penalty[i,j,t] - 1)
           if penalty > 0:
             mu_values[a,i,j,t] = max(0.0, mu_values[a,i,j,t] + penalty)
             conflicts += 1
           elif penalty < 0:
             mu_values[a,i,j,t] = max(0.0, mu_values[a,i,j,t] + penalty)
-    
-    # for (i,j) in edges:
-    #   if i == j:
-    #     continue
-    #   for t in time_window:
-    #     penalty = sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents)
-    #     if penalty == 0:
-    #       cost[i,j,t] = max(0, cost[i,j,t] - random.uniform(0.09, 0.11))
-    #     elif penalty > 1:
-    #       cost[i,j,t] += random.uniform(0.09,0.11)
-    #     else:
-    #       cost[i,j,t] += random.uniform(0.09,0.11)
     
     if __name__ == "__main__":
       if k%10 == 0:
@@ -344,7 +308,7 @@ if __name__ == "__main__":
   # scenario = 'scenarios/six_tracks/four_trains.json'
   location = 'locations/binckhorst.json'
   # scenario = '../robust-rail-solver/ServiceSiteScheduling/database/TUSS-Instance-Generator/scenario_settings/setting_A/scenario_solver.json'
-  scenario = 'scenarios/binckhorst3/20_trains.json'
+  scenario = 'scenarios/binckhorst3/15_trains4.json'
   # location = 'locations/6_tracks_location.json'
   # scenario = 'scenarios/6_tracks/5_trains_difficult.json'
   # location = 'locations/ten_tracks_location.json'

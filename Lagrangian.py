@@ -5,6 +5,7 @@ import load_scenario as ls
 import random
 import time
 import math
+from collections import defaultdict
 
 # random.seed(41)
 
@@ -13,23 +14,45 @@ def objective_lagrangian(m):
   #           for (i, j) in m.edges if i != j)
   # MILP_objective = sum(m.r[(i,j),t]*m.x[(i, j), t] for t in m.time_window
             # for (i, j) in m.edges if i != j)
-  MILP_objective = sum(m.x[(i, j), t] for t in m.time_window
-            for (i, j) in m.edges if i != j)
-  MILP_objective *= m.multiplyer
-  node_capacity_penalty = 0
-  for i in m.nodes:
-    for t in m.time_window:
-      lambda_value = m.lambda_values[m.a,i,t]
-      node_capacity_penalty += lambda_value * m.p[i,t] 
-  edge_capacity_penalty = 0
-  for e in m.edges:
-    i, j = e
-    if j <= i:
-      continue
-    for t in m.time_window:
-      mu_value = m.mu_values[m.a,i,j,t]
-      edge_capacity_penalty += mu_value * (m.x[(i,j),t] + m.x[(j,i),t])
-  return MILP_objective + node_capacity_penalty + edge_capacity_penalty
+  # MILP_objective = sum(m.x[(i, j), t] for t in m.time_window
+  #           for (i, j) in m.edges if i != j)
+  # MILP_objective *= m.multiplyer
+  # node_capacity_penalty = 0
+  # for i in m.nodes:
+  #   for t in m.time_window:
+  #     lambda_value = m.lambda_values[m.a,i,t]
+  #     node_capacity_penalty += lambda_value * m.p[i,t] 
+  # edge_capacity_penalty = 0
+  # for e in m.edges:
+  #   i, j = e
+  #   if j <= i:
+  #     continue
+  #   for t in m.time_window:
+  #     mu_value = m.mu_values[m.a,i,j,t]
+  #     edge_capacity_penalty += mu_value * (m.x[(i,j),t] + m.x[(j,i),t])
+  
+  # MILP_objective = 0
+  # node_capacity_penalty = 0
+  # edge_capacity_penalty = 0
+  # for t in m.time_window:
+  #   for e in m.edges:
+  #     i, j = e
+  #     if j <= i:
+  #       continue
+  #     MILP_objective += m.x[(i, j), t] + m.x[(j, i), t]
+  #     edge_capacity_penalty += m.mu_values[m.a,i,j,t] * (m.x[(i,j),t] + m.x[(j,i),t])
+  #   for i in m.nodes:
+  #     node_capacity_penalty += m.lambda_values[m.a,i,t] * m.p[i,t] 
+  objective = 0
+  for t in m.time_window:
+    for e in m.edges:
+      i, j = e
+      if j <= i:
+        continue
+      objective += (1 + m.mu_values[m.a,i,j,t]) * (m.x[(i, j), t] + m.x[(j, i), t])
+    for i in m.nodes:
+      objective += m.lambda_values[m.a,i,t] * m.p[i,t]
+  return objective
 
 def setup(location, scenario):
   data = ll.load_json(location)
@@ -98,9 +121,9 @@ def solve_agent(k, a, m, nodes, edges, time_window, lambda_values, mu_values, co
   # Solve
   solver = SolverFactory('gurobi')
   solver.solve(m, warmstart=True, keepfiles=False)
-  x_values = {(i,j): { t: (m.x[(i,j),t].value) for t in m.time_window} for (i,j) in m.edges}
-  p_values = {l: { t: (m.p[l,t].value) for t in m.time_window} for l in m.nodes}
-  y_values = {t: (m.y[t].value) for t in m.time_window}
+  x_values = {(i,j): { t: m.x[(i,j),t].value for t in m.time_window} for (i,j) in m.edges}
+  p_values = {l: { t: m.p[l,t].value for t in m.time_window} for l in m.nodes}
+  y_values = {t: m.y[t].value for t in m.time_window}
   objective_value = m.cost
   
   return x_values, p_values, y_values, value(objective_value)
@@ -118,7 +141,10 @@ def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, star
   x_values, p_values, y_values, objective_values = {}, {}, {}, {}
   start = time.time()
   for k in range(n_iter):
-    x_values, p_values, y_values, objective_values = {}, {}, {}, {}
+    x_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+    p_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+    y_values = {}
+    objective_values = {}
     if __name__ == "__main__":
       print(k)
     
@@ -156,53 +182,36 @@ def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, star
     obj = 0
     for a in agents:
       obj += objective_values[a]
-    # obj -= sum(lambda_values[a,l,t] for l in nodes for t in time_window) - sum(mu_values[i,j,t] for i,j in edges for t in time_window)
     objectives.append(obj)   
     
     conflicts = 0
+    p_penalty = {(l, t): sum(p_values[a][l][t] for a in agents) for l in nodes for t in time_window}
+    x_penalty = {(i, j, t): sum(x_values[a][(i, j)][t] + x_values[a][(j, i)][t] for a in agents)
+                 for (i, j) in edges if i < j for t in time_window}
     for a in agents:
-      for l in nodes:
-        for t in time_window:
+      for t in time_window:
+        for l in nodes:
           # penalty = 1/(math.sqrt(k+1)) * (sum(p_values[a][l][t] for a in agents) - 1)
-          penalty = 1/(k+1) * (sum(p_values[a][l][t] for a in agents) - 1)
+          penalty = 1/(k+1) * (p_penalty[l,t] - 1)
           if penalty > 0:
-            # if a != agents[k%n_agents]:
             if a != agents[(n_agents - 1 - k) % n_agents]:
               lambda_values[a,l,t] = max(0.0, lambda_values[a,l,t] + penalty)
             conflicts += 1
           elif penalty < 0:
-            # if a != agents[k%n_agents]:
             if a != agents[(n_agents - 1 - k) % n_agents]:
               lambda_values[a,l,t] = max(0.0, lambda_values[a,l,t] + penalty)
-
-    for a in agents:
-      for (i,j) in edges:
-        if j <= i:
-          continue
-        for t in time_window:
+        for (i,j) in edges:
+          if j <= i:
+            continue
           # penalty = 1/(math.sqrt(k+1)) * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
-          penalty = 1/(k+1) * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
+          penalty = 1/(k+1) * (x_penalty[i,j,t] - 1)
           if penalty > 0:
-            # if a != agents[k%n_agents]:
             if a != agents[(n_agents - 1 - k) % n_agents]:
               mu_values[a,i,j,t] = max(0.0, mu_values[a,i,j,t] + penalty)
             conflicts += 1
           elif penalty < 0:
-            # if a != agents[k%n_agents]:
             if a != agents[(n_agents - 1 - k) % n_agents]:
               mu_values[a,i,j,t] = max(0.0, mu_values[a,i,j,t] + penalty)
-    
-    # for (i,j) in edges:
-    #   if i == j:
-    #     continue
-    #   for t in time_window:
-    #     penalty = sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents)
-    #     if penalty == 0:
-    #       cost[i,j,t] = max(0, cost[i,j,t] - random.uniform(0.09, 0.11))
-    #     elif penalty > 1:
-    #       cost[i,j,t] += random.uniform(0.09,0.11)
-    #     else:
-    #       cost[i,j,t] += random.uniform(0.09,0.11)
     
     if __name__ == "__main__":
       if k%10 == 0:
