@@ -38,7 +38,7 @@ def objective_lagrangian(m):
       i, j = e
       if j <= i:
         continue
-      objective += (1 + m.mu_values[m.a,i,j,t] + m.rho * m.edge_admm[i,j,t] - m.rho/2) * (m.x[(i, j), t] + m.x[(j, i), t])
+      objective += (1*m.rho + m.mu_values[m.a,i,j,t] + m.rho * m.edge_admm[i,j,t] - m.rho/2) * (m.x[(i, j), t] + m.x[(j, i), t])
     for i in m.nodes:
       objective += (m.lambda_values[m.a,i,t] + m.rho * m.node_admm[i,t] - m.rho/2) * m.p[i,t]
   return objective
@@ -197,11 +197,21 @@ def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, star
     p_penalty = {(l, t): sum(p_values[a][l][t] for a in agents) for l in nodes for t in time_window}
     x_penalty = {(i, j, t): sum(x_values[a][(i, j)][t] + x_values[a][(j, i)][t] for a in agents)
                  for (i, j) in edges if i < j for t in time_window}
+    for l in nodes:
+      for t in time_window:
+        if p_penalty[l,t] > 1.0:
+          print(f"p_penalty[{l},{t}] = {p_penalty[l,t]}")
+    for (i,j) in edges:
+      if j <= i:
+        continue
+      for t in time_window:
+        if x_penalty[i,j,t] > 1.0:
+          print(f"x_penalty[{i},{j},{t}] = {x_penalty[i,j,t]}")
     for a in agents:
       for t in time_window:
         for l in nodes:
           # penalty = 1/(math.sqrt(k+1)) * (sum(p_values[a][l][t] for a in agents) - 1)
-          # penalty = 1/(k+1) * (sum(p_values[a][l][t] for a in agents) - 1)
+          # penalty = 1/(k+1) * (p_penalty[l,t] - 1)
           penalty = rho * (p_penalty[l,t] - 1)
           if penalty > 0:
             lambda_values[a,l,t] = max(0.0, lambda_values[a,l,t] + penalty)
@@ -212,7 +222,7 @@ def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, star
           if j <= i:
             continue
           # penalty = 1/(math.sqrt(k+1)) * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
-          # penalty = 1/(k+1) * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
+          # penalty = 1/(k+1) * (x_penalty[i,j,t] - 1)
           penalty = rho * (x_penalty[i,j,t] - 1)
           if penalty > 0:
             mu_values[a,i,j,t] = max(0.0, mu_values[a,i,j,t] + penalty)
@@ -308,7 +318,7 @@ if __name__ == "__main__":
   # scenario = 'scenarios/six_tracks/four_trains.json'
   location = 'locations/binckhorst.json'
   # scenario = '../robust-rail-solver/ServiceSiteScheduling/database/TUSS-Instance-Generator/scenario_settings/setting_A/scenario_solver.json'
-  scenario = 'scenarios/binckhorst3/15_trains4.json'
+  scenario = 'scenarios/binckhorst3/20_trains3.json'
   # location = 'locations/6_tracks_location.json'
   # scenario = 'scenarios/6_tracks/5_trains_difficult.json'
   # location = 'locations/ten_tracks_location.json'

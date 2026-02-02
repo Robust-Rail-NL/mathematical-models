@@ -47,6 +47,7 @@ class Scenario:
 
 def loadInTrains(data):
   in_trains = []
+  i = 0
   for train in data["in"]["trains"]:
     members = []
     for member in train["members"]:
@@ -64,6 +65,7 @@ def loadInTrains(data):
           reversalDuration=ty.get("reversalDuration", "0"),
       )
       tu_type.displayName = (
+        f"{i}"
         f"{tu_type.displayName}|"
         f"{tu_type.carriages}|"
         f"{tu_type.length}|"
@@ -74,6 +76,7 @@ def loadInTrains(data):
         f"{tu_type.reversalDuration}"
       )
       members.append(TrainUnit(id=t.get("id", ""), type=tu_type))
+      i += 1
       # tu_type = TrainUnitType(
       #   displayName=member["trainUnit"]["type"]["displayName"],
       #   carriages=member["trainUnit"]["type"]["carriages"],
@@ -98,6 +101,7 @@ def loadInTrains(data):
 
 def loadOutTrains(data):
   out_trains = []
+  i = 0
   for train in data["out"]["trainRequests"]:
     units = []
     for unit in train["trainUnits"]:
@@ -114,6 +118,7 @@ def loadOutTrains(data):
           reversalDuration=ty.get("reversalDuration", "0"),
       )
       tu_type.displayName = (
+        f"{i}"
         f"{tu_type.displayName}|"
         f"{tu_type.carriages}|"
         f"{tu_type.length}|"
@@ -125,6 +130,7 @@ def loadOutTrains(data):
       )
 
       units.append(TrainUnit(id=unit.get("id", ""), type=tu_type))
+      i += 1
       # tu_type = TrainUnitType(
       #   displayName=unit["type"]["displayName"],
       #   carriages=unit["type"]["carriages"],

@@ -49,7 +49,7 @@ def objective_lagrangian(m):
       i, j = e
       if j <= i:
         continue
-      objective += (1 + m.mu_values[m.a,i,j,t]) * (m.x[(i, j), t] + m.x[(j, i), t])
+      objective += (1*m.multiplyer + m.mu_values[m.a,i,j,t]) * (m.x[(i, j), t] + m.x[(j, i), t])
     for i in m.nodes:
       objective += m.lambda_values[m.a,i,t] * m.p[i,t]
   return objective
@@ -138,7 +138,7 @@ def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, star
   for a in agents:
     models[a] = create_model(agents, a, nodes, edges, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, r, cost)
   
-  x_values, p_values, y_values, objective_values = {}, {}, {}, {}
+  # x_values, p_values, y_values, objective_values = {}, {}, {}, {}
   start = time.time()
   for k in range(n_iter):
     x_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
@@ -185,14 +185,15 @@ def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, star
     objectives.append(obj)   
     
     conflicts = 0
-    p_penalty = {(l, t): sum(p_values[a][l][t] for a in agents) for l in nodes for t in time_window}
-    x_penalty = {(i, j, t): sum(x_values[a][(i, j)][t] + x_values[a][(j, i)][t] for a in agents)
-                 for (i, j) in edges if i < j for t in time_window}
+    # p_penalty = {(l, t): sum(p_values[a][l][t] for a in agents) for l in nodes for t in time_window}
+    # x_penalty = {(i, j, t): sum(x_values[a][(i, j)][t] + x_values[a][(j, i)][t] for a in agents)
+                #  for (i, j) in edges if i < j for t in time_window}
     for a in agents:
       for t in time_window:
         for l in nodes:
           # penalty = 1/(math.sqrt(k+1)) * (sum(p_values[a][l][t] for a in agents) - 1)
-          penalty = 1/(k+1) * (p_penalty[l,t] - 1)
+          penalty = 1/(k+1) * (sum(p_values[a][l][t] for a in agents) - 1)
+          # penalty = 1/(k+1) * (p_penalty[l,t] - 1)
           if penalty > 0:
             if a != agents[(n_agents - 1 - k) % n_agents]:
               lambda_values[a,l,t] = max(0.0, lambda_values[a,l,t] + penalty)
@@ -204,7 +205,8 @@ def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, star
           if j <= i:
             continue
           # penalty = 1/(math.sqrt(k+1)) * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
-          penalty = 1/(k+1) * (x_penalty[i,j,t] - 1)
+          penalty = 1/(k+1) * (sum(x_values[a][(i,j)][t] + x_values[a][(j,i)][t] for a in agents) - 1)
+          # penalty = 1/(k+1) * (x_penalty[i,j,t] - 1)
           if penalty > 0:
             if a != agents[(n_agents - 1 - k) % n_agents]:
               mu_values[a,i,j,t] = max(0.0, mu_values[a,i,j,t] + penalty)
@@ -301,7 +303,7 @@ if __name__ == "__main__":
   # scenario = 'scenarios/six_tracks/four_trains.json'
   location = 'locations/binckhorst.json'
   # scenario = '../robust-rail-solver/ServiceSiteScheduling/database/TUSS-Instance-Generator/scenario_settings/setting_A/scenario_solver.json'
-  scenario = 'scenarios/kleinebinckhorst/test2.json'
+  scenario = 'scenarios/binckhorst3/15_trains.json'
   # location = 'locations/6_tracks_location.json'
   # scenario = 'scenarios/6_tracks/5_trains_difficult.json'
   # location = 'locations/ten_tracks_location.json'
