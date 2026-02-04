@@ -82,29 +82,6 @@
         "trainRequests": [
             {
                 "leaveTrackPart": "12",
-                "arrival": "540",
-                "departure": "540",
-                "displayName": "33334",
-                "trainUnits": [
-                    {
-                        "type": {
-                            "displayName": "SNG",
-                            "carriages": 3,
-                            "length": 59.5,
-                            "combineDuration": "180",
-                            "splitDuration": "120",
-                            "reversalDuration": "0",
-                            "backNormTime": "0",
-                            "backAdditionTime": "0"
-                        },
-                        "id": ""
-                    }
-                ],
-                "lastParkingTrackPart": "3",
-                "standingIndex": 0.0
-            },
-            {
-                "leaveTrackPart": "12",
                 "arrival": "480",
                 "departure": "480",
                 "displayName": "11112",
@@ -124,6 +101,29 @@
                     }
                 ],
                 "lastParkingTrackPart": "2",
+                "standingIndex": 0.0
+            },
+            {
+                "leaveTrackPart": "12",
+                "arrival": "540",
+                "departure": "540",
+                "displayName": "33334",
+                "trainUnits": [
+                    {
+                        "type": {
+                            "displayName": "SNG",
+                            "carriages": 3,
+                            "length": 59.5,
+                            "combineDuration": "180",
+                            "splitDuration": "120",
+                            "reversalDuration": "0",
+                            "backNormTime": "0",
+                            "backAdditionTime": "0"
+                        },
+                        "id": ""
+                    }
+                ],
+                "lastParkingTrackPart": "3",
                 "standingIndex": 0.0
             },
             {

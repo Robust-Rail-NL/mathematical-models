@@ -4,10 +4,19 @@ import constraints as c
 import load_location as ll
 import load_scenario as ls
 import time
+import gurobipy as gp
+from gurobipy import GRB
 
 def objective(m):
   return sum(m.x[a, (i, j), t] for a in m.agents for t in m.time_window
-            for (i, j) in m.edges if i != j)
+    for (i, j) in m.edges if i != j)
+
+def first_solution_callback(pyomo_model, solver, where):
+    if where == GRB.Callback.MIPSOL:
+      grb_model = solver._solver_model
+      if not hasattr(grb_model, "_first_solution_time"):
+        grb_model._first_solution_time = grb_model.cbGet(GRB.Callback.RUNTIME)
+
 
 def setup(location, scenario):
     data = ll.load_json(location)
@@ -57,50 +66,76 @@ def solve(nodes, edges, agents, start_nodes, arrival_time, departures, start_tim
     model = create_model(nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window)
     
     # # Solve using Gurobi
-    solver = SolverFactory('gurobi')
+    # solver = SolverFactory('gurobi')
+    solver = SolverFactory('gurobi_persistent')
+    solver.set_instance(model)
+    
+    # def stop_after_first_solution(pyomo_model, solver_obj, where):
+    #     grb_model = solver_obj._solver_model
+    #     if where == GRB.Callback.MIPSOL:
+    #         # Record first solution time
+    #         if not hasattr(grb_model, "_first_solution_time"):
+    #             grb_model._first_solution_time = grb_model.cbGet(GRB.Callback.RUNTIME)
+    #         # Immediately terminate the solve
+    #         grb_model.terminate()
+    solver.set_gurobi_param('TimeLimit', 600)
+    solver.set_callback(first_solution_callback)
+    # solver.set_callback(stop_after_first_solution)
+
     start = time.time()
     result = solver.solve(model, tee=True, keepfiles=True)
     end = time.time()
-    if (result.solver.status != SolverStatus.ok or
-        result.solver.termination_condition not in (
-            TerminationCondition.optimal,
-            TerminationCondition.feasible
-        )):
-        raise RuntimeError(
-            f"No solution found. "
-            f"Status: {result.solver.status}, "
-            f"Termination: {result.solver.termination_condition}"
-        )
+    
+    time_solution = 0.0
+    grb_model = solver._solver_model
+    if hasattr(grb_model, "_first_solution_time"):
+        time_solution = grb_model._first_solution_time
+    # if (result.solver.status != SolverStatus.ok or
+    #     result.solver.termination_condition not in (
+    #         TerminationCondition.optimal,
+    #         TerminationCondition.feasible
+    #     )):
+    #     raise RuntimeError(
+    #         f"No solution found. "
+    #         f"Status: {result.solver.status}, "
+    #         f"Termination: {result.solver.termination_condition}"
+        # )
+        
     # # Output
-    if __name__ == "__main__":
-        print("x[a,(i,j),t] values:")
-        for a in model.agents:
-            for (i,j) in model.edges:
-                for t in model.time_window:
-                    val = model.x[a, (i,j), t].value
-                    if val is not None and val > 0:
-                        print(f"x[{a},{i}->{j},{t}] = {val}")
-        print("\np[a,n,t] values:")
-        for a in model.agents:
-            for n in model.nodes:
-                for t in model.time_window:
-                    val = model.p[a, n, t].value
-                    if val is not None and val > 0:
-                        print(f"p[{a},{n},{t}] = {val}")
+    # if __name__ == "__main__":
+    #     print("x[a,(i,j),t] values:")
+    #     for a in model.agents:
+    #         for (i,j) in model.edges:
+    #             for t in model.time_window:
+    #                 val = model.x[a, (i,j), t].value
+    #                 if val is not None and val > 0:
+    #                     print(f"x[{a},{i}->{j},{t}] = {val}")
+    #     print("\np[a,n,t] values:")
+    #     for a in model.agents:
+    #         for n in model.nodes:
+    #             for t in model.time_window:
+    #                 val = model.p[a, n, t].value
+    #                 if val is not None and val > 0:
+    #                     print(f"p[{a},{n},{t}] = {val}")
         # print("\ny[a,t] values:")
         # for a in model.agents:
         #     for t in model.time_window:
         #         val = model.y[a, t].value
         #         if val is not None and val > 0:
         #             print(f"y[{a},{t}] = {val}")                
-    print("Objective (cost):", model.cost())
+    # print("Objective (cost):", model.cost())
     print("Time taken (seconds):", end - start)
-    return 0, end - start
+    print("Time to first solution (seconds):", time_solution)
+    return 0, end - start, time_solution
     
 if __name__ == "__main__":
     # location = 'locations/five_tracks_location.json'
     # scenario = 'scenarios/five_tracks/two_trains_easiest.json'
     location = 'locations/binckhorst.json'
-    scenario = 'scenarios/kleinebinckhorst/15_trains4.json'
+    # scenario = 'scenarios/binckhorst3/testing.json'
+    scenario = 'scenarios/binckhorst_mixed_traffic_false/5_trains1.json'
+    # location = 'locations/four_tracks_location.json'
+    # scenario = 'scenarios/four_tracks/two_trains_simple.json'
     nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = setup(location, scenario)
     solve(nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types)
+    

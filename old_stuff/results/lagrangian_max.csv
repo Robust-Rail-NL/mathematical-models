@@ -1,0 +1,24 @@
+scenario,k,time
+locations/five_tracks_location.json | scenarios/five_tracks/two_trains_easiest.json,1,0.33879733085632324
+locations/five_tracks_location.json | scenarios/five_tracks/two_trains_simple.json,0,0.04807877540588379
+locations/five_tracks_location.json | scenarios/five_tracks/two_trains.json,156,5.657469987869263
+locations/five_tracks_location.json | scenarios/five_tracks/three_trains.json,32,1.9420661926269531
+locations/five_tracks_location.json | scenarios/five_tracks/three_trains_difficult.json,999,34.57485771179199
+locations/four_tracks_location.json | scenarios/four_tracks/two_trains_simple.json,0,0.030440330505371094
+locations/four_tracks_location.json | scenarios/four_tracks/two_trains_more_time.json,155,4.616186857223511
+locations/four_tracks_location.json | scenarios/four_tracks/two_trains.json,152,2.8490052223205566
+locations/six_tracks_location.json | scenarios/six_tracks/three_trains.json,3,0.268632173538208
+locations/six_tracks_location.json | scenarios/six_tracks/four_trains.json,7,0.49207448959350586
+locations/six_tracks_location.json | scenarios/six_tracks/four_trains_difficult.json,7,0.6892349720001221
+locations/circle_location.json | scenarios/circle/four_trains.json,5,0.3301825523376465
+locations/circle_location_small.json | scenarios/circle/three_trains.json,13,0.4104928970336914
+locations/8_tracks_location.json | scenarios/8_tracks/7_trains.json,8,1.868882656097412
+locations/ten_tracks_location.json | scenarios/ten_tracks/nine_trains.json,9,4.063525438308716
+locations/ten_tracks_location.json | scenarios/ten_tracks/nine_trains_more_time.json,10,5.518683195114136
+locations/ten_tracks_location.json | scenarios/ten_tracks/ten_trains.json,11,5.880954027175903
+locations/ten_tracks_location.json | scenarios/ten_tracks/ten_trains_more_time.json,12,7.9562788009643555
+locations/6_tracks_location.json | scenarios/6_tracks/4_trains.json,4,0.38118958473205566
+locations/6_tracks_location.json | scenarios/6_tracks/5_trains.json,8,0.8996834754943848
+locations/6_tracks_location.json | scenarios/6_tracks/5_trains_difficult.json,6,0.8002221584320068
+locations/9_tracks_location.json | scenarios/9_tracks/7_trains.json,15,3.836716651916504
+locations/9_tracks_location.json | scenarios/9_tracks/7_trains_difficult.json,105,23.4829843044281

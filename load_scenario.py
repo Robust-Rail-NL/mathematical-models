@@ -1,5 +1,6 @@
 from load_location import load_json
 from dataclasses import dataclass
+import math
 
 @dataclass
 class TrainUnitType:
@@ -156,8 +157,8 @@ def loadOutTrains(data):
   return out_trains
 
 def convert_to_input(scenario):
-  start_time = int(int(scenario.startTime)/60)
-  end_time = int(int(scenario.endTime)/60)
+  start_time = int(math.ceil(int(scenario.startTime)/60))
+  end_time = int(math.ceil(int(scenario.endTime)/60))
   agents = []
   start_nodes = {}
   arrival_time = {}

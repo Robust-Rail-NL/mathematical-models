@@ -46,9 +46,9 @@
             ],
             "length": 1000.0,
             "name": "rail_1",
-            "parkingAllowed": true,
+            "parkingAllowed": false,
             "type": "RailRoad",
-            "sawMovementAllowed": true
+            "sawMovementAllowed": false
         },
         {
             "id": "2",

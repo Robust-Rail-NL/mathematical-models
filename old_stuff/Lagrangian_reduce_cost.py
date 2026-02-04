@@ -232,3 +232,36 @@ print("time_window:", time_window)
 print("train_types:", train_types)
 # print("cost", cost)
 print(k)
+
+# 1/k of 1/wortel k en max(0)
+# plot objective value van elke iteratie om te kijken naar de convergence
+#  lagrangian relaxation van IP vs LP
+# maak vars contiunue om LP te be kijken
+# welke penalty waardes geven een goede oplossing
+# is die oplosbaar met penalty waardes?
+# gwn de violation als penalty geven
+# kleine pertubatie toevoegen
+# bij opschalen
+# solver niet nodig voor simple path, dus kunnen niet gebruik maken van de randomness
+# van de solver
+# kan ik het oplossen zonder de randomness van de solver
+# kijken of ik het hele pad kan straffen
+# type problemen classifiseren
+# zelfde spoor
+# om leiden
+# andere padden goedkoper maken
+# intergrality gap tussen 4 en 6
+# na solven een pad fixen, dan moet die andere trein wat anders doen
+# ga nooit alle violations oplossen
+# mogelijk resultaat, dit is niet op te lossen met onze methoden
+# wat voor problemen kan ik tegen komen?
+# random.uniform(0.999999,1.000001) either finds solution in first 2 iterations or 
+# after 70 or 86 iterations because then then difference between the penalties
+# for two timesteps can be overcome by the randomeness
+# I think given enough iterations random.uniform(0.99,1.01) always finds the solution
+# finds solution for circle_four 47/50 with 1000 iterations
+# finds solution for two train on four/five. three train on 5 and 4 train on 6
+# and circle_four not circle_three
+# four trains difficult very hard with all departures at 420
+# Research if worse at finding solutions with multiple solutions?
+# run a few iterations with the same penalties but different random
