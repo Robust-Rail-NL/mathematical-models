@@ -16,9 +16,9 @@ def objective_lagrangian(m):
       i, j = e
       if j <= i:
         continue
-      objective += (1*0.26 + m.mu_values[i,j,t] + m.rho * m.edge_admm[i,j,t] - m.rho/2) * (m.x[(i, j), t] + m.x[(j, i), t])
+      objective += (1 + m.mu_values[i,j,t] + m.rho * m.edge_admm[i,j,t] - m.rho/2) * (m.x[(i, j), t] + m.x[(j, i), t])
     for i in m.nodes:
-      objective += (m.lambda_values[i,t] + m.rho * m.node_admm[i,t] - m.rho/2) * m.p[i,t]
+      objective += (m.lambda_values[i,t] + m.rho * m.node_admm[i,t]) * m.p[i,t]
   return objective
 # note: if 1*z - m.rho/2 = 0 the solver does not assign values to certain x causing errors
 # note: 1*z has to be bigger than -m.rho/2 because other wise moving decreases the cost i think
@@ -34,7 +34,7 @@ def setup(location, scenario):
   mu_values = {(i,j,t): 0.0 for (i, j) in edges for t in time_window}
   node_admm_values = {(a,i,t): 0.0 for a in agents for i in nodes for t in time_window}
   edge_admm_values = {(a,i,j,t): 0.0 for a in agents for (i, j) in edges for t in time_window}
-  rho = 0.5
+  rho = 1.99
   # r = {(i,j,t): random.uniform(0.99,1.01) for (i, j) in edges for t in time_window}
   # cost = {(i,j,t): 1.0 for (i, j) in edges for t in time_window}
   r = 0
@@ -208,16 +208,23 @@ def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, star
     p_penalty = {(l, t): sum(p_values[a][l][t] for a in agents) for l in nodes for t in time_window}
     x_penalty = {(i, j, t): sum(x_values[a][(i, j)][t] + x_values[a][(j, i)][t] for a in agents)
                  for (i, j) in edges if i < j for t in time_window}
-    # for l in nodes:
-    #   for t in time_window:
-    #     if p_penalty[l,t] > 1.0:
-    #       print(f"p_penalty[{l},{t}] = {p_penalty[l,t]}")
+    for l in nodes:
+      for t in time_window:
+        if p_penalty[l,t] > 1.0 and l == '15':
+          print(f"p_penalty[{l},{t}] = {p_penalty[l,t]}")
     # for (i,j) in edges:
     #   if j <= i:
     #     continue
     #   for t in time_window:
     #     if x_penalty[i,j,t] > 1.0:
     #       print(f"x_penalty[{i},{j},{t}] = {x_penalty[i,j,t]}")
+    # for a in agents:
+    #   # print(f"node_admm_values[{a}] = {node_admm_values[a,'15','106']}")
+    #   # print(f"node_admm_values[{a}] = {node_admm_values[a,'15','108']}")
+    #   for i in nodes:
+    #     for t in time_window:
+    #       if node_admm_values[a,i,t] > 0 and i == '15':
+    #         print(f"node_admm_values[{a},{i},{t}] = {node_admm_values[a,i,t]}")
     # for a in agents:
     for t in time_window:
       for l in nodes:
@@ -322,7 +329,27 @@ def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, star
     print("objectives:", objectives)
   print("Total time (seconds):", end_time - start)
   print(k)
-  return k, end_time - start
+
+  p_values_filtered = []
+  for agent in agents:
+    for node in nodes:
+      for t in time_window:
+        if p_values[agent][node][t] == 1:
+          p_values_filtered.append((agent, node, t))
+
+  x_values_filtered = []
+  for agent in agents:
+      for edge in edges:
+        i, j = edge
+        for t in time_window:
+          val = x_values[agent][edge][t]
+          if val == 1:
+           x_values_filtered.append((agent, i, j, t))
+
+  # print(x_values_filtered)
+  # print(p_values_filtered)
+  
+  return k, end_time - start, x_values_filtered, p_values_filtered
 
 if __name__ == "__main__":
   # location = 'locations/circle_location_small.json'
@@ -330,7 +357,7 @@ if __name__ == "__main__":
   location = 'locations/binckhorst.json'
   # scenario = '../robust-rail-solver/ServiceSiteScheduling/database/TUSS-Instance-Generator/scenario_settings/setting_A/scenario_solver.json'
   # scenario = 'scenarios/binckhorst3/20_trains.json'
-  scenario = 'scenarios/binckhorst_mixed_traffic_false/30_trains1.json'
+  scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/5_trains5.json'
   # location = 'locations/6_tracks_location.json'
   # scenario = 'scenarios/6_tracks/5_trains_difficult.json'
   # location = 'locations/ten_tracks_location.json'
@@ -338,5 +365,5 @@ if __name__ == "__main__":
   # location = 'locations/ten_tracks_location.json'
   # scenario = 'scenarios/ten_tracks/ten_trains_more_time.json'
   nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, r, cost, rho = setup(location, scenario)
-  k, time = Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, r, cost, rho)
+  k, time, x_values_filtered, p_values_filtered = Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, r, cost, rho)
   

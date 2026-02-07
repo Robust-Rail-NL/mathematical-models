@@ -66,7 +66,7 @@ def loadInTrains(data):
           reversalDuration=ty.get("reversalDuration", "0"),
       )
       tu_type.displayName = (
-        f"{i}"
+        # f"{i}"
         f"{tu_type.displayName}|"
         f"{tu_type.carriages}|"
         f"{tu_type.length}|"
@@ -119,7 +119,7 @@ def loadOutTrains(data):
           reversalDuration=ty.get("reversalDuration", "0"),
       )
       tu_type.displayName = (
-        f"{i}"
+        # f"{i}"
         f"{tu_type.displayName}|"
         f"{tu_type.carriages}|"
         f"{tu_type.length}|"
