@@ -613,28 +613,6 @@
             "parkingAllowed": false
         },
         {
-            "id": "963",
-            "type": "Switch",
-            "aSide": [
-                "906",
-                "52",
-                "53",
-                "54",
-                "55",
-                "56",
-                "57",
-                "58",
-                "59"
-            ],
-            "bSide": [
-                "15"
-            ],
-            "name": "switch_963",
-            "length": 0.0,
-            "sawMovementAllowed": false,
-            "parkingAllowed": false
-        },
-        {
             "id": "555",
             "type": "Switch",
             "aSide": [
