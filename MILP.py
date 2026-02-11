@@ -1,4 +1,5 @@
-from pyomo.environ import ConcreteModel, Set, Param, Var, Objective, Constraint, Binary, minimize, SolverFactory
+from networkx import nodes
+from pyomo.environ import ConcreteModel, Set, Param, Var, Objective, Constraint, Binary, minimize, SolverFactory, RangeSet
 from pyomo.opt import TerminationCondition, SolverStatus
 import constraints as c
 import load_location as ll
@@ -20,12 +21,12 @@ def first_solution_callback(pyomo_model, solver, where):
 
 def setup(location, scenario):
 	data = ll.load_json(location)
-	nodes, edges, facilities = ll.load_location(data)
+	nodes, edges, conflict_edges, facilities = ll.load_location(data)
 	data = ll.load_json(scenario)
 	agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = ls.load_scenario(data)
-	return nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types
+	return nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types
 
-def create_model(nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window):
+def create_model(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window):
     model = ConcreteModel()
 
     # Sets
@@ -33,6 +34,10 @@ def create_model(nodes, edges, agents, start_nodes, arrival_time, departures, st
     model.time_window = Set(initialize=time_window)
     model.nodes = Set(initialize=nodes)
     model.edges = Set(initialize=edges, dimen=2)
+    
+    model.conflict_groups = RangeSet(len(conflict_edges))
+    model.conflict_edges = Set(model.conflict_groups, initialize=lambda m, g: conflict_edges[g-1], dimen=2)
+    
     model.start_nodes = Param(model.agents, initialize=start_nodes)
     model.arrival_time = Param(model.agents, initialize=arrival_time)
     model.departures = Set(initialize=departures, dimen=3)
@@ -51,7 +56,8 @@ def create_model(nodes, edges, agents, start_nodes, arrival_time, departures, st
     model.initial = Constraint(model.agents, rule=c.inital_position_constraint)
     model.location = Constraint(model.agents, model.time_window, rule=c.location_constraint)
     model.node_capacity = Constraint(model.nodes, model.time_window, rule=c.node_capacity_constraint)
-    model.edge_capacity = Constraint(model.edges, model.time_window, rule=c.edge_capacity_constraint)
+    # model.edge_capacity = Constraint(model.edges, model.time_window, rule=c.edge_capacity_constraint)
+    model.edge_capacity = Constraint(model.conflict_groups, model.time_window, rule=c.edge_capacity_constraint_group)
     model.movement_departure = Constraint(model.agents, model.nodes, model.time_window, rule=c.movement_constraint_departure)
     model.movement_arrival = Constraint(model.agents, model.nodes, model.time_window, rule=c.movement_constraint_arrival)
     model.match_agent_destination = Constraint(model.agents, rule=c.match_agent_destination)
@@ -61,9 +67,9 @@ def create_model(nodes, edges, agents, start_nodes, arrival_time, departures, st
     # model.no_movement_when_not_present = Constraint(model.agents, model.edges, model.time_window, rule=c.no_movement_when_not_present_constraint)
     return model
 
-def solve(nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types):
+def solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types):
 	time_window = range(start_time, end_time+1)
-	model = create_model(nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window)
+	model = create_model(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window)
 	
 	# Solve using Gurobi
 	# solver = SolverFactory('gurobi')
@@ -134,8 +140,9 @@ if __name__ == "__main__":
 	location = 'locations/binckhorst.json'
 	# scenario = 'scenarios/binckhorst3/testing.json'
 	# scenario = 'scenarios/binckhorst_mixed_traffic_false/5_trains1.json'
-	scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/5_trains1.json'
+	# scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/5_trains1.json'
+	scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/1_type/10_trains1.json'
 	# location = 'locations/four_tracks_location.json'
 	# scenario = 'scenarios/four_tracks/two_trains_simple.json'
-	nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = setup(location, scenario)
-	solve(nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types)
+	nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = setup(location, scenario)
+	solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types)

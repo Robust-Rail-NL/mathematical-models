@@ -11,10 +11,13 @@ def location_constraint(m, a, t):
 def node_capacity_constraint(m, i, t):
   return sum(m.p[a,i,t] for a in m.agents) <= 1
 
-def edge_capacity_constraint(m, i, j, t):
-  if j <= i:
-    return Constraint.Skip
-  return sum(m.x[a, (i,j), t] + m.x[a, (j,i), t] for a in m.agents) <= 1
+# def edge_capacity_constraint(m, i, j, t):
+#   if j <= i:
+#     return Constraint.Skip
+#   return sum(m.x[a, (i,j), t] + m.x[a, (j,i), t] for a in m.agents) <= 1
+
+def edge_capacity_constraint_group(m, g, t):
+  return sum(m.x[a, e, t] for a in m.agents for e in m.conflict_edges[g]) <= 1
 
 def movement_constraint_departure(m, a, i, t):
   if t == max(m.time_window) or t < m.arrival_time[a]:# or t >= m.departure_time[a]:

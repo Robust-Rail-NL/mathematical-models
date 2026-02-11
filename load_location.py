@@ -35,23 +35,30 @@ def load_json(file_path):
     exit()
 
 def convert_to_graph(track_parts):
-    nodes = []
-    edges = []
-    names_id_map = {}
+  nodes = []
+  edges = []
+  names_id_map = {}
+  
+  conflict_edges = [] 
 
-    for track_part in track_parts:
-        if track_part.type == "RailRoad":
-            nodes.append(track_part.id)
-            names_id_map[track_part.name] = track_part.id
-            if getattr(track_part, "parkingAllowed", False):
-                edges.append((track_part.id, track_part.id))  # Add self-loop if parking allowed
-        elif track_part.type == "Switch":
-            for i in track_part.aSide:
-                for j in track_part.bSide:
-                    edges.append((i, j))  # Forward direction
-                    edges.append((j, i))  # Reverse direction
-
-    return nodes, edges
+  for track_part in track_parts:
+    if track_part.type == "RailRoad":
+      nodes.append(track_part.id)
+      names_id_map[track_part.name] = track_part.id
+      if getattr(track_part, "parkingAllowed", False):
+        edges.append((track_part.id, track_part.id))  # Add self-loop if parking allowed
+    elif track_part.type == "Switch":
+      switch_edges = set()
+      for i in track_part.aSide:
+        for j in track_part.bSide:
+          edges.append((i, j))  # Forward direction
+          edges.append((j, i))  # Reverse direction
+          
+          switch_edges.add((i, j))
+          switch_edges.add((j, i))
+      if switch_edges:
+        conflict_edges.append(switch_edges)
+  return nodes, edges, conflict_edges
 
 def load_location(data):
   track_Parts = []
@@ -73,14 +80,15 @@ def load_location(data):
       relatedTrackParts=facility.get('relatedTrackParts', []),
       taskTypes=facility.get('taskTypes', []),
       simultaneousUsageCount=facility.get('simultaneousUsageCount', 0)))
-  nodes, edges = convert_to_graph(track_Parts)
-  return nodes, edges, facilities
+  nodes, edges, conflict_edges = convert_to_graph(track_Parts)
+  return nodes, edges, conflict_edges, facilities
   
 if __name__ == "__main__":
   # data = load_json('locations/ten_tracks_location.json')
   # data = load_json('../robust-rail-generator/data/locations/kleineBinckhorst_solver.json')
   data = load_json('locations/binckhorst.json')
-  nodes, edges, facilities = load_location(data)
+  nodes, edges, conflict_edges, facilities = load_location(data)
   print("Nodes:", nodes)
   print("Edges:", edges)
+  print("Conflict Edges:", conflict_edges)
   print("Facilities:", facilities)
