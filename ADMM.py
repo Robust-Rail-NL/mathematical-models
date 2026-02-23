@@ -25,7 +25,7 @@ def objective_lagrangian(m):
 
 def setup(location, scenario):
   data = ll.load_json(location)
-  nodes, edges, facilities = ll.load_location(data)
+  nodes, edges, conflcit_edges, facilities = ll.load_location(data)
   data = ll.load_json(scenario)
   agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = ls.load_scenario(data)
   time_window = range(start_time, end_time+1)
@@ -354,10 +354,11 @@ def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, star
 if __name__ == "__main__":
   # location = 'locations/circle_location_small.json'
   # scenario = 'scenarios/circle/three_trains.json'
-  location = 'locations/binckhorst.json'
+  # location = 'locations/binckhorst.json'
+  location = 'locations/location_solver.json'
   # scenario = '../robust-rail-solver/ServiceSiteScheduling/database/TUSS-Instance-Generator/scenario_settings/setting_A/scenario_solver.json'
   # scenario = 'scenarios/binckhorst3/20_trains.json'
-  scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/5_trains5.json'
+  scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/25_trains3.json'
   # location = 'locations/6_tracks_location.json'
   # scenario = 'scenarios/6_tracks/5_trains_difficult.json'
   # location = 'locations/ten_tracks_location.json'

@@ -572,7 +572,7 @@
             ],
             "length": 0.0,
             "name": "rail_63",
-            "parkingAllowed": true,
+            "parkingAllowed": false,
             "type": "RailRoad",
             "sawMovementAllowed": true
         },
@@ -586,7 +586,7 @@
             ],
             "length": 0.0,
             "name": "rail_632",
-            "parkingAllowed": true,
+            "parkingAllowed": false,
             "type": "RailRoad",
             "sawMovementAllowed": true
         },        
