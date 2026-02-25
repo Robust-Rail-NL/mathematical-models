@@ -138,9 +138,6 @@ def compute_conflicts(edges, track_parts_used):
       continue
     if edge not in edges_in_conflicts:
       conflict_sets.append({edge})
-  sorted_conflicts = sort_conflict_sets(conflict_sets)
-  for conflict in sorted_conflicts:
-    print("Conflict set:", conflict)
   return conflict_sets
 
 # Check if two sets of edges should be merged based on shared track parts
@@ -182,6 +179,8 @@ def merge_conflict_sets(conflict_sets, track_parts_used):
 def add_reverse_edges(edges):
   reverse_edges = set()
   for a, b in edges:
+    if a == b:
+      continue
     reverse_edges.add((b, a))
   return list(edges) + list(reverse_edges)
 
