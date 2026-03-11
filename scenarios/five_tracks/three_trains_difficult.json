@@ -61,7 +61,7 @@
                         "trainUnit": {
                             "id": "2222",
                             "type": {
-                                "displayName": "SLT2",
+                                "displayName": "SLT",
                                 "carriages": 4,
                                 "length": 69.36,
                                 "combineDuration": "180",
@@ -82,8 +82,8 @@
         "trainRequests": [
             {
                 "leaveTrackPart": "12",
-                "arrival": "240",
-                "departure": "240",
+                "arrival": "360",
+                "departure": "360",
                 "displayName": "11112",
                 "trainUnits": [
                     {
@@ -105,8 +105,8 @@
             },
             {
                 "leaveTrackPart": "12",
-                "arrival": "240",
-                "departure": "240",
+                "arrival": "360",
+                "departure": "360",
                 "displayName": "33334",
                 "trainUnits": [
                     {
@@ -128,13 +128,13 @@
             },
             {
                 "leaveTrackPart": "10",
-                "arrival": "240",
-                "departure": "240",
+                "arrival": "360",
+                "departure": "360",
                 "displayName": "11222",
                 "trainUnits": [
                     {
                         "type": {
-                            "displayName": "SLT2",
+                            "displayName": "SLT",
                             "carriages": 4,
                             "length": 69.36,
                             "combineDuration": "180",
@@ -151,7 +151,7 @@
             }
         ]
     },
-    "endTime": "240",
+    "endTime": "360",
     "startTime": "0",
     "inStanding": {},
     "outStanding": {}

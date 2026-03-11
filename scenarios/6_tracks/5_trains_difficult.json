@@ -132,13 +132,36 @@
         "trainRequests": [
             {
                 "leaveTrackPart": "101",
-                "arrival": "300",
-                "departure": "300",
+                "arrival": "360",
+                "departure": "360",
                 "displayName": "11112",
                 "trainUnits": [
                     {
                         "type": {
                             "displayName": "SLT",
+                            "carriages": 4,
+                            "length": 69.36,
+                            "combineDuration": "180",
+                            "splitDuration": "120",
+                            "backNormTime": "120",
+                            "backAdditionTime": "16",
+                            "reversalDuration": "0"
+                        },
+                        "id": ""
+                    }
+                ],
+                "lastParkingTrackPart": "1",
+                "standingIndex": 0.0
+            },
+            {
+                "leaveTrackPart": "101",
+                "arrival": "600",
+                "departure": "600",
+                "displayName": "11112",
+                "trainUnits": [
+                    {
+                        "type": {
+                            "displayName": "SLT2",
                             "carriages": 4,
                             "length": 69.36,
                             "combineDuration": "180",
@@ -161,7 +184,7 @@
                 "trainUnits": [
                     {
                         "type": {
-                            "displayName": "SLT2",
+                            "displayName": "SLT3",
                             "carriages": 4,
                             "length": 69.36,
                             "combineDuration": "180",
@@ -184,7 +207,7 @@
                 "trainUnits": [
                     {
                         "type": {
-                            "displayName": "SLT3",
+                            "displayName": "SLT4",
                             "carriages": 4,
                             "length": 69.36,
                             "combineDuration": "180",
@@ -203,29 +226,6 @@
                 "leaveTrackPart": "101",
                 "arrival": "420",
                 "departure": "420",
-                "displayName": "11112",
-                "trainUnits": [
-                    {
-                        "type": {
-                            "displayName": "SLT4",
-                            "carriages": 4,
-                            "length": 69.36,
-                            "combineDuration": "180",
-                            "splitDuration": "120",
-                            "backNormTime": "120",
-                            "backAdditionTime": "16",
-                            "reversalDuration": "0"
-                        },
-                        "id": ""
-                    }
-                ],
-                "lastParkingTrackPart": "1",
-                "standingIndex": 0.0
-            },
-            {
-                "leaveTrackPart": "101",
-                "arrival": "360",
-                "departure": "360",
                 "displayName": "11112",
                 "trainUnits": [
                     {

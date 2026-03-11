@@ -179,12 +179,12 @@ def load_scenario(data):
     in_trains = loadInTrains(data)
     out_trains = loadOutTrains(data)
     scenario = Scenario(
-        inTrains=in_trains,
-        outTrains=out_trains,
-        startTime=data["startTime"],
-        endTime=data["endTime"],
-        inStanding=data.get("inStanding", {}),
-        outStanding=data.get("outStanding", {}))
+      inTrains=in_trains,
+      outTrains=out_trains,
+      startTime=data["startTime"],
+      endTime=data["endTime"],
+      inStanding=data.get("inStanding", {}),
+      outStanding=data.get("outStanding", {}))
     agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = convert_to_input(scenario)
     return agents, start_nodes, arrival_time, departures, start_time, end_time, train_types
 

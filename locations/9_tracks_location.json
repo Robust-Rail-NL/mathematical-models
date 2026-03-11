@@ -44,9 +44,9 @@
             "bSide": [
                 "101"
             ],
-            "length": 1000.0,
+            "length": 100.0,
             "name": "rail_1",
-            "parkingAllowed": true,
+            "parkingAllowed": false,
             "type": "RailRoad",
             "sawMovementAllowed": true
         },

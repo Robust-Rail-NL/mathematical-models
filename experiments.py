@@ -55,9 +55,6 @@ i = 0
 for sublist in l_s:
   results_file_new = f"{results_file}_types{i}.csv"
   solution_file_new = f"{solution_file}_types{i}"
-  if i == 0 or i == 2 or i == 3 or i == 4 or i == 5:
-    i += 1
-    continue
   i += 1
   with open(results_file_new, mode="w", newline="") as file:
     writer = csv.writer(file)
@@ -81,8 +78,8 @@ for sublist in l_s:
         num_trains = len(agents)
         writer.writerow([num_trains, k, time])
         
-        with open(solution_file_new2, mode="w", newline="") as solution_file:
-          solution_writer = csv.writer(solution_file)
+        with open(solution_file_new2, mode="w", newline="") as s_file:
+          solution_writer = csv.writer(s_file)
           solution_writer.writerow(["agent", "i", "j", "t"])
           for agent, node, j, t in x_values_filtered:
             solution_writer.writerow([agent, node, j, t])

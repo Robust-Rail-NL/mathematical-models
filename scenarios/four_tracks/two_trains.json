@@ -57,8 +57,8 @@
         "trainRequests": [
             {
                 "leaveTrackPart": "12",
-                "arrival": "240",
-                "departure": "240",
+                "arrival": "300",
+                "departure": "300",
                 "displayName": "11112",
                 "trainUnits": [
                     {
@@ -80,8 +80,8 @@
             },
             {
                 "leaveTrackPart": "10",
-                "arrival": "240",
-                "departure": "240",
+                "arrival": "300",
+                "departure": "300",
                 "displayName": "11222",
                 "trainUnits": [
                     {
@@ -103,7 +103,7 @@
             }
         ]
     },
-    "endTime": "240",
+    "endTime": "300",
     "startTime": "0",
     "inStanding": {},
     "outStanding": {}

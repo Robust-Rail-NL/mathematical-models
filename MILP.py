@@ -137,11 +137,13 @@ def solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, depar
 if __name__ == "__main__":
 	# location = 'locations/five_tracks_location.json'
 	# scenario = 'scenarios/five_tracks/two_trains_easiest.json'
-	location = 'locations/binckhorst.json'
+	location = 'locations/6_tracks_location.json'
+	scenario = 'scenarios/6_tracks/5_trains_difficult.json'
+	# location = 'locations/binckhorst.json'
 	# scenario = 'scenarios/binckhorst3/testing.json'
 	# scenario = 'scenarios/binckhorst_mixed_traffic_false/5_trains1.json'
 	# scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/5_trains1.json'
-	scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/1_type/10_trains1.json'
+	# scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/1_type/10_trains1.json'
 	# location = 'locations/four_tracks_location.json'
 	# scenario = 'scenarios/four_tracks/two_trains_simple.json'
 	nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = setup(location, scenario)

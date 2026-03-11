@@ -56,7 +56,7 @@ def objective_lagrangian(m):
 
 def setup(location, scenario):
   data = ll.load_json(location)
-  nodes, edges, facilities = ll.load_location(data)
+  nodes, edges, conflict_edges, facilities = ll.load_location(data)
   data = ll.load_json(scenario)
   agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = ls.load_scenario(data)
   time_window = range(start_time, end_time+1)
@@ -183,8 +183,8 @@ def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, star
       # print("Objective agent", a, ":", objective_values[a])
       obj += objective_values[a]
     # print("Sum of agent objectives:", obj)
-    obj -= sum(lambda_values['0',i,t] for i in nodes for t in time_window)
-    obj -= sum(mu_values['0',i,j,t] for (i,j) in edges for t in time_window)
+    # obj -= sum(lambda_values['0',i,t] for i in nodes for t in time_window)
+    # obj -= sum(mu_values['0',i,j,t] for (i,j) in edges for t in time_window)
     # print("Lagrangian Objective:", obj)
     objectives.append(obj)   
     
@@ -305,9 +305,10 @@ def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, star
 if __name__ == "__main__":
   # location = 'locations/six_tracks_location.json'
   # scenario = 'scenarios/six_tracks/four_trains.json'
-  location = 'locations/binckhorst.json'
-  # scenario = '../robust-rail-solver/ServiceSiteScheduling/database/TUSS-Instance-Generator/scenario_settings/setting_A/scenario_solver.json'
-  scenario = 'scenarios/binckhorst3/10_trains.json'
+  # location = 'locations/binckhorst.json'
+  # scenario = 'scenarios/binckhorst3/10_trains.json'
+  location = 'locations/five_tracks_location.json'
+  scenario = 'scenarios/five_tracks/two_trains_easiest.json'
   # location = 'locations/6_tracks_location.json'
   # scenario = 'scenarios/6_tracks/5_trains_difficult.json'
   # location = 'locations/ten_tracks_location.json'

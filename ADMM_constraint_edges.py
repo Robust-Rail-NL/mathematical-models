@@ -17,11 +17,11 @@ def objective_lagrangian(m):
       if j <= i:
         continue
       # objective += (1 + m.mu_values[i,j,t] + m.rho * m.edge_admm[i,j,t] - m.rho/2) * (m.x[(i, j), t] + m.x[(j, i), t])
-      objective += m.x[(i, j), t] + m.x[(j, i), t]
+      objective += 0.01*(m.x[(i, j), t] + m.x[(j, i), t])
     for g in m.conflict_groups:
-      objective += (m.mu_values[g,t] + m.rho * m.edge_admm[g,t] - m.rho/2) * sum(m.x[e,t] for e in m.conflict_edges[g])
+      objective += (m.mu_values[g,t] + m.edge_admm[g,t]) * sum(m.x[e,t] for e in m.conflict_edges[g])
     for i in m.nodes:
-      objective += (m.lambda_values[i,t] + m.rho * m.node_admm[i,t]) * m.p[i,t]
+      objective += (m.lambda_values[i,t] + m.node_admm[i,t]) * m.p[i,t]
   return objective
 # note: if 1*z - m.rho/2 = 0 the solver does not assign values to certain x causing errors
 # note: 1*z has to be bigger than -m.rho/2 because other wise moving decreases the cost i think
@@ -39,12 +39,11 @@ def setup(location, scenario):
   node_admm_values = {(a,i,t): 0.0 for a in agents for i in nodes for t in time_window}
   # edge_admm_values = {(a,i,j,t): 0.0 for a in agents for (i, j) in edges for t in time_window}
   edge_admm_values = {(a,g,t): 0.0 for a in agents for g in range(1, len(conflict_edges)+1) for t in time_window}
-  rho = 1.99
+  rho = 0.5
   # r = {(i,j,t): random.uniform(0.99,1.01) for (i, j) in edges for t in time_window}
   # cost = {(i,j,t): 1.0 for (i, j) in edges for t in time_window}
   r = 0
   cost = 0
-    
   return nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, r, cost, rho
 
 def create_model(agents, a, nodes, edges, conflict_edges, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, r, cost, rho):
@@ -136,12 +135,12 @@ def update_admm_values(agents, a, nodes, edges, conflict_edges, time_window, x_v
   # return node_admm_values, edge_admm_values
   for t in time_window:
     for l in nodes:
-      node_admm_values[a,l,t] = sum(p_values[a1][l][t] for a1 in agents if a1 != a)
+      node_admm_values[a,l,t] = max(0, rho*sum(p_values[a1][l][t] for a1 in agents if a1 != a)-rho/2)
     # for (i,j) in edges:
     #   if i < j:
     #     edge_admm_values[a,i,j,t] = sum(x_values[a1][(i,j)][t] + x_values[a1][(j,i)][t] for a1 in agents if a1 != a)
     for g in range(1, len(conflict_edges)+1):
-      edge_admm_values[a,g,t] = sum(x_values[a1][e][t] for a1 in agents if a1 != a for e in conflict_edges[g-1])
+      edge_admm_values[a,g,t] = max(0, rho*sum(x_values[a1][e][t] for a1 in agents if a1 != a for e in conflict_edges[g-1]) - rho/2)
   return node_admm_values, edge_admm_values
 
 
@@ -265,14 +264,15 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
       for g in range(1, len(conflict_edges)+1):
         penalty = 1/(k+1) * (x_penalty[g,t] - 1)
         if penalty > 0:
+          # print(f"x_penalty[{g},{t}] = {x_penalty[g,t]}, penalty = {penalty}")
           mu_values[g,t] = max(0.0, mu_values[g,t] + penalty)
           conflicts += 1
         elif penalty < 0:
           mu_values[g,t] = max(0.0, mu_values[g,t] + penalty)
     
     if __name__ == "__main__":
-      if k%10 == 0:
-        print("conflicts", conflicts)
+      # if k%10 == 0:
+      print("conflicts", conflicts)
 
       # if conflicts <= 2:
       #   print("x[a,(i,j),t] values:")
@@ -314,19 +314,19 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
         for t in time_window:
           val = p_values[a][n][t]
           if val is not None and val > 0:
-              print(f"p[{a},{n},{t}] = {val}")
+            print(f"p[{a},{n},{t}] = {val}")
     # for a in agents:
     #   for i in nodes:
     #     for t in time_window:
     #       if lambda_values[a,i,t] > 0:
     #         print(f"Lambda[{a},{i},{t}] = {lambda_values[a,i,t]}")
-    print("x[a,(i,j),t] values:")
-    for a in agents:
-      for (i,j) in edges:
-        for t in time_window:
-          val = x_values[a][(i,j)][t]
-          if val is not None and val > 0:
-            print(f"x[{a},{i}->{j},{t}] = {val}")
+    # print("x[a,(i,j),t] values:")
+    # for a in agents:
+    #   for (i,j) in edges:
+    #     for t in time_window:
+    #       val = x_values[a][(i,j)][t]
+    #       if val is not None and val > 0:
+    #         print(f"x[{a},{i}->{j},{t}] = {val}")
     # print("\np[a,n,t] values:")
     # for a in agents:
     #     for n in nodes:
@@ -377,11 +377,16 @@ if __name__ == "__main__":
   # location = 'locations/circle_location_small.json'
   # scenario = 'scenarios/circle/three_trains.json'
   # location = 'locations/five_tracks_location.json'
-  # scenario = 'scenarios/five_tracks/two_trains_easiest.json'
-  location = 'locations/binckhorst.json'
-  # scenario = '../robust-rail-solver/ServiceSiteScheduling/database/TUSS-Instance-Generator/scenario_settings/setting_A/scenario_solver.json'
-  # scenario = 'scenarios/binckhorst3/20_trains.json'
-  scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/5_trains1.json'
+  # scenario = 'scenarios/five_tracks/two_trains.json'
+  # location = 'locations/9_tracks_location.json'
+  # scenario = 'scenarios/9_tracks/7_trains_matching.json'
+  # location = 'locations/binckhorst.json'
+  location = 'locations/location_solver.json'
+  scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/5_trains4.json'
+  # location = "../scenario-planning-inputs/Location_KleineBinckhorst/location_solver.json"
+  # scenario = "../scenario-planning-inputs/Location_KleineBinckhorst/scenarios/scenario_solver_test.json"
+  
+  # scenario = 'scenarios/temp.json'
   # location = 'locations/6_tracks_location.json'
   # scenario = 'scenarios/6_tracks/5_trains_difficult.json'
   # location = 'locations/ten_tracks_location.json'
@@ -390,4 +395,3 @@ if __name__ == "__main__":
   # scenario = 'scenarios/ten_tracks/ten_trains_more_time.json'
   nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, r, cost, rho = setup(location, scenario)
   k, time, x_values_filtered, p_values_filtered = Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, r, cost, rho)
-  

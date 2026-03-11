@@ -61,7 +61,7 @@
                         "trainUnit": {
                             "id": "2222",
                             "type": {
-                                "displayName": "SLT2",
+                                "displayName": "SLT",
                                 "carriages": 4,
                                 "length": 69.36,
                                 "combineDuration": "180",
@@ -134,7 +134,7 @@
                 "trainUnits": [
                     {
                         "type": {
-                            "displayName": "SLT2",
+                            "displayName": "SLT",
                             "carriages": 4,
                             "length": 69.36,
                             "combineDuration": "180",
