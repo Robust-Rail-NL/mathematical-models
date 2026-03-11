@@ -19,9 +19,11 @@ def objective_lagrangian(m):
       # objective += (1 + m.mu_values[i,j,t] + m.rho * m.edge_admm[i,j,t] - m.rho/2) * (m.x[(i, j), t] + m.x[(j, i), t])
       objective += 0.01*(m.x[(i, j), t] + m.x[(j, i), t])
     for g in m.conflict_groups:
-      objective += (m.mu_values[g,t] + m.edge_admm[g,t]) * sum(m.x[e,t] for e in m.conflict_edges[g])
+      objective += (m.mu_values[g,t] + m.edge_admm[g,t,1]) * sum(m.x[e,t] for e in m.conflict_edges[g]) + (1 - sum(m.x[e,t] for e in m.conflict_edges[g])) * m.edge_admm[g,t,0]
+      # objective += m.mu_values[g,t] * sum(m.x[e,t] for e in m.conflict_edges[g])
     for i in m.nodes:
-      objective += (m.lambda_values[i,t] + m.node_admm[i,t]) * m.p[i,t]
+      objective += (m.lambda_values[i,t] + m.node_admm[i,t,1]) * m.p[i,t] + (1 - m.p[i,t]) * m.node_admm[i,t,0]
+      # objective += m.lambda_values[i,t] * m.p[i,t]
   return objective
 # note: if 1*z - m.rho/2 = 0 the solver does not assign values to certain x causing errors
 # note: 1*z has to be bigger than -m.rho/2 because other wise moving decreases the cost i think
@@ -36,9 +38,9 @@ def setup(location, scenario):
   lambda_values = {(i,t): 0.0 for i in nodes for t in time_window}
   # mu_values = {(i,j,t): 0.0 for (i, j) in edges for t in time_window}
   mu_values = {(g,t): 0.0 for g in range(1, len(conflict_edges)+1) for t in time_window}
-  node_admm_values = {(a,i,t): 0.0 for a in agents for i in nodes for t in time_window}
+  node_admm_values = {(a,i,t,z): 0.0 for a in agents for i in nodes for t in time_window for z in range(2)}
   # edge_admm_values = {(a,i,j,t): 0.0 for a in agents for (i, j) in edges for t in time_window}
-  edge_admm_values = {(a,g,t): 0.0 for a in agents for g in range(1, len(conflict_edges)+1) for t in time_window}
+  edge_admm_values = {(a,g,t,z): 0.0 for a in agents for g in range(1, len(conflict_edges)+1) for t in time_window for z in range(2)}
   rho = 0.5
   # r = {(i,j,t): random.uniform(0.99,1.01) for (i, j) in edges for t in time_window}
   # cost = {(i,j,t): 1.0 for (i, j) in edges for t in time_window}
@@ -71,8 +73,8 @@ def create_model(agents, a, nodes, edges, conflict_edges, start_nodes, arrival_t
 
   model.lambda_values = Param(model.nodes, model.time_window, mutable=True, initialize=lambda_values)
   model.mu_values = Param(model.conflict_groups, model.time_window, mutable=True, initialize=mu_values)
-  model.node_admm = Param(model.nodes, model.time_window, mutable=True, initialize=0)
-  model.edge_admm = Param(model.conflict_groups, model.time_window, mutable=True, initialize=0)
+  model.node_admm = Param(model.nodes, model.time_window, range(2), mutable=True, initialize=0)
+  model.edge_admm = Param(model.conflict_groups, model.time_window, range(2), mutable=True, initialize=0)
   model.r = Param(model.edges, model.time_window, mutable=True, initialize=r)
   model.c = Param(model.edges, model.time_window, mutable=True, initialize=cost)
   # model.multiplyer = Param(initialize=0.01, mutable=True)
@@ -96,7 +98,8 @@ def solve_agent(k, a, m, nodes, edges, conflict_edges, time_window, lambda_value
   for t in time_window:  
     for l in nodes:
       m.lambda_values[l,t] = lambda_values[l,t]
-      m.node_admm[l,t] = node_admm_values[a,l,t]
+      for z in range(2):
+        m.node_admm[l,t,z] = node_admm_values[a,l,t,z]
     # for i,j in edges:
     #   # m.r[(i,j),t] = random.uniform(0.9,1.1)
     #   # m.c[(i,j),t] = cost[i,j,t]
@@ -105,7 +108,8 @@ def solve_agent(k, a, m, nodes, edges, conflict_edges, time_window, lambda_value
     #     m.edge_admm[i,j,t] = edge_admm_values[a,i,j,t]
     for g in m.conflict_groups:
       m.mu_values[g,t] = mu_values[g,t]
-      m.edge_admm[g,t] = edge_admm_values[a,g,t]
+      for z in range(2):
+        m.edge_admm[g,t,z] = edge_admm_values[a,g,t,z]
   # if k%100 == 0 and k > 0:
   #   m.multiplyer = m.multiplyer.value/10
   # Solve
@@ -135,12 +139,14 @@ def update_admm_values(agents, a, nodes, edges, conflict_edges, time_window, x_v
   # return node_admm_values, edge_admm_values
   for t in time_window:
     for l in nodes:
-      node_admm_values[a,l,t] = max(0, rho*sum(p_values[a1][l][t] for a1 in agents if a1 != a)-rho/2)
+      node_admm_values[a,l,t,0] = math.pow(max(0, rho/2*(0 + sum(p_values[a1][l][t] for a1 in agents if a1 != a) - 1)), 2)
+      node_admm_values[a,l,t,1] = math.pow(max(0, rho/2*(1 + sum(p_values[a1][l][t] for a1 in agents if a1 != a) - 1)), 2)
     # for (i,j) in edges:
     #   if i < j:
     #     edge_admm_values[a,i,j,t] = sum(x_values[a1][(i,j)][t] + x_values[a1][(j,i)][t] for a1 in agents if a1 != a)
     for g in range(1, len(conflict_edges)+1):
-      edge_admm_values[a,g,t] = max(0, rho*sum(x_values[a1][e][t] for a1 in agents if a1 != a for e in conflict_edges[g-1]) - rho/2)
+      edge_admm_values[a,g,t,0] = math.pow(max(0, rho/2*(0 + sum(x_values[a1][e][t] for a1 in agents if a1 != a for e in conflict_edges[g-1]) - 1)), 2)
+      edge_admm_values[a,g,t,1] = math.pow(max(0, rho/2*(1 + sum(x_values[a1][e][t] for a1 in agents if a1 != a for e in conflict_edges[g-1]) - 1)), 2)
   return node_admm_values, edge_admm_values
 
 
@@ -224,7 +230,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
     x_penalty = {(g, t): sum(x_values[a][e][t] for a in agents for e in conflict_edges[g-1]) for g in range(1, len(conflict_edges)+1) for t in time_window}
     for l in nodes:
       for t in time_window:
-        if p_penalty[l,t] > 1.0 and l == '15':
+        if p_penalty[l,t] > 1.0:# and l == '15':
           print(f"p_penalty[{l},{t}] = {p_penalty[l,t]}")
     # for (i,j) in edges:
     #   if j <= i:
@@ -382,7 +388,7 @@ if __name__ == "__main__":
   # scenario = 'scenarios/9_tracks/7_trains_matching.json'
   # location = 'locations/binckhorst.json'
   location = 'locations/location_solver.json'
-  scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/5_trains4.json'
+  scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/25_trains3.json'
   # location = "../scenario-planning-inputs/Location_KleineBinckhorst/location_solver.json"
   # scenario = "../scenario-planning-inputs/Location_KleineBinckhorst/scenarios/scenario_solver_test.json"
   
