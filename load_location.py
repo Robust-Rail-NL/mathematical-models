@@ -245,6 +245,7 @@ if __name__ == "__main__":
   # data = load_json('../robust-rail-generator/data/locations/kleineBinckhorst_solver.json')
   # data = load_json('locations/binckhorst.json')
   data = load_json('locations/location_solver.json')
+  data = load_json('locations/detour_location.json')
   nodes, edges, conflict_edges, facilities = load_location(data)
   print("Nodes:", nodes)
   print("Edges:", edges)

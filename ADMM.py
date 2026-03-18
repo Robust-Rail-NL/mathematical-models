@@ -29,7 +29,7 @@ def setup(location, scenario):
   data = ll.load_json(scenario)
   agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = ls.load_scenario(data)
   time_window = range(start_time, end_time+1)
-  
+  # agents = sorted(agents, key=lambda a: arrival_time[a], reverse=True)
   lambda_values = {(i,t): 0.0 for i in nodes for t in time_window}
   mu_values = {(i,j,t): 0.0 for (i, j) in edges for t in time_window}
   node_admm_values = {(a,i,t): 0.0 for a in agents for i in nodes for t in time_window}
@@ -146,7 +146,8 @@ def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, star
   for k in range(n_iter):
     # if __name__ == "__main__":
     print(k)
-    
+    # if k != 0:
+    #   random.shuffle(agents)
     for a in agents:
       node_admm_values, edge_admm_values = update_admm_values(agents, a, nodes, edges, time_window, x_values, p_values, node_admm_values, edge_admm_values)
       x_values[a], p_values[a], y_values[a], objective_values[a]= solve_agent(k, a, models[a], nodes, edges, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, cost)
@@ -210,8 +211,13 @@ def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, star
                  for (i, j) in edges if i < j for t in time_window}
     for l in nodes:
       for t in time_window:
-        if p_penalty[l,t] > 1.0 and l == '15':
+        if p_penalty[l,t] > 1.0:# and l == '15':
           print(f"p_penalty[{l},{t}] = {p_penalty[l,t]}")
+    for t in time_window:
+      for i,j in edges:
+        if i < j:
+          if x_penalty[i,j,t] > 1.0:
+            print(f"Conflict edge {i}->{j} at time {t} has penalty {x_penalty[i,j,t]}")
     # for (i,j) in edges:
     #   if j <= i:
     #     continue
@@ -286,25 +292,25 @@ def Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, star
   end_time = time.time()
   if __name__ == "__main__":
     # Output
-    print("\np[a,n,t] values:")
-    for a in agents:
-      for n in nodes:
-        for t in time_window:
-          val = p_values[a][n][t]
-          if val is not None and val > 0:
-              print(f"p[{a},{n},{t}] = {val}")
+    # print("\np[a,n,t] values:")
+    # for a in agents:
+    #   for n in nodes:
+    #     for t in time_window:
+    #       val = p_values[a][n][t]
+    #       if val is not None and val > 0:
+    #           print(f"p[{a},{n},{t}] = {val}")
     # for a in agents:
     #   for i in nodes:
     #     for t in time_window:
     #       if lambda_values[a,i,t] > 0:
     #         print(f"Lambda[{a},{i},{t}] = {lambda_values[a,i,t]}")
-    print("x[a,(i,j),t] values:")
-    for a in agents:
-      for (i,j) in edges:
-        for t in time_window:
-          val = x_values[a][(i,j)][t]
-          if val is not None and val > 0:
-            print(f"x[{a},{i}->{j},{t}] = {val}")
+    # print("x[a,(i,j),t] values:")
+    # for a in agents:
+    #   for (i,j) in edges:
+    #     for t in time_window:
+    #       val = x_values[a][(i,j)][t]
+    #       if val is not None and val > 0:
+    #         print(f"x[{a},{i}->{j},{t}] = {val}")
     # print("\np[a,n,t] values:")
     # for a in agents:
     #     for n in nodes:
@@ -358,7 +364,9 @@ if __name__ == "__main__":
   location = 'locations/location_solver.json'
   # scenario = '../robust-rail-solver/ServiceSiteScheduling/database/TUSS-Instance-Generator/scenario_settings/setting_A/scenario_solver.json'
   # scenario = 'scenarios/binckhorst3/20_trains.json'
-  scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/25_trains3.json'
+  scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/15_trains5.json'
+  location = 'locations/five_tracks_location.json'
+  scenario = 'scenarios/five_tracks/three_trains_difficult.json'
   # location = 'locations/6_tracks_location.json'
   # scenario = 'scenarios/6_tracks/5_trains_difficult.json'
   # location = 'locations/ten_tracks_location.json'
@@ -366,5 +374,6 @@ if __name__ == "__main__":
   # location = 'locations/ten_tracks_location.json'
   # scenario = 'scenarios/ten_tracks/ten_trains_more_time.json'
   nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, r, cost, rho = setup(location, scenario)
+  print("ADMM", scenario, rho)
   k, time, x_values_filtered, p_values_filtered = Lagrangian(nodes, edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, r, cost, rho)
   
