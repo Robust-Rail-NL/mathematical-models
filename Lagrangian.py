@@ -4,7 +4,6 @@ import load_location as ll
 import load_scenario as ls
 import random
 import time
-import math
 from collections import defaultdict
 
 random.seed(1)
@@ -57,7 +56,6 @@ def create_model(agents, a, nodes, edges, conflict_edges, start_nodes, arrival_t
   model.arrival_time = Param(initialize=arrival_time[a])
   model.departures = Set(initialize=departures, dimen=3)
   model.train_type = Param(initialize=train_types[a])
-  model.agents = Set(initialize=agents)
 
   model.x = Var(model.edges, model.time_window, domain=Binary)
   model.p = Var(model.nodes, model.time_window, domain=Binary)
@@ -160,8 +158,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
     for edge in edges:
       i, j = edge
       for t in time_window:
-        val = x_values[agent][edge][t]
-        if val == 1:
+        if x_values[agent][edge][t] == 1:
           x_values_filtered.append((agent, i, j, t))
   return k, end_time - start, x_values_filtered, p_values_filtered, solution_found, conflict_list
 

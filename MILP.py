@@ -32,8 +32,7 @@ def setup(location, scenario):
 
 def create_model(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window):
     model = ConcreteModel()
-
-    # Sets
+    
     model.agents = Set(initialize=agents)
     model.time_window = Set(initialize=time_window)
     model.nodes = Set(initialize=nodes)
@@ -95,6 +94,9 @@ def solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, depar
 	result = solver.solve(model, tee=True, keepfiles=True)
 	end = time.time()
 	
+	solution_found = (result.solver.status == SolverStatus.ok and
+    result.solver.termination_condition in [TerminationCondition.optimal, TerminationCondition.feasible])
+ 
 	time_solution = 0.0
 	grb_model = solver._solver_model
 	if hasattr(grb_model, "_first_solution_time"):
@@ -151,7 +153,7 @@ def solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, depar
 					x_values_filtered.append((a, i, j, t))
 	# print(x_values_filtered)
 	# print(p_values_filtered)
-	return 0, end - start, time_solution
+	return 0, end - start, x_values_filtered, p_values_filtered, time_solution, solution_found
     
 if __name__ == "__main__":
 	location = 'locations/location_solver.json'

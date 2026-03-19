@@ -7,8 +7,8 @@ from pathlib import Path
 import random
 random.seed(41)
 
-algo = M.solve
-# algo = L.Lagrangian
+# algo = M.solve
+algo = L.Lagrangian
 # algo = A.Lagrangian
 
 location = 'locations/location_solver.json'
@@ -18,7 +18,7 @@ mixed_traffic = False
 matching = True # If matching is false, uncomment in load_scenario.py the i in the displayname of in and out trains
 rho_string = "2"
 rho = 2
-time_out = 600
+time_out = 1
 
 algo_string = "MILP"
 if algo == L.Lagrangian:
@@ -95,13 +95,22 @@ for sublist in l_s:
       filename = os.path.basename(scenario)
       time_solution = None
       if algo == L.Lagrangian:
-        nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, r, m = L.setup(loc, scenario)
-        k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = L.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, time_out)
+        nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values = L.setup(loc, scenario)
+        k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = L.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, time_out)
         num_trains = len(agents)
         writer.writerow([num_trains, k, time, time, solution_found])
+        
+        with open(solution_file_new2, mode="w", newline="") as s_file:
+          solution_writer = csv.writer(s_file)
+          solution_writer.writerow(["agent", "i", "j", "t"])
+          for agent, node, j, t in x_values_filtered:
+            solution_writer.writerow([agent, node, j, t])
+          solution_writer.writerow(["agent", "n", "t"])
+          for agent, n, t in p_values_filtered:
+            solution_writer.writerow([agent, n, t])
       elif algo == A.Lagrangian:
         nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values = A.setup(loc, scenario)
-        k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = A.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out)
+        k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = A.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out)
         filename = os.path.basename(scenario)  
         num_trains = len(agents)
         writer.writerow([num_trains, k, time, time, solution_found])
@@ -117,8 +126,18 @@ for sublist in l_s:
         
       elif algo == M.solve:
         nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = M.setup(loc, scenario)
-        k, time, time_solution = M.solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_out)
+        k, time, x_values_filtered, p_values_filtered, time_solution, solution_found = M.solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_out)
         num_trains = len(agents)
-        writer.writerow([num_trains, k, time, time_solution])
+        writer.writerow([num_trains, k, time, time_solution, solution_found])
+        
+        with open(solution_file_new2, mode="w", newline="") as s_file:
+          solution_writer = csv.writer(s_file)
+          solution_writer.writerow(["agent", "i", "j", "t"])
+          for agent, node, j, t in x_values_filtered:
+            solution_writer.writerow([agent, node, j, t])
+          solution_writer.writerow(["agent", "n", "t"])
+          for agent, n, t in p_values_filtered:
+            solution_writer.writerow([agent, n, t])
+        
       print(f"Finished scenario {scenario} with {num_trains} trains: k={k}, time={time}, time_solution={time_solution}")
       

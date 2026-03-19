@@ -18,7 +18,8 @@ def objective_lagrangian(m):
         continue
       objective += 0.01*(m.x[(i, j), t] + m.x[(j, i), t])
     for g in m.conflict_groups:
-      objective += (m.mu_values[g,t] + m.edge_admm[g,t,1]) * sum(m.x[e,t] for e in m.conflict_edges[g]) + (1 - sum(m.x[e,t] for e in m.conflict_edges[g])) * m.edge_admm[g,t,0]
+      used = sum(m.x[e,t] for e in m.conflict_edges[g])
+      objective += (m.mu_values[g,t] + m.edge_admm[g,t,1]) * used + (1 - used) * m.edge_admm[g,t,0]
     for i in m.nodes:
       objective += (m.lambda_values[i,t] + m.node_admm[i,t,1]) * m.p[i,t] + (1 - m.p[i,t]) * m.node_admm[i,t,0]
   return objective
@@ -57,7 +58,6 @@ def create_model(agents, a, nodes, edges, conflict_edges, start_nodes, arrival_t
   model.arrival_time = Param(initialize=arrival_time[a])
   model.departures = Set(initialize=departures, dimen=3)
   model.train_type = Param(initialize=train_types[a])
-  model.agents = Set(initialize=agents)
 
   model.x = Var(model.edges, model.time_window, domain=Binary)
   model.p = Var(model.nodes, model.time_window, domain=Binary)
@@ -96,6 +96,7 @@ def solve_agent(a, m, nodes, time_window, lambda_values, mu_values, node_admm_va
   solver = SolverFactory('gurobi')
   solver.options['Seed'] = 1
   solver.solve(m, warmstart=True, keepfiles=False)
+  
   x_values = {(i,j): { t: m.x[(i,j),t].value for t in m.time_window} for (i,j) in m.edges}
   p_values = {l: { t: m.p[l,t].value for t in m.time_window} for l in m.nodes}
   y_values = {t: m.y[t].value for t in m.time_window}
@@ -120,7 +121,6 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
   conflict_list = []
   for a in agents:
     models[a] = create_model(agents, a, nodes, edges, conflict_edges, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, rho)
-  
   start = time.time()
   x_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
   p_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
@@ -242,8 +242,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
     for edge in edges:
       i, j = edge
       for t in time_window:
-        val = x_values[agent][edge][t]
-        if val == 1:
+        if x_values[agent][edge][t] == 1:
           x_values_filtered.append((agent, i, j, t))
   return k, end_time - start, x_values_filtered, p_values_filtered, solution_found, conflict_list
 
@@ -256,7 +255,7 @@ if __name__ == "__main__":
   # scenario = 'scenarios/9_tracks/7_trains_matching.json'
   # location = 'locations/binckhorst.json'
   location = 'locations/location_solver.json'
-  scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/25_trains2.json'
+  scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/5_trains2.json'
   # scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/30_trains1.json'
   
   # location = 'locations/6_tracks_location.json'
@@ -269,4 +268,4 @@ if __name__ == "__main__":
   rho = 2
   nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values = setup(location, scenario)
   print("ADMM_constraint_edges", scenario, rho)
-  k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out)
+  k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out)
