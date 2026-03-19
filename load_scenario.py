@@ -191,14 +191,12 @@ def load_scenario(data):
 
 
 if __name__ == "__main__":
-  # data = load_json('../scenario-planning-inputs/Scenario_settings/SimpleService/scenario_no-service_solver.json')
   data = load_json('scenarios/four_tracks/two_trains.json')
-  # data = load_json('scenarios/kleinebinckhorst/test.json')
-  agents, start_nodes, destination_nodes, start_time, end_time, arrival_time, departure_time = load_scenario(data)
+  agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = load_scenario(data)
   print("Agents:", agents)
   print("Start Nodes:", start_nodes)
-  print("Destination Nodes:", destination_nodes)
+  print("Arrival Time:", arrival_time)
+  print("departures:", departures)
   print("Start Time:", start_time)
   print("End Time:", end_time)
-  print("Arrival Time:", arrival_time)
-  print("Departure Time:", departure_time)
+  print("Train types:", train_types)

@@ -238,19 +238,15 @@ def load_location(data):
   conflict_edges = add_reverse_edges_to_conflicts(conflict_edges)
   # Sort for printing
   conflict_edges = sort_conflict_sets(conflict_edges)
-  return nodes, edges, conflict_edges, facilities
+  return nodes, edges, conflict_edges
 
 if __name__ == "__main__":
-  # data = load_json('locations/ten_tracks_location.json')
-  # data = load_json('../robust-rail-generator/data/locations/kleineBinckhorst_solver.json')
-  # data = load_json('locations/binckhorst.json')
   data = load_json('locations/location_solver.json')
   data = load_json('locations/detour_location.json')
-  nodes, edges, conflict_edges, facilities = load_location(data)
+  nodes, edges, conflict_edges, = load_location(data)
   print("Nodes:", nodes)
   print("Edges:", edges)
   conflict_edges = sort_conflict_sets(conflict_edges)
   for conflict in conflict_edges:
     print("Conflict set:", conflict)
-  # print("Facilities:", facilities)
   
