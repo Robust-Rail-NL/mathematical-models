@@ -49,9 +49,12 @@ else:
 scenarios = []
 input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_solver_types/{input_folder}")
 
-for subfolder in sorted(input_folder.iterdir(), key=lambda p: p.name):
-  for file_path in sorted(subfolder.iterdir(), key=lambda p: p.name):
-    scenarios.append((location, file_path))
+# for subfolder in sorted(input_folder.iterdir(), key=lambda p: p.name):
+#   for file_path in sorted(subfolder.iterdir(), key=lambda p: p.name):
+    # scenarios.append((location, file_path))
+for file_path in sorted(input_folder.iterdir(), key=lambda p: p.name):
+  if file_path.is_file() and file_path.suffix == ".json":
+      scenarios.append((location, file_path))
 
 num_scenarios = len(scenarios)
 
