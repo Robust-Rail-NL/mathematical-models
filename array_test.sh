@@ -23,4 +23,4 @@ cd /home/thomasverwaal/Robust-Rail-NL/mathematical-models
 source ~/pyomo_project/env/bin/activate
 
 # ================= RUN =================
-srun python3 ADMM_constraint_edges_cluster.py
+srun python3 experiments_cluster.py
