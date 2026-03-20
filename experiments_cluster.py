@@ -26,7 +26,7 @@ mixed_traffic = False
 matching = True # If matching is false, uncomment in load_scenario.py the i in the displayname of in and out trains
 rho_string = "2"
 rho = 2
-time_out = 600
+time_out = 1800
 
 GROUP_SIZE = 5
 
