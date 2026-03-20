@@ -97,10 +97,10 @@ def solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, depar
 	solution_found = (result.solver.status == SolverStatus.ok and
     result.solver.termination_condition in [TerminationCondition.optimal, TerminationCondition.feasible])
  
-	time_solution = 0.0
+	time_first_solution = 0.0
 	grb_model = solver._solver_model
 	if hasattr(grb_model, "_first_solution_time"):
-			time_solution = grb_model._first_solution_time
+			time_first_solution = grb_model._first_solution_time
 	# if (result.solver.status != SolverStatus.ok or
 	#     result.solver.termination_condition not in (
 	#         TerminationCondition.optimal,
@@ -135,7 +135,7 @@ def solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, depar
 	# 		if val is not None and val > 0:
 	# 			print(f"y[{a},{t}] = {val}")    
 	print("Time taken (seconds):", end - start)
-	print("Time to first solution (seconds):", time_solution)
+	print("Time to first solution (seconds):", time_first_solution)
  
 	p_values_filtered = []
 	for a in model.agents:
@@ -153,7 +153,7 @@ def solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, depar
 					x_values_filtered.append((a, i, j, t))
 	# print(x_values_filtered)
 	# print(p_values_filtered)
-	return 0, end - start, x_values_filtered, p_values_filtered, time_solution, solution_found
+	return 0, end - start, x_values_filtered, p_values_filtered, time_first_solution, solution_found
     
 if __name__ == "__main__":
 	location = 'locations/location_solver.json'

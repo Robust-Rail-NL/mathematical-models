@@ -187,7 +187,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
           conflicts += 1
         elif penalty < 0:
           mu_values[g,t] = max(0.0, mu_values[g,t] + penalty)
-      conflict_list.append((conflicts, time.time() - start))
+    conflict_list.append((conflicts, time.time() - start))
     if __name__ == "__main__":
       print("conflicts", conflicts)
     if conflicts < 1:
