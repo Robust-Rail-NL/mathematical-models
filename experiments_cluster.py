@@ -20,7 +20,7 @@ def compute_number_of_movements(x_values):
 # algo = L.Lagrangian
 algo = A.Lagrangian
 
-location = 'locations/location_solver.json'
+location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
 input_folder = ""
 mixed_traffic = False
 matching = True # If matching is false, uncomment in load_scenario.py the i in the displayname of in and out trains
@@ -47,7 +47,7 @@ else:
 
 
 scenarios = []
-input_folder = Path(f"scenarios_final/{input_folder}")
+input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_final/{input_folder}")
 
 for subfolder in sorted(input_folder.iterdir(), key=lambda p: p.name):
   for file_path in sorted(subfolder.iterdir(), key=lambda p: p.name):
