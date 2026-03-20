@@ -39,15 +39,15 @@ elif algo == A.Lagrangian:
   algo_string = "ADMM"
 
 if algo == A.Lagrangian:
-  results_file = f"results_final/{algo_string}_rho{rho_string}"
-  solution_file = f"solutions_final/{algo_string}_rho{rho_string}"
+  results_file = f"results_types/{algo_string}_rho{rho_string}"
+  solution_file = f"solutions_types/{algo_string}_rho{rho_string}"
 else:
   results_file = f"results_final/{algo_string}"
   solution_file = f"solutions_final/{algo_string}"
 
 
 scenarios = []
-input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_final/{input_folder}")
+input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_solver_types/{input_folder}")
 
 for subfolder in sorted(input_folder.iterdir(), key=lambda p: p.name):
   for file_path in sorted(subfolder.iterdir(), key=lambda p: p.name):
