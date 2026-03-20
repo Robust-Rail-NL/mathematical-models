@@ -69,6 +69,7 @@ def create_model(nodes, edges, conflict_edges, agents, start_nodes, arrival_time
 
 def solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_out):
 	time_window = range(start_time, end_time+1)
+	start = time.time()
 	model = create_model(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window)
 	
 	# Solve using Gurobi
@@ -89,8 +90,6 @@ def solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, depar
 	solver.set_gurobi_param('TimeLimit', time_out)
 	solver.set_callback(first_solution_callback)
 	# solver.set_callback(stop_after_first_solution)
-
-	start = time.time()
 	result = solver.solve(model, tee=True, keepfiles=True)
 	end = time.time()
 	

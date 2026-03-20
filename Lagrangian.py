@@ -101,10 +101,10 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
   solution_found = False
   models = {}
   conflict_list = []
+  start = time.time()
   for a in agents:
     models[a] = create_model(agents, a, nodes, edges, conflict_edges, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values)
   
-  start = time.time()
   x_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
   p_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
   y_values = {}

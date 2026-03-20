@@ -119,9 +119,9 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
   solution_found = False
   models = {}
   conflict_list = []
+  start = time.time()
   for a in agents:
     models[a] = create_model(agents, a, nodes, edges, conflict_edges, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, rho)
-  start = time.time()
   x_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
   p_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
   y_values = {}
@@ -247,23 +247,8 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
   return k, end_time - start, x_values_filtered, p_values_filtered, solution_found, conflict_list
 
 if __name__ == "__main__":
-  # location = 'locations/circle_location_small.json'
-  # scenario = 'scenarios/circle/three_trains.json'
-  # location = 'locations/five_tracks_location.json'
-  # scenario = 'scenarios/five_tracks/three_trains_difficult.json'
-  # location = 'locations/9_tracks_location.json'
-  # scenario = 'scenarios/9_tracks/7_trains_matching.json'
-  # location = 'locations/binckhorst.json'
-  location = 'locations/location_solver.json'
-  scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/5_trains2.json'
-  # scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/30_trains1.json'
-  
-  # location = 'locations/6_tracks_location.json'
-  # scenario = 'scenarios/6_tracks/5_trains_difficult.json'
-  # location = 'locations/ten_tracks_location.json'
-  # scenario = 'scenarios/ten_tracks/nine_trains_more_time.json'
-  # location = 'locations/ten_tracks_location.json'
-  # scenario = 'scenarios/ten_tracks/ten_trains_more_time.json'
+  location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
+  scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_final/1_type/scenario_solver_30_trains5.json'
   time_out = 1800
   rho = 2
   nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values = setup(location, scenario)
