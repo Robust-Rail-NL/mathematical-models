@@ -18,4 +18,4 @@ source env/bin/activate
 
 module load pyomo
 
-srun python3 /home/thomasverwaal/Robust-Rail-NL/mathematical-models/ADMM_constraint_edges.py
+srun python3 /home/thomasverwaal/Robust-Rail-NL/mathematical-models/ADMM_constraint_edges_cluster.py
