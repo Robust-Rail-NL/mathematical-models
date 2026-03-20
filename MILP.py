@@ -1,11 +1,9 @@
-from networkx import nodes
 from pyomo.environ import ConcreteModel, Set, Param, Var, Objective, Constraint, Binary, minimize, SolverFactory, RangeSet
 from pyomo.opt import TerminationCondition, SolverStatus
 import constraints as c
 import load_location as ll
 import load_scenario as ls
 import time
-import gurobipy as gp
 from gurobipy import GRB
 
 import random
