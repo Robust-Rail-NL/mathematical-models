@@ -12,15 +12,12 @@
 #SBATCH --output=logs/out_%A_%a.txt
 #SBATCH --error=logs/err_%A_%a.txt
 
-# ================= MODULES =================
 module load 2025
 module load python
 module load gurobi/12.0.0
 module load pyomo
 
-# ================= ENV =================
 cd /home/thomasverwaal/Robust-Rail-NL/mathematical-models
 source ~/pyomo_project/env/bin/activate
 
-# ================= RUN =================
 srun python3 experiments_cluster.py

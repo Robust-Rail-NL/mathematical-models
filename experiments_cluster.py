@@ -5,8 +5,26 @@ import csv
 import os
 from pathlib import Path
 import random
+import math
 
 random.seed(1)
+
+def extract_type_category(file_path, num_trains):
+    name = os.path.basename(file_path)
+
+    parts = name.split("_")
+    num_types = int(parts[4])
+
+    if num_types == 1:
+        return "1"
+    elif num_types == 2:
+        return "2"
+    elif num_types == math.ceil(num_trains / 2):
+        return "1/2"
+    elif num_types == math.ceil(num_trains / 3):
+        return "1/3"
+    else:
+        return "unknown"
 
 def compute_number_of_movements(x_values):
   count = 0
@@ -74,7 +92,8 @@ solution_file_new = f"{solution_file}_task{task_id}"
 
 with open(results_file_new, mode="w", newline="") as file:
   writer = csv.writer(file)
-  writer.writerow(["num_trains", "k", "time", "time_first_solution", "solution_found", "num_movements"])
+  # writer.writerow(["num_trains", "k", "time", "time_first_solution", "solution_found", "num_movements"])
+  writer.writerow(["num_trains", "type", "k", "time", "time_first_solution", "solution_found", "num_movements"])
 
   for loc, scenario in subset:
     print(f"Processing scenario {scenario}")
@@ -92,9 +111,11 @@ with open(results_file_new, mode="w", newline="") as file:
       k, time, x_values_filtered, p_values_filtered, time_first_solution, solution_found = M.solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_out)
 
     num_trains = len(agents)
+    type_category = extract_type_category(scenario, num_trains)
     num_movements = compute_number_of_movements(x_values_filtered)
 
-    writer.writerow([num_trains, k, time, time, solution_found, num_movements])
+    # writer.writerow([num_trains, k, time, time, solution_found, num_movements])
+    writer.writerow([num_trains, type_category, k, time, time, solution_found, num_movements])
 
     with open(solution_file_new2, mode="w", newline="") as s_file:
       solution_writer = csv.writer(s_file)
