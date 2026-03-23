@@ -1,4 +1,5 @@
 import json
+import math
 
 from dataclasses import dataclass
 from collections import defaultdict, deque
@@ -201,7 +202,29 @@ def sort_conflict_sets(conflict_sets):
   sorted_outer = sorted(sorted_inner, key=lambda s: s[0] if s else ("", ""))
   return sorted_outer
 
-def load_location(data):
+def traversal_time(edges, track_parts_used, track_Parts):
+  traversal_time_edges = {}
+  for i,j in edges:
+    traversal_time_edges[(i,j)] = 0
+    traversal_time_edges[(j,i)] = 0
+    for tp in track_parts_used[(i,j)]:
+      for tp2 in track_Parts:
+        if tp == tp2.id:
+          if tp2.type == 'EnglishSwitch' or tp2.type == 'Switch' or tp2.type == 'Intersection':
+            traversal_time_edges[(i,j)] += 1
+            traversal_time_edges[(j,i)] += 1
+    # if 0 then its an edge between nodes orignating from the same track, which takes 1 minute/timestep
+    if traversal_time_edges[(i,j)] == 0:
+      traversal_time_edges[(i,j)] = 1
+    # divide by 2 since one switch takes 30 seconds/half of a timestep and add 2
+    # because its between two tracks so 2 minutes
+    else:
+      traversal_time_edges[(i,j)] = 2+math.ceil(traversal_time_edges[(i,j)]/2)
+      traversal_time_edges[(j,i)] = 2+math.ceil(traversal_time_edges[(j,i)]/2)
+  return traversal_time_edges
+
+
+def pre_load_location(data):
   track_Parts = []
   facilities = []
   for trackPart in data['trackParts']:
@@ -228,6 +251,9 @@ def load_location(data):
   # and compute which track parts are used in each edge for conflict computation
   nodes, edges, self_loop_edges, main_nodes = convert_to_graph(track_Parts)
   nodes, edges, track_parts_used = convert_to_compressed_graph(track_Parts, edges, main_nodes)
+  
+  traversal_time_edges = traversal_time(edges, track_parts_used, track_Parts)
+  
   # Add self loops to edges
   edges += self_loop_edges
   # Compute edge conflcits based on shared track parts, then merge conflict set
@@ -235,18 +261,29 @@ def load_location(data):
   conflict_edges = merge_conflict_sets(conflict_edges, track_parts_used)
   # Add reverse edges to ensure undirected graph representation
   edges = add_reverse_edges(edges)
+  
   conflict_edges = add_reverse_edges_to_conflicts(conflict_edges)
   # Sort for printing
   conflict_edges = sort_conflict_sets(conflict_edges)
+  return nodes, edges, conflict_edges, traversal_time_edges
+
+def load_location(data):
+  nodes, edges, conflict_edges, traversal_time_edges = pre_load_location(data)
   return nodes, edges, conflict_edges
+
+def load_location_time(data):
+  nodes, edges, conflict_edges, traversal_time_edges = pre_load_location(data)
+  print(traversal_time_edges)
+  return nodes, edges, conflict_edges, traversal_time_edges
 
 if __name__ == "__main__":
   data = load_json('locations/location_solver.json')
-  data = load_json('locations/detour_location.json')
-  nodes, edges, conflict_edges, = load_location(data)
-  print("Nodes:", nodes)
-  print("Edges:", edges)
+  # data = load_json('locations/detour_location.json')
+  # nodes, edges, conflict_edges = load_location(data)
+  nodes, edges, conflict_edges,traversal_time_edges  = load_location_time(data)
+  # print("Nodes:", nodes)
+  # print("Edges:", edges)
   conflict_edges = sort_conflict_sets(conflict_edges)
-  for conflict in conflict_edges:
-    print("Conflict set:", conflict)
+  # for conflict in conflict_edges:
+  #   print("Conflict set:", conflict)
   
