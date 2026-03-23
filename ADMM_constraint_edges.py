@@ -190,12 +190,12 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
     conflict_list.append((conflicts, time.time() - start))
     if __name__ == "__main__":
       print("conflicts", conflicts)
+    if time.time() - start > time_out:
+      print("TIME LIMIT REACHED")
+      break
     if conflicts < 1:
       print("NO MORE CONFLICT")
       solution_found = True
-      break
-    if time.time() - start > time_out:
-      print("TIME LIMIT REACHED")
       break
   if __name__ == "__main__":
     pass

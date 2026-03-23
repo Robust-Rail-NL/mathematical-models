@@ -132,5 +132,8 @@ with open(results_file_new, mode="w", newline="") as file:
         solution_writer.writerow(["conflicts", "time"])
         for conflicts, conflict_time in conflict_list:
           solution_writer.writerow([conflicts, conflict_time])
+      
+      solution_writer.writerow(["found"])
+      solution_writer.writerow([solution_found])
 
     print(f"Finished {scenario} | trains={num_trains}, k={k}, time={time}")
