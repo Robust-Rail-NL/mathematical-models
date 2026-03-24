@@ -4,7 +4,7 @@ import constraints as c
 import load_location as ll
 import load_scenario as ls
 import time
-# from gurobipy import GRB
+from gurobipy import GRB
 
 import random
 
@@ -14,23 +14,23 @@ def objective(m):
   return sum(m.x[a, (i, j), t] for a in m.agents for t in m.time_window
     for (i, j) in m.edges if i != j)
 
-# def first_solution_callback(pyomo_model, solver, where):
-#   if where == GRB.Callback.MIPSOL:
-#     grb_model = solver._solver_model
-#     if not hasattr(grb_model, "_first_solution_time"):
-#       grb_model._first_solution_time = grb_model.cbGet(GRB.Callback.RUNTIME)
-def first_solution_callback(pyomo_model, solver, where=None):
-	grb_model = getattr(solver, "_solver_model", None)
-	if grb_model is None:
-		return
+def first_solution_callback(pyomo_model, solver, where):
+  if where == GRB.Callback.MIPSOL:
+    grb_model = solver._solver_model
+    if not hasattr(grb_model, "_first_solution_time"):
+      grb_model._first_solution_time = grb_model.cbGet(GRB.Callback.RUNTIME)
+# def first_solution_callback(pyomo_model, solver, where=None):
+# 	grb_model = getattr(solver, "_solver_model", None)
+# 	if grb_model is None:
+# 		return
 
-	if not hasattr(grb_model, "_first_solution_time"):
-		try:
-			sol_count = grb_model.getAttr("SolCount")
-			if sol_count > 0:
-				grb_model._first_solution_time = grb_model.getAttr("Runtime")
-		except Exception:
-			grb_model._first_solution_time = 0.0
+# 	if not hasattr(grb_model, "_first_solution_time"):
+# 		try:
+# 			sol_count = grb_model.getAttr("SolCount")
+# 			if sol_count > 0:
+# 				grb_model._first_solution_time = grb_model.getAttr("Runtime")
+# 		except Exception:
+# 			grb_model._first_solution_time = 0.0
 
 
 def setup(location, scenario):
@@ -168,6 +168,8 @@ if __name__ == "__main__":
 	location = 'locations/location_solver.json'
 	scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/1_type/5_trains5.json'
 	time_out = 600
+	# location = 'locations/five_tracks_location.json'
+	# scenario = 'scenarios/five_tracks/two_trains.json'
 	# scenario = 'scenarios/binckhorst_mixed_traffic_false/15_trains5.json'
 	print(scenario)
 	nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = setup(location, scenario)
