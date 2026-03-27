@@ -82,13 +82,14 @@ def solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, depar
 	time_window = range(start_time, end_time+1)
 	start = time.time()
 	model = create_model(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window)
-        model.Params.Threads = 1
-        print("Affinity cores:", len(os.sched_getaffinity(0)))
+	
 	# Solve using Gurobi
 	# solver = SolverFactory('gurobi')
 	solver = SolverFactory('gurobi_persistent')
 	solver.options['Seed'] = 1
 	solver.set_instance(model)
+	solver.set_gurobi_param('Threads', 1)
+	print("Affinity cores:", len(os.sched_getaffinity(0)))
 	
 	# def stop_after_first_solution(pyomo_model, solver_obj, where):
 	# 	grb_model = solver_obj._solver_model
