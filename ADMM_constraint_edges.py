@@ -94,8 +94,11 @@ def solve_agent(a, m, nodes, time_window, lambda_values, mu_values, node_admm_va
         m.edge_admm[g,t,z] = edge_admm_values[a,g,t,z]
   # Solve
   solver = SolverFactory('gurobi')
+  # solver = SolverFactory('gurobi_persistent')
   solver.options['Seed'] = 1
-  solver.set_gurobi_param('Threads', 1)
+  # solver.set_instance(m)
+  # solver.set_gurobi_param('Threads', 1)
+  solver.options['Threads'] = 1
   solver.solve(m, warmstart=True, keepfiles=False)
   
   x_values = {(i,j): { t: m.x[(i,j),t].value for t in m.time_window} for (i,j) in m.edges}
@@ -120,15 +123,16 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
   solution_found = False
   models = {}
   conflict_list = []
+  start = time.time()
   for a in agents:
     models[a] = create_model(agents, a, nodes, edges, conflict_edges, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, rho)
-  start = time.time()
+  
   x_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
   p_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
   y_values = {}
   for k in range(n_iter):
     print(k)
-    
+    print(time.time() - start)
     for a in agents:
       node_admm_values, edge_admm_values = update_admm_values(agents, a, nodes, edges, conflict_edges, time_window, x_values, p_values, node_admm_values, edge_admm_values, rho)
       x_values[a], p_values[a], y_values[a] = solve_agent(a, models[a], nodes, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values)
@@ -256,7 +260,7 @@ if __name__ == "__main__":
   # scenario = 'scenarios/9_tracks/7_trains_matching.json'
   # location = 'locations/binckhorst.json'
   location = 'locations/location_solver.json'
-  scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/5_trains2.json'
+  scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/25_trains2.json'
   # scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/30_trains1.json'
   
   # location = 'locations/6_tracks_location.json'

@@ -87,7 +87,7 @@ def solve_agent(m, nodes, time_window, lambda_values, mu_values):
   # Solve
   solver = SolverFactory('gurobi')
   solver.options['Seed'] = 1
-  solver.set_gurobi_param('Threads', 1)
+  solver.options['Threads'] = 1
   solver.solve(m, warmstart=True, keepfiles=False)
   
   x_values = {(i,j): { t: m.x[(i,j),t].value for t in m.time_window} for (i,j) in m.edges}
