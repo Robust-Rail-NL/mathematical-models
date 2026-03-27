@@ -259,8 +259,10 @@ if __name__ == "__main__":
   # location = 'locations/9_tracks_location.json'
   # scenario = 'scenarios/9_tracks/7_trains_matching.json'
   # location = 'locations/binckhorst.json'
-  location = 'locations/location_solver.json'
-  scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/25_trains2.json'
+  # location = 'locations/location_solver.json'
+  # scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/30_trains1.json'
+  location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
+  scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_final/1_type/scenario_solver_30_trains5.json'
   # scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/30_trains1.json'
   
   # location = 'locations/6_tracks_location.json'
