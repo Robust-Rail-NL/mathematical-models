@@ -95,6 +95,7 @@ def solve_agent(a, m, nodes, time_window, lambda_values, mu_values, node_admm_va
   # Solve
   solver = SolverFactory('gurobi')
   solver.options['Seed'] = 1
+  solver.set_gurobi_param('Threads', 1)
   solver.solve(m, warmstart=True, keepfiles=False)
   
   x_values = {(i,j): { t: m.x[(i,j),t].value for t in m.time_window} for (i,j) in m.edges}
@@ -190,12 +191,12 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
     conflict_list.append((conflicts, time.time() - start))
     if __name__ == "__main__":
       print("conflicts", conflicts)
+    if time.time() - start > time_out:
+      print("TIME LIMIT REACHED")
+      break
     if conflicts < 1:
       print("NO MORE CONFLICT")
       solution_found = True
-      break
-    if time.time() - start > time_out:
-      print("TIME LIMIT REACHED")
       break
   if __name__ == "__main__":
     pass

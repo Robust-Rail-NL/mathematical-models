@@ -89,7 +89,6 @@ def solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, depar
 	solver.options['Seed'] = 1
 	solver.set_instance(model)
 	solver.set_gurobi_param('Threads', 1)
-	print("Affinity cores:", len(os.sched_getaffinity(0)))
 	
 	# def stop_after_first_solution(pyomo_model, solver_obj, where):
 	# 	grb_model = solver_obj._solver_model

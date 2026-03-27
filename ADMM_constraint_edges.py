@@ -95,6 +95,7 @@ def solve_agent(a, m, nodes, time_window, lambda_values, mu_values, node_admm_va
   # Solve
   solver = SolverFactory('gurobi')
   solver.options['Seed'] = 1
+  solver.set_gurobi_param('Threads', 1)
   solver.solve(m, warmstart=True, keepfiles=False)
   
   x_values = {(i,j): { t: m.x[(i,j),t].value for t in m.time_window} for (i,j) in m.edges}
@@ -106,11 +107,11 @@ def solve_agent(a, m, nodes, time_window, lambda_values, mu_values, node_admm_va
 def update_admm_values(agents, a, nodes, edges, conflict_edges, time_window, x_values, p_values, node_admm_values, edge_admm_values, rho):
   for t in time_window:
     for l in nodes:
-      node_admm_values[a,l,t,0] = math.pow(max(0, rho/2*(0 + sum(p_values[a1][l][t] for a1 in agents if a1 != a) - 1)), 2)
-      node_admm_values[a,l,t,1] = math.pow(max(0, rho/2*(1 + sum(p_values[a1][l][t] for a1 in agents if a1 != a) - 1)), 2)
+      node_admm_values[a,l,t,0] = rho/2*math.pow(max(0, (0 + sum(p_values[a1][l][t] for a1 in agents if a1 != a) - 1)), 2)
+      node_admm_values[a,l,t,1] = rho/2*math.pow(max(0, (1 + sum(p_values[a1][l][t] for a1 in agents if a1 != a) - 1)), 2)
     for g in range(1, len(conflict_edges)+1):
-      edge_admm_values[a,g,t,0] = math.pow(max(0, rho/2*(0 + sum(x_values[a1][e][t] for a1 in agents if a1 != a for e in conflict_edges[g-1]) - 1)), 2)
-      edge_admm_values[a,g,t,1] = math.pow(max(0, rho/2*(1 + sum(x_values[a1][e][t] for a1 in agents if a1 != a for e in conflict_edges[g-1]) - 1)), 2)
+      edge_admm_values[a,g,t,0] = rho/2*math.pow(max(0, (0 + sum(x_values[a1][e][t] for a1 in agents if a1 != a for e in conflict_edges[g-1]) - 1)), 2)
+      edge_admm_values[a,g,t,1] = rho/2*math.pow(max(0, (1 + sum(x_values[a1][e][t] for a1 in agents if a1 != a for e in conflict_edges[g-1]) - 1)), 2)
   return node_admm_values, edge_admm_values
 
 
