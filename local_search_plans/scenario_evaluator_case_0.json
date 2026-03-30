@@ -1,0 +1,239 @@
+{
+	"nonServiceTraffic": [],
+	"disabledTrackPart": [],
+	"workers": [],
+	"in": [
+		{
+			"time": "8280",
+			"id": "0",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "0",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "4680",
+			"id": "1",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "1",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "9360",
+			"id": "2",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "4",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "720",
+			"id": "3",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "3",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "2160",
+			"id": "4",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "2",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		}
+	],
+	"out": [
+		{
+			"time": "22500",
+			"id": "5",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "****",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "18540",
+			"id": "6",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "****",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "14580",
+			"id": "7",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "****",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "14940",
+			"id": "8",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "****",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "14220",
+			"id": "9",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "****",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		}
+	],
+	"startTime": "0",
+	"endTime": "23400",
+	"inStanding": [],
+	"outStanding": [],
+	"trainUnitTypes": [
+		{
+			"displayName": "SLT-4",
+			"carriages": 4,
+			"length": 69.36,
+			"combineDuration": "180",
+			"splitDuration": "120",
+			"backNormTime": "120",
+			"backAdditionTime": "16",
+			"travelSpeed": "0",
+			"startUpTime": "0",
+			"typePrefix": "SLT",
+			"needsLoco": false,
+			"isLoco": false,
+			"needsElectricity": true,
+			"idPrefix": 0
+		},
+		{
+			"displayName": "SLT-6",
+			"carriages": 6,
+			"length": 100.54,
+			"combineDuration": "180",
+			"splitDuration": "120",
+			"backNormTime": "120",
+			"backAdditionTime": "15",
+			"travelSpeed": "0",
+			"startUpTime": "0",
+			"typePrefix": "SLT",
+			"needsLoco": false,
+			"isLoco": false,
+			"needsElectricity": true,
+			"idPrefix": 0
+		},
+		{
+			"displayName": "SNG-3",
+			"carriages": 3,
+			"length": 59.5,
+			"combineDuration": "180",
+			"splitDuration": "120",
+			"backNormTime": "0",
+			"backAdditionTime": "0",
+			"travelSpeed": "0",
+			"startUpTime": "0",
+			"typePrefix": "SNG",
+			"needsLoco": false,
+			"isLoco": false,
+			"needsElectricity": true,
+			"idPrefix": 0
+		},
+		{
+			"displayName": "SNG-4",
+			"carriages": 4,
+			"length": 75.7,
+			"combineDuration": "180",
+			"splitDuration": "120",
+			"backNormTime": "0",
+			"backAdditionTime": "0",
+			"travelSpeed": "0",
+			"startUpTime": "0",
+			"typePrefix": "SNG",
+			"needsLoco": false,
+			"isLoco": false,
+			"needsElectricity": true,
+			"idPrefix": 0
+		}
+	]
+}
