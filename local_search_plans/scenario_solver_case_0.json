@@ -3,13 +3,13 @@
 		"trains": [
 			{
 				"entryTrackPart": "42",
-				"arrival": "8280",
-				"departure": "8280",
+				"arrival": "7200",
+				"departure": "7200",
 				"id": "0",
 				"members": [
 					{
 						"trainUnit": {
-							"id": "0",
+							"id": "7",
 							"type": {
 								"displayName": "VIRM4",
 								"carriages": 4,
@@ -29,13 +29,13 @@
 			},
 			{
 				"entryTrackPart": "42",
-				"arrival": "4680",
-				"departure": "4680",
+				"arrival": "3600",
+				"departure": "3600",
 				"id": "1",
 				"members": [
 					{
 						"trainUnit": {
-							"id": "1",
+							"id": "0",
 							"type": {
 								"displayName": "VIRM4",
 								"carriages": 4,
@@ -61,6 +61,110 @@
 				"members": [
 					{
 						"trainUnit": {
+							"id": "6",
+							"type": {
+								"displayName": "VIRM4",
+								"carriages": 4,
+								"reversalDuration": "0",
+								"length": 100,
+								"combineDuration": "180",
+								"splitDuration": "120",
+								"backNormTime": "280",
+								"backAdditionTime": "25"
+							}
+						},
+						"tasks": []
+					}
+				],
+				"firstParkingTrackPart": "15",
+				"standingIndex": 0
+			},
+			{
+				"entryTrackPart": "42",
+				"arrival": "8280",
+				"departure": "8280",
+				"id": "3",
+				"members": [
+					{
+						"trainUnit": {
+							"id": "8",
+							"type": {
+								"displayName": "VIRM4",
+								"carriages": 4,
+								"reversalDuration": "0",
+								"length": 100,
+								"combineDuration": "180",
+								"splitDuration": "120",
+								"backNormTime": "280",
+								"backAdditionTime": "25"
+							}
+						},
+						"tasks": []
+					}
+				],
+				"firstParkingTrackPart": "15",
+				"standingIndex": 0
+			},
+			{
+				"entryTrackPart": "42",
+				"arrival": "10080",
+				"departure": "10080",
+				"id": "4",
+				"members": [
+					{
+						"trainUnit": {
+							"id": "9",
+							"type": {
+								"displayName": "VIRM4",
+								"carriages": 4,
+								"reversalDuration": "0",
+								"length": 100,
+								"combineDuration": "180",
+								"splitDuration": "120",
+								"backNormTime": "280",
+								"backAdditionTime": "25"
+							}
+						},
+						"tasks": []
+					}
+				],
+				"firstParkingTrackPart": "15",
+				"standingIndex": 0
+			},
+			{
+				"entryTrackPart": "42",
+				"arrival": "1080",
+				"departure": "1080",
+				"id": "5",
+				"members": [
+					{
+						"trainUnit": {
+							"id": "1",
+							"type": {
+								"displayName": "VIRM4",
+								"carriages": 4,
+								"reversalDuration": "0",
+								"length": 100,
+								"combineDuration": "180",
+								"splitDuration": "120",
+								"backNormTime": "280",
+								"backAdditionTime": "25"
+							}
+						},
+						"tasks": []
+					}
+				],
+				"firstParkingTrackPart": "15",
+				"standingIndex": 0
+			},
+			{
+				"entryTrackPart": "42",
+				"arrival": "5400",
+				"departure": "5400",
+				"id": "6",
+				"members": [
+					{
+						"trainUnit": {
 							"id": "4",
 							"type": {
 								"displayName": "VIRM4",
@@ -81,9 +185,35 @@
 			},
 			{
 				"entryTrackPart": "42",
-				"arrival": "720",
-				"departure": "720",
-				"id": "3",
+				"arrival": "8640",
+				"departure": "8640",
+				"id": "7",
+				"members": [
+					{
+						"trainUnit": {
+							"id": "2",
+							"type": {
+								"displayName": "VIRM4",
+								"carriages": 4,
+								"reversalDuration": "0",
+								"length": 100,
+								"combineDuration": "180",
+								"splitDuration": "120",
+								"backNormTime": "280",
+								"backAdditionTime": "25"
+							}
+						},
+						"tasks": []
+					}
+				],
+				"firstParkingTrackPart": "15",
+				"standingIndex": 0
+			},
+			{
+				"entryTrackPart": "42",
+				"arrival": "1800",
+				"departure": "1800",
+				"id": "8",
 				"members": [
 					{
 						"trainUnit": {
@@ -107,13 +237,13 @@
 			},
 			{
 				"entryTrackPart": "42",
-				"arrival": "2160",
-				"departure": "2160",
-				"id": "4",
+				"arrival": "7920",
+				"departure": "7920",
+				"id": "9",
 				"members": [
 					{
 						"trainUnit": {
-							"id": "2",
+							"id": "5",
 							"type": {
 								"displayName": "VIRM4",
 								"carriages": 4,
@@ -137,9 +267,9 @@
 		"trainRequests": [
 			{
 				"leaveTrackPart": "42",
-				"arrival": "22500",
-				"departure": "22500",
-				"displayName": "5",
+				"arrival": "21780",
+				"departure": "21780",
+				"displayName": "10",
 				"trainUnits": [
 					{
 						"id": "",
@@ -160,9 +290,9 @@
 			},
 			{
 				"leaveTrackPart": "42",
-				"arrival": "18540",
-				"departure": "18540",
-				"displayName": "6",
+				"arrival": "16380",
+				"departure": "16380",
+				"displayName": "11",
 				"trainUnits": [
 					{
 						"id": "",
@@ -183,9 +313,101 @@
 			},
 			{
 				"leaveTrackPart": "42",
-				"arrival": "14580",
-				"departure": "14580",
-				"displayName": "7",
+				"arrival": "17820",
+				"departure": "17820",
+				"displayName": "12",
+				"trainUnits": [
+					{
+						"id": "",
+						"type": {
+							"displayName": "VIRM4",
+							"carriages": 4,
+							"reversalDuration": "0",
+							"length": 100,
+							"combineDuration": "180",
+							"splitDuration": "120",
+							"backNormTime": "280",
+							"backAdditionTime": "25"
+						}
+					}
+				],
+				"lastParkingTrackPart": "15",
+				"standingIndex": 0
+			},
+			{
+				"leaveTrackPart": "42",
+				"arrival": "16740",
+				"departure": "16740",
+				"displayName": "13",
+				"trainUnits": [
+					{
+						"id": "",
+						"type": {
+							"displayName": "VIRM4",
+							"carriages": 4,
+							"reversalDuration": "0",
+							"length": 100,
+							"combineDuration": "180",
+							"splitDuration": "120",
+							"backNormTime": "280",
+							"backAdditionTime": "25"
+						}
+					}
+				],
+				"lastParkingTrackPart": "15",
+				"standingIndex": 0
+			},
+			{
+				"leaveTrackPart": "42",
+				"arrival": "12780",
+				"departure": "12780",
+				"displayName": "14",
+				"trainUnits": [
+					{
+						"id": "",
+						"type": {
+							"displayName": "VIRM4",
+							"carriages": 4,
+							"reversalDuration": "0",
+							"length": 100,
+							"combineDuration": "180",
+							"splitDuration": "120",
+							"backNormTime": "280",
+							"backAdditionTime": "25"
+						}
+					}
+				],
+				"lastParkingTrackPart": "15",
+				"standingIndex": 0
+			},
+			{
+				"leaveTrackPart": "42",
+				"arrival": "13860",
+				"departure": "13860",
+				"displayName": "15",
+				"trainUnits": [
+					{
+						"id": "",
+						"type": {
+							"displayName": "VIRM4",
+							"carriages": 4,
+							"reversalDuration": "0",
+							"length": 100,
+							"combineDuration": "180",
+							"splitDuration": "120",
+							"backNormTime": "280",
+							"backAdditionTime": "25"
+						}
+					}
+				],
+				"lastParkingTrackPart": "15",
+				"standingIndex": 0
+			},
+			{
+				"leaveTrackPart": "42",
+				"arrival": "17460",
+				"departure": "17460",
+				"displayName": "16",
 				"trainUnits": [
 					{
 						"id": "",
@@ -208,7 +430,7 @@
 				"leaveTrackPart": "42",
 				"arrival": "14940",
 				"departure": "14940",
-				"displayName": "8",
+				"displayName": "17",
 				"trainUnits": [
 					{
 						"id": "",
@@ -229,9 +451,32 @@
 			},
 			{
 				"leaveTrackPart": "42",
-				"arrival": "14220",
-				"departure": "14220",
-				"displayName": "9",
+				"arrival": "19260",
+				"departure": "19260",
+				"displayName": "18",
+				"trainUnits": [
+					{
+						"id": "",
+						"type": {
+							"displayName": "VIRM4",
+							"carriages": 4,
+							"reversalDuration": "0",
+							"length": 100,
+							"combineDuration": "180",
+							"splitDuration": "120",
+							"backNormTime": "280",
+							"backAdditionTime": "25"
+						}
+					}
+				],
+				"lastParkingTrackPart": "15",
+				"standingIndex": 0
+			},
+			{
+				"leaveTrackPart": "42",
+				"arrival": "21060",
+				"departure": "21060",
+				"displayName": "19",
 				"trainUnits": [
 					{
 						"id": "",

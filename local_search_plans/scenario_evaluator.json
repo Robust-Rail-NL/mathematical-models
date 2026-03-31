@@ -4,13 +4,13 @@
 	"workers": [],
 	"in": [
 		{
-			"time": "8280",
+			"time": "7200",
 			"id": "0",
 			"sideTrackPart": "42",
 			"parkingTrackPart": "15",
 			"members": [
 				{
-					"id": "0",
+					"id": "7",
 					"typeDisplayName": "VIRM4-4",
 					"tasks": []
 				}
@@ -20,13 +20,13 @@
 			"minimumDuration": ""
 		},
 		{
-			"time": "4680",
+			"time": "3600",
 			"id": "1",
 			"sideTrackPart": "42",
 			"parkingTrackPart": "15",
 			"members": [
 				{
-					"id": "1",
+					"id": "0",
 					"typeDisplayName": "VIRM4-4",
 					"tasks": []
 				}
@@ -42,6 +42,70 @@
 			"parkingTrackPart": "15",
 			"members": [
 				{
+					"id": "6",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "8280",
+			"id": "3",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "8",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "10080",
+			"id": "4",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "9",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "1080",
+			"id": "5",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "1",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "5400",
+			"id": "6",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
 					"id": "4",
 					"typeDisplayName": "VIRM4-4",
 					"tasks": []
@@ -52,8 +116,24 @@
 			"minimumDuration": ""
 		},
 		{
-			"time": "720",
-			"id": "3",
+			"time": "8640",
+			"id": "7",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "2",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "1800",
+			"id": "8",
 			"sideTrackPart": "42",
 			"parkingTrackPart": "15",
 			"members": [
@@ -68,13 +148,13 @@
 			"minimumDuration": ""
 		},
 		{
-			"time": "2160",
-			"id": "4",
+			"time": "7920",
+			"id": "9",
 			"sideTrackPart": "42",
 			"parkingTrackPart": "15",
 			"members": [
 				{
-					"id": "2",
+					"id": "5",
 					"typeDisplayName": "VIRM4-4",
 					"tasks": []
 				}
@@ -86,8 +166,8 @@
 	],
 	"out": [
 		{
-			"time": "22500",
-			"id": "5",
+			"time": "21780",
+			"id": "10",
 			"sideTrackPart": "42",
 			"parkingTrackPart": "15",
 			"members": [
@@ -102,8 +182,8 @@
 			"minimumDuration": ""
 		},
 		{
-			"time": "18540",
-			"id": "6",
+			"time": "16380",
+			"id": "11",
 			"sideTrackPart": "42",
 			"parkingTrackPart": "15",
 			"members": [
@@ -118,8 +198,72 @@
 			"minimumDuration": ""
 		},
 		{
-			"time": "14580",
-			"id": "7",
+			"time": "17820",
+			"id": "12",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "****",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "16740",
+			"id": "13",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "****",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "12780",
+			"id": "14",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "****",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "13860",
+			"id": "15",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "****",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "17460",
+			"id": "16",
 			"sideTrackPart": "42",
 			"parkingTrackPart": "15",
 			"members": [
@@ -135,7 +279,7 @@
 		},
 		{
 			"time": "14940",
-			"id": "8",
+			"id": "17",
 			"sideTrackPart": "42",
 			"parkingTrackPart": "15",
 			"members": [
@@ -150,8 +294,24 @@
 			"minimumDuration": ""
 		},
 		{
-			"time": "14220",
-			"id": "9",
+			"time": "19260",
+			"id": "18",
+			"sideTrackPart": "42",
+			"parkingTrackPart": "15",
+			"members": [
+				{
+					"id": "****",
+					"typeDisplayName": "VIRM4-4",
+					"tasks": []
+				}
+			],
+			"canDepartFromAnyTrack": false,
+			"standingIndex": 0,
+			"minimumDuration": ""
+		},
+		{
+			"time": "21060",
+			"id": "19",
 			"sideTrackPart": "42",
 			"parkingTrackPart": "15",
 			"members": [
