@@ -227,14 +227,14 @@
         },
         {
             "id": "15",
-            "name": "906b",
+            "name": "906a",
             "aSide": [
-                59
-            ],
-            "bSide": [
                 42
             ],
-            "length": 480,
+            "bSide": [
+                59
+            ],
+            "length": 255,
             "sawMovementAllowed": true,
             "parkingAllowed": true,
             "isElectrified": true,
@@ -617,14 +617,14 @@
         },
         {
             "id": "41",
-            "name": "906a",
+            "name": "906b",
             "aSide": [
-                47
-            ],
-            "bSide": [
                 59
             ],
-            "length": 480,
+            "bSide": [
+                47
+            ],
+            "length": 255,
             "sawMovementAllowed": true,
             "parkingAllowed": true,
             "isElectrified": true,
@@ -640,7 +640,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Bumper"
         },
         {
@@ -653,7 +653,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Bumper"
         },
         {
@@ -666,7 +666,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Bumper"
         },
         {
@@ -679,7 +679,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Bumper"
         },
         {
@@ -692,12 +692,12 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Bumper"
         },
         {
             "id": "47",
-            "name": "Stootblok906a",
+            "name": "Stootblok906b",
             "aSide": [
                 41
             ],
@@ -705,7 +705,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Bumper"
         },
         {
@@ -722,7 +722,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Intersection"
         },
         {
@@ -739,7 +739,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Intersection"
         },
         {
@@ -755,7 +755,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
@@ -771,7 +771,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
@@ -787,7 +787,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
@@ -803,7 +803,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
@@ -819,81 +819,81 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
             "id": "55",
             "name": "Wissel958",
             "aSide": [
-                21,
-                4
+                20
             ],
             "bSide": [
-                20
+                21,
+                4
             ],
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
             "id": "56",
             "name": "Wissel959",
             "aSide": [
-                20,
-                3
+                22
             ],
             "bSide": [
-                22
+                20,
+                3
             ],
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
             "id": "57",
             "name": "Wissel960",
             "aSide": [
-                22,
-                2
+                23
             ],
             "bSide": [
-                23
+                22,
+                2
             ],
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
             "id": "58",
             "name": "Wissel961",
             "aSide": [
-                23,
-                1
+                24
             ],
             "bSide": [
-                24
+                23,
+                1
             ],
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
             "id": "59",
             "name": "Wissel963",
             "aSide": [
-                24,
                 15
             ],
             "bSide": [
+                24,
                 41
             ],
             "length": 0,
@@ -915,7 +915,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
@@ -931,7 +931,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
@@ -947,87 +947,87 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
             "id": "63",
             "name": "Wissel973",
             "aSide": [
-                17,
-                38
+                29
             ],
             "bSide": [
-                29
+                17,
+                38
             ],
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
             "id": "64",
             "name": "Wissel976",
             "aSide": [
-                7,
-                6
+                30
             ],
             "bSide": [
-                30
+                7,
+                6
             ],
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
             "id": "65",
             "name": "Wissel977",
             "aSide": [
-                30,
-                5
+                31
             ],
             "bSide": [
-                31
+                30,
+                5
             ],
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
             "id": "66",
             "name": "Wissel978",
             "aSide": [
-                8,
-                31
+                21
             ],
             "bSide": [
-                21
+                8,
+                31
             ],
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
             "id": "67",
             "name": "Wissel979",
             "aSide": [
-                13,
-                27
+                8
             ],
             "bSide": [
-                8
+                13,
+                27
             ],
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "Switch"
         },
         {
@@ -1044,7 +1044,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "EnglishSwitch"
         },
         {
@@ -1061,7 +1061,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "EnglishSwitch"
         },
         {
@@ -1078,7 +1078,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "EnglishSwitch"
         },
         {
@@ -1095,7 +1095,7 @@
             "length": 0,
             "sawMovementAllowed": false,
             "parkingAllowed": false,
-            "isElectrified": true,
+            "isElectrified": false,
             "type": "EnglishSwitch"
         }
     ],
@@ -1108,44 +1108,27 @@
                 11
             ],
             "taskTypes": [
-				{
-					"other": "Reinigingsperron"
-				}
-			],
-			"simultaneousUsageCount": 2,
-			"timeWindow": {
-				"start": 0,
-				"end": 100000
-			}
+                {
+                    "other": "Reinigingsperron"
+                }
+            ],
+            "simultaneousUsageCount": 2,
+            "timeWindow": {
+                "start": 0,
+                "end": 100000
+            }
         },
         {
             "id": "73",
             "type": "Wasmachine",
             "relatedTrackParts": [
                 12
-            ]
+            ],
+            "taskTypes": [],
+            "simultaneousUsageCount": 1
         },
         {
             "id": "74",
-            "type": "Inspectieput",
-            "relatedTrackParts": [
-                13
-            ],
-            "taskTypes": [
-				{
-					"other": "technische_controle_A"
-				},
-				{
-					"other": "technische_controle_B"
-				}
-			],
-            "timeWindow": {
-				"start": 0,
-				"end": 100000
-			}
-        },
-        {
-            "id": "75",
             "type": "Monteur",
             "relatedTrackParts": [
                 1,
@@ -1156,12 +1139,13 @@
                 6,
                 7,
                 8
-            ]
+            ],
+            "taskTypes": [],
+            "simultaneousUsageCount": 1
         }
     ],
     "taskTypes": [],
-	"movementConstant": 0,
-	"movementTrackCoefficient": 30,
-	"movementSwitchCoefficient": 0,
-	"distanceEntries": []
+    "movementConstant": 0,
+    "movementTrackCoefficient": 30,
+    "movementSwitchCoefficient": 0
 }
