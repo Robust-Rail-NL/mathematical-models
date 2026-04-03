@@ -53,8 +53,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "7920",
-                "departure": "7920",
+                "arrival": "10440",
+                "departure": "10440",
                 "id": "2",
                 "members": [
                     {
@@ -78,8 +78,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "9360",
-                "departure": "9360",
+                "arrival": "8640",
+                "departure": "8640",
                 "id": "3",
                 "members": [
                     {
@@ -103,8 +103,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "5040",
-                "departure": "5040",
+                "arrival": "1440",
+                "departure": "1440",
                 "id": "4",
                 "members": [
                     {
@@ -128,8 +128,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "4320",
-                "departure": "4320",
+                "arrival": "720",
+                "departure": "720",
                 "id": "5",
                 "members": [
                     {
@@ -153,8 +153,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "1440",
-                "departure": "1440",
+                "arrival": "9360",
+                "departure": "9360",
                 "id": "6",
                 "members": [
                     {
@@ -178,8 +178,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "720",
-                "departure": "720",
+                "arrival": "5040",
+                "departure": "5040",
                 "id": "7",
                 "members": [
                     {
@@ -278,8 +278,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "2160",
-                "departure": "2160",
+                "arrival": "7920",
+                "departure": "7920",
                 "id": "11",
                 "members": [
                     {
@@ -303,8 +303,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "8640",
-                "departure": "8640",
+                "arrival": "2160",
+                "departure": "2160",
                 "id": "12",
                 "members": [
                     {
@@ -328,8 +328,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "1080",
-                "departure": "1080",
+                "arrival": "9720",
+                "departure": "9720",
                 "id": "13",
                 "members": [
                     {
@@ -353,8 +353,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "3240",
-                "departure": "3240",
+                "arrival": "1080",
+                "departure": "1080",
                 "id": "14",
                 "members": [
                     {
@@ -378,8 +378,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "6840",
-                "departure": "6840",
+                "arrival": "3240",
+                "departure": "3240",
                 "id": "15",
                 "members": [
                     {
@@ -403,8 +403,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "8280",
-                "departure": "8280",
+                "arrival": "11160",
+                "departure": "11160",
                 "id": "16",
                 "members": [
                     {
@@ -428,8 +428,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "360",
-                "departure": "360",
+                "arrival": "9000",
+                "departure": "9000",
                 "id": "17",
                 "members": [
                     {
@@ -453,8 +453,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "11160",
-                "departure": "11160",
+                "arrival": "360",
+                "departure": "360",
                 "id": "18",
                 "members": [
                     {
@@ -478,8 +478,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "2520",
-                "departure": "2520",
+                "arrival": "8280",
+                "departure": "8280",
                 "id": "19",
                 "members": [
                     {
@@ -503,8 +503,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "5400",
-                "departure": "5400",
+                "arrival": "2520",
+                "departure": "2520",
                 "id": "20",
                 "members": [
                     {
@@ -528,8 +528,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "4680",
-                "departure": "4680",
+                "arrival": "5760",
+                "departure": "5760",
                 "id": "21",
                 "members": [
                     {
@@ -553,8 +553,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "11520",
-                "departure": "11520",
+                "arrival": "7560",
+                "departure": "7560",
                 "id": "22",
                 "members": [
                     {
@@ -578,6 +578,8 @@
             },
             {
                 "entryTrackPart": "42",
+                "arrival": "12240",
+                "departure": "12240",
                 "id": "23",
                 "members": [
                     {
@@ -597,14 +599,10 @@
                         "tasks": []
                     }
                 ],
-                "firstParkingTrackPart": "15",
-                "arrival": "0",
-                "departure": "0"
+                "firstParkingTrackPart": "15"
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "10800",
-                "departure": "10800",
                 "id": "24",
                 "members": [
                     {
@@ -624,12 +622,14 @@
                         "tasks": []
                     }
                 ],
-                "firstParkingTrackPart": "15"
+                "firstParkingTrackPart": "15",
+                "arrival": "0",
+                "departure": "0"
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "7560",
-                "departure": "7560",
+                "arrival": "6480",
+                "departure": "6480",
                 "id": "25",
                 "members": [
                     {
@@ -653,8 +653,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "6480",
-                "departure": "6480",
+                "arrival": "5400",
+                "departure": "5400",
                 "id": "26",
                 "members": [
                     {
@@ -678,8 +678,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "1800",
-                "departure": "1800",
+                "arrival": "11880",
+                "departure": "11880",
                 "id": "27",
                 "members": [
                     {
@@ -703,8 +703,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "9720",
-                "departure": "9720",
+                "arrival": "1800",
+                "departure": "1800",
                 "id": "28",
                 "members": [
                     {
@@ -728,8 +728,8 @@
             },
             {
                 "entryTrackPart": "42",
-                "arrival": "9000",
-                "departure": "9000",
+                "arrival": "4680",
+                "departure": "4680",
                 "id": "29",
                 "members": [
                     {
@@ -757,9 +757,55 @@
         "trainRequests": [
             {
                 "leaveTrackPart": "42",
-                "arrival": "15840",
-                "departure": "15840",
+                "arrival": "19440",
+                "departure": "19440",
                 "displayName": "30",
+                "trainUnits": [
+                    {
+                        "type": {
+                            "displayName": "ICR9",
+                            "carriages": 9,
+                            "length": 100.0,
+                            "combineDuration": "180",
+                            "splitDuration": "120",
+                            "reversalDuration": "0",
+                            "backNormTime": "0",
+                            "backAdditionTime": "0"
+                        },
+                        "id": ""
+                    }
+                ],
+                "lastParkingTrackPart": "15",
+                "standingIndex": 0.0
+            },
+            {
+                "leaveTrackPart": "42",
+                "arrival": "16560",
+                "departure": "16560",
+                "displayName": "31",
+                "trainUnits": [
+                    {
+                        "type": {
+                            "displayName": "VIRM6",
+                            "carriages": 6,
+                            "length": 100.0,
+                            "combineDuration": "180",
+                            "splitDuration": "120",
+                            "backNormTime": "280",
+                            "backAdditionTime": "24",
+                            "reversalDuration": "0"
+                        },
+                        "id": ""
+                    }
+                ],
+                "lastParkingTrackPart": "15",
+                "standingIndex": 0.0
+            },
+            {
+                "leaveTrackPart": "42",
+                "arrival": "12960",
+                "departure": "12960",
+                "displayName": "32",
                 "trainUnits": [
                     {
                         "type": {
@@ -782,52 +828,6 @@
                 "leaveTrackPart": "42",
                 "arrival": "18720",
                 "departure": "18720",
-                "displayName": "31",
-                "trainUnits": [
-                    {
-                        "type": {
-                            "displayName": "VIRM6",
-                            "carriages": 6,
-                            "length": 100.0,
-                            "combineDuration": "180",
-                            "splitDuration": "120",
-                            "backNormTime": "280",
-                            "backAdditionTime": "24",
-                            "reversalDuration": "0"
-                        },
-                        "id": ""
-                    }
-                ],
-                "lastParkingTrackPart": "15",
-                "standingIndex": 0.0
-            },
-            {
-                "leaveTrackPart": "42",
-                "arrival": "11880",
-                "departure": "11880",
-                "displayName": "32",
-                "trainUnits": [
-                    {
-                        "type": {
-                            "displayName": "ICR9",
-                            "carriages": 9,
-                            "length": 100.0,
-                            "combineDuration": "180",
-                            "splitDuration": "120",
-                            "reversalDuration": "0",
-                            "backNormTime": "0",
-                            "backAdditionTime": "0"
-                        },
-                        "id": ""
-                    }
-                ],
-                "lastParkingTrackPart": "15",
-                "standingIndex": 0.0
-            },
-            {
-                "leaveTrackPart": "42",
-                "arrival": "19080",
-                "departure": "19080",
                 "displayName": "33",
                 "trainUnits": [
                     {
@@ -849,8 +849,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "14760",
-                "departure": "14760",
+                "arrival": "21960",
+                "departure": "21960",
                 "displayName": "34",
                 "trainUnits": [
                     {
@@ -872,8 +872,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "21240",
-                "departure": "21240",
+                "arrival": "23760",
+                "departure": "23760",
                 "displayName": "35",
                 "trainUnits": [
                     {
@@ -895,8 +895,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "18000",
-                "departure": "18000",
+                "arrival": "13320",
+                "departure": "13320",
                 "displayName": "36",
                 "trainUnits": [
                     {
@@ -918,101 +918,9 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "12600",
-                "departure": "12600",
+                "arrival": "20520",
+                "departure": "20520",
                 "displayName": "37",
-                "trainUnits": [
-                    {
-                        "type": {
-                            "displayName": "FFF4",
-                            "carriages": 4,
-                            "length": 100.0,
-                            "combineDuration": "180",
-                            "splitDuration": "120",
-                            "reversalDuration": "0",
-                            "backNormTime": "0",
-                            "backAdditionTime": "0"
-                        },
-                        "id": ""
-                    }
-                ],
-                "lastParkingTrackPart": "15",
-                "standingIndex": 0.0
-            },
-            {
-                "leaveTrackPart": "42",
-                "arrival": "19800",
-                "departure": "19800",
-                "displayName": "38",
-                "trainUnits": [
-                    {
-                        "type": {
-                            "displayName": "FFF3",
-                            "carriages": 3,
-                            "length": 100.0,
-                            "combineDuration": "180",
-                            "splitDuration": "120",
-                            "reversalDuration": "0",
-                            "backNormTime": "0",
-                            "backAdditionTime": "0"
-                        },
-                        "id": ""
-                    }
-                ],
-                "lastParkingTrackPart": "15",
-                "standingIndex": 0.0
-            },
-            {
-                "leaveTrackPart": "42",
-                "arrival": "15480",
-                "departure": "15480",
-                "displayName": "39",
-                "trainUnits": [
-                    {
-                        "type": {
-                            "displayName": "SNG3",
-                            "carriages": 3,
-                            "length": 100.0,
-                            "combineDuration": "180",
-                            "splitDuration": "120",
-                            "reversalDuration": "0",
-                            "backNormTime": "0",
-                            "backAdditionTime": "0"
-                        },
-                        "id": ""
-                    }
-                ],
-                "lastParkingTrackPart": "15",
-                "standingIndex": 0.0
-            },
-            {
-                "leaveTrackPart": "42",
-                "arrival": "21960",
-                "departure": "21960",
-                "displayName": "40",
-                "trainUnits": [
-                    {
-                        "type": {
-                            "displayName": "SLT4",
-                            "carriages": 4,
-                            "length": 100.0,
-                            "combineDuration": "180",
-                            "splitDuration": "120",
-                            "backNormTime": "120",
-                            "backAdditionTime": "16",
-                            "reversalDuration": "0"
-                        },
-                        "id": ""
-                    }
-                ],
-                "lastParkingTrackPart": "15",
-                "standingIndex": 0.0
-            },
-            {
-                "leaveTrackPart": "42",
-                "arrival": "22320",
-                "departure": "22320",
-                "displayName": "41",
                 "trainUnits": [
                     {
                         "type": {
@@ -1035,6 +943,98 @@
                 "leaveTrackPart": "42",
                 "arrival": "20880",
                 "departure": "20880",
+                "displayName": "38",
+                "trainUnits": [
+                    {
+                        "type": {
+                            "displayName": "FFF3",
+                            "carriages": 3,
+                            "length": 100.0,
+                            "combineDuration": "180",
+                            "splitDuration": "120",
+                            "reversalDuration": "0",
+                            "backNormTime": "0",
+                            "backAdditionTime": "0"
+                        },
+                        "id": ""
+                    }
+                ],
+                "lastParkingTrackPart": "15",
+                "standingIndex": 0.0
+            },
+            {
+                "leaveTrackPart": "42",
+                "arrival": "16200",
+                "departure": "16200",
+                "displayName": "39",
+                "trainUnits": [
+                    {
+                        "type": {
+                            "displayName": "SNG3",
+                            "carriages": 3,
+                            "length": 100.0,
+                            "combineDuration": "180",
+                            "splitDuration": "120",
+                            "reversalDuration": "0",
+                            "backNormTime": "0",
+                            "backAdditionTime": "0"
+                        },
+                        "id": ""
+                    }
+                ],
+                "lastParkingTrackPart": "15",
+                "standingIndex": 0.0
+            },
+            {
+                "leaveTrackPart": "42",
+                "arrival": "19800",
+                "departure": "19800",
+                "displayName": "40",
+                "trainUnits": [
+                    {
+                        "type": {
+                            "displayName": "SLT4",
+                            "carriages": 4,
+                            "length": 100.0,
+                            "combineDuration": "180",
+                            "splitDuration": "120",
+                            "backNormTime": "120",
+                            "backAdditionTime": "16",
+                            "reversalDuration": "0"
+                        },
+                        "id": ""
+                    }
+                ],
+                "lastParkingTrackPart": "15",
+                "standingIndex": 0.0
+            },
+            {
+                "leaveTrackPart": "42",
+                "arrival": "12600",
+                "departure": "12600",
+                "displayName": "41",
+                "trainUnits": [
+                    {
+                        "type": {
+                            "displayName": "FFF4",
+                            "carriages": 4,
+                            "length": 100.0,
+                            "combineDuration": "180",
+                            "splitDuration": "120",
+                            "reversalDuration": "0",
+                            "backNormTime": "0",
+                            "backAdditionTime": "0"
+                        },
+                        "id": ""
+                    }
+                ],
+                "lastParkingTrackPart": "15",
+                "standingIndex": 0.0
+            },
+            {
+                "leaveTrackPart": "42",
+                "arrival": "23040",
+                "departure": "23040",
                 "displayName": "42",
                 "trainUnits": [
                     {
@@ -1056,8 +1056,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "21600",
-                "departure": "21600",
+                "arrival": "15480",
+                "departure": "15480",
                 "displayName": "43",
                 "trainUnits": [
                     {
@@ -1079,8 +1079,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "12960",
-                "departure": "12960",
+                "arrival": "13680",
+                "departure": "13680",
                 "displayName": "44",
                 "trainUnits": [
                     {
@@ -1102,8 +1102,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "16920",
-                "departure": "16920",
+                "arrival": "17640",
+                "departure": "17640",
                 "displayName": "45",
                 "trainUnits": [
                     {
@@ -1125,8 +1125,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "16200",
-                "departure": "16200",
+                "arrival": "16920",
+                "departure": "16920",
                 "displayName": "46",
                 "trainUnits": [
                     {
@@ -1148,8 +1148,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "14040",
-                "departure": "14040",
+                "arrival": "19080",
+                "departure": "19080",
                 "displayName": "47",
                 "trainUnits": [
                     {
@@ -1171,8 +1171,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "20160",
-                "departure": "20160",
+                "arrival": "24840",
+                "departure": "24840",
                 "displayName": "48",
                 "trainUnits": [
                     {
@@ -1194,8 +1194,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "14400",
-                "departure": "14400",
+                "arrival": "14040",
+                "departure": "14040",
                 "displayName": "49",
                 "trainUnits": [
                     {
@@ -1217,8 +1217,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "20520",
-                "departure": "20520",
+                "arrival": "22320",
+                "departure": "22320",
                 "displayName": "50",
                 "trainUnits": [
                     {
@@ -1240,8 +1240,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "22680",
-                "departure": "22680",
+                "arrival": "24480",
+                "departure": "24480",
                 "displayName": "51",
                 "trainUnits": [
                     {
@@ -1263,8 +1263,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "17640",
-                "departure": "17640",
+                "arrival": "21240",
+                "departure": "21240",
                 "displayName": "52",
                 "trainUnits": [
                     {
@@ -1286,8 +1286,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "18360",
-                "departure": "18360",
+                "arrival": "14760",
+                "departure": "14760",
                 "displayName": "53",
                 "trainUnits": [
                     {
@@ -1309,8 +1309,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "13320",
-                "departure": "13320",
+                "arrival": "15840",
+                "departure": "15840",
                 "displayName": "54",
                 "trainUnits": [
                     {
@@ -1332,8 +1332,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "12240",
-                "departure": "12240",
+                "arrival": "20160",
+                "departure": "20160",
                 "displayName": "55",
                 "trainUnits": [
                     {
@@ -1355,8 +1355,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "17280",
-                "departure": "17280",
+                "arrival": "21600",
+                "departure": "21600",
                 "displayName": "56",
                 "trainUnits": [
                     {
@@ -1378,8 +1378,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "16560",
-                "departure": "16560",
+                "arrival": "18000",
+                "departure": "18000",
                 "displayName": "57",
                 "trainUnits": [
                     {
@@ -1401,8 +1401,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "19440",
-                "departure": "19440",
+                "arrival": "24120",
+                "departure": "24120",
                 "displayName": "58",
                 "trainUnits": [
                     {
@@ -1424,8 +1424,8 @@
             },
             {
                 "leaveTrackPart": "42",
-                "arrival": "13680",
-                "departure": "13680",
+                "arrival": "15120",
+                "departure": "15120",
                 "displayName": "59",
                 "trainUnits": [
                     {
@@ -1447,7 +1447,7 @@
             }
         ]
     },
-    "endTime": "23400",
+    "endTime": "25200",
     "startTime": "0",
     "inStanding": {},
     "outStanding": {}

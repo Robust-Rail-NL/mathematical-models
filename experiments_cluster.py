@@ -17,12 +17,14 @@ def extract_type_category(file_path, num_trains):
 
     if num_types == 1:
         return "1"
-    elif num_types == 2:
-        return "2"
+    elif num_types == 5:
+        return "5"
     elif num_types == math.ceil(num_trains / 2):
         return "1/2"
     elif num_types == math.ceil(num_trains / 3):
         return "1/3"
+    elif num_types == math.ceil(num_trains):
+        return str(num_trains)
     else:
         return "unknown"
 

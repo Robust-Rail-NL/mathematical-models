@@ -17,7 +17,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "11520",
+            "time": "12240",
             "id": "1",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -33,7 +33,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "9000",
+            "time": "5760",
             "id": "2",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -49,7 +49,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "7920",
+            "time": "10080",
             "id": "3",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -65,7 +65,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "2880",
+            "time": "11520",
             "id": "4",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -81,7 +81,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "5040",
+            "time": "7200",
             "id": "5",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -97,7 +97,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "5760",
+            "time": "3600",
             "id": "6",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -113,7 +113,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "7200",
+            "time": "10440",
             "id": "7",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -129,7 +129,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "3600",
+            "time": "11160",
             "id": "8",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -145,7 +145,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "10800",
+            "time": "6480",
             "id": "9",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -163,7 +163,7 @@
     ],
     "out": [
         {
-            "time": "19080",
+            "time": "14040",
             "id": "10",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -179,7 +179,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "18360",
+            "time": "20880",
             "id": "11",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -195,7 +195,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "21240",
+            "time": "18360",
             "id": "12",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -211,7 +211,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "21600",
+            "time": "13320",
             "id": "13",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -227,7 +227,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "20520",
+            "time": "15120",
             "id": "14",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -243,7 +243,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "18720",
+            "time": "17640",
             "id": "15",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -259,7 +259,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "18000",
+            "time": "24840",
             "id": "16",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -275,7 +275,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "12600",
+            "time": "14400",
             "id": "17",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -291,7 +291,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "20160",
+            "time": "21240",
             "id": "18",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -307,7 +307,7 @@
             "canDepartFromAnyTrack": false
         },
         {
-            "time": "15840",
+            "time": "13680",
             "id": "19",
             "sideTrackPart": "42",
             "parkingTrackPart": "15",
@@ -323,7 +323,7 @@
             "canDepartFromAnyTrack": false
         }
     ],
-    "endTime": "23400",
+    "endTime": "25200",
     "trainUnitTypes": [
         {
             "displayName": "VIRM4-4",
@@ -351,6 +351,70 @@
             "backAdditionTime": "24",
             "travelSpeed": "10",
             "typePrefix": "VIRM6",
+            "needsElectricity": true,
+            "startUpTime": "0",
+            "needsLoco": false,
+            "isLoco": false,
+            "idPrefix": 0
+        },
+        {
+            "displayName": "VIRM5-5",
+            "carriages": 4,
+            "length": 100.0,
+            "combineDuration": "180",
+            "splitDuration": "120",
+            "backNormTime": "280",
+            "backAdditionTime": "25",
+            "travelSpeed": "10",
+            "typePrefix": "VIRM5",
+            "needsElectricity": true,
+            "startUpTime": "0",
+            "needsLoco": false,
+            "isLoco": false,
+            "idPrefix": 0
+        },
+        {
+            "displayName": "VIRM7-7",
+            "carriages": 4,
+            "length": 100.0,
+            "combineDuration": "180",
+            "splitDuration": "120",
+            "backNormTime": "280",
+            "backAdditionTime": "25",
+            "travelSpeed": "10",
+            "typePrefix": "VIRM7",
+            "needsElectricity": true,
+            "startUpTime": "0",
+            "needsLoco": false,
+            "isLoco": false,
+            "idPrefix": 0
+        },
+        {
+            "displayName": "VIRM8-8",
+            "carriages": 4,
+            "length": 100.0,
+            "combineDuration": "180",
+            "splitDuration": "120",
+            "backNormTime": "280",
+            "backAdditionTime": "25",
+            "travelSpeed": "10",
+            "typePrefix": "VIRM8",
+            "needsElectricity": true,
+            "startUpTime": "0",
+            "needsLoco": false,
+            "isLoco": false,
+            "idPrefix": 0
+        },
+        {
+            "displayName": "VIRM9-9",
+            "carriages": 4,
+            "length": 100.0,
+            "combineDuration": "180",
+            "splitDuration": "120",
+            "backNormTime": "280",
+            "backAdditionTime": "25",
+            "travelSpeed": "10",
+            "typePrefix": "VIRM9",
             "needsElectricity": true,
             "startUpTime": "0",
             "needsLoco": false,
@@ -390,6 +454,70 @@
             "idPrefix": 0
         },
         {
+            "displayName": "DDZ5-5",
+            "carriages": 4,
+            "length": 100.0,
+            "combineDuration": "180",
+            "splitDuration": "120",
+            "backNormTime": "261",
+            "backAdditionTime": "30",
+            "travelSpeed": "10",
+            "typePrefix": "DDZ5",
+            "needsElectricity": true,
+            "startUpTime": "0",
+            "needsLoco": false,
+            "isLoco": false,
+            "idPrefix": 0
+        },
+        {
+            "displayName": "DDZ7-7",
+            "carriages": 4,
+            "length": 100.0,
+            "combineDuration": "180",
+            "splitDuration": "120",
+            "backNormTime": "261",
+            "backAdditionTime": "30",
+            "travelSpeed": "10",
+            "typePrefix": "DDZ7",
+            "needsElectricity": true,
+            "startUpTime": "0",
+            "needsLoco": false,
+            "isLoco": false,
+            "idPrefix": 0
+        },
+        {
+            "displayName": "DDZ8-8",
+            "carriages": 4,
+            "length": 100.0,
+            "combineDuration": "180",
+            "splitDuration": "120",
+            "backNormTime": "261",
+            "backAdditionTime": "30",
+            "travelSpeed": "10",
+            "typePrefix": "DDZ8",
+            "needsElectricity": true,
+            "startUpTime": "0",
+            "needsLoco": false,
+            "isLoco": false,
+            "idPrefix": 0
+        },
+        {
+            "displayName": "DDZ9-9",
+            "carriages": 4,
+            "length": 100.0,
+            "combineDuration": "180",
+            "splitDuration": "120",
+            "backNormTime": "261",
+            "backAdditionTime": "30",
+            "travelSpeed": "10",
+            "typePrefix": "DDZ9",
+            "needsElectricity": true,
+            "startUpTime": "0",
+            "needsLoco": false,
+            "isLoco": false,
+            "idPrefix": 0
+        },
+        {
             "displayName": "SLT4-4",
             "carriages": 4,
             "length": 100.0,
@@ -399,6 +527,102 @@
             "backAdditionTime": "16",
             "travelSpeed": "10",
             "typePrefix": "SLT4",
+            "needsElectricity": true,
+            "startUpTime": "0",
+            "needsLoco": false,
+            "isLoco": false,
+            "idPrefix": 0
+        },
+        {
+            "displayName": "SLT5-5",
+            "carriages": 4,
+            "length": 100.0,
+            "combineDuration": "180",
+            "splitDuration": "120",
+            "backNormTime": "120",
+            "backAdditionTime": "16",
+            "travelSpeed": "10",
+            "typePrefix": "SLT5",
+            "needsElectricity": true,
+            "startUpTime": "0",
+            "needsLoco": false,
+            "isLoco": false,
+            "idPrefix": 0
+        },
+        {
+            "displayName": "SLT7-7",
+            "carriages": 4,
+            "length": 100.0,
+            "combineDuration": "180",
+            "splitDuration": "120",
+            "backNormTime": "120",
+            "backAdditionTime": "16",
+            "travelSpeed": "10",
+            "typePrefix": "SLT7",
+            "needsElectricity": true,
+            "startUpTime": "0",
+            "needsLoco": false,
+            "isLoco": false,
+            "idPrefix": 0
+        },
+        {
+            "displayName": "SLT8-8",
+            "carriages": 4,
+            "length": 100.0,
+            "combineDuration": "180",
+            "splitDuration": "120",
+            "backNormTime": "120",
+            "backAdditionTime": "16",
+            "travelSpeed": "10",
+            "typePrefix": "SLT8",
+            "needsElectricity": true,
+            "startUpTime": "0",
+            "needsLoco": false,
+            "isLoco": false,
+            "idPrefix": 0
+        },
+        {
+            "displayName": "SLT9-9",
+            "carriages": 4,
+            "length": 100.0,
+            "combineDuration": "180",
+            "splitDuration": "120",
+            "backNormTime": "120",
+            "backAdditionTime": "16",
+            "travelSpeed": "10",
+            "typePrefix": "SLT9",
+            "needsElectricity": true,
+            "startUpTime": "0",
+            "needsLoco": false,
+            "isLoco": false,
+            "idPrefix": 0
+        },
+        {
+            "displayName": "SLT10-10",
+            "carriages": 4,
+            "length": 100.0,
+            "combineDuration": "180",
+            "splitDuration": "120",
+            "backNormTime": "120",
+            "backAdditionTime": "16",
+            "travelSpeed": "10",
+            "typePrefix": "SLT10",
+            "needsElectricity": true,
+            "startUpTime": "0",
+            "needsLoco": false,
+            "isLoco": false,
+            "idPrefix": 0
+        },
+        {
+            "displayName": "SLT11-11",
+            "carriages": 4,
+            "length": 100.0,
+            "combineDuration": "180",
+            "splitDuration": "120",
+            "backNormTime": "120",
+            "backAdditionTime": "16",
+            "travelSpeed": "10",
+            "typePrefix": "SLT11",
             "needsElectricity": true,
             "startUpTime": "0",
             "needsLoco": false,
@@ -445,6 +669,22 @@
             "splitDuration": "120",
             "travelSpeed": "10",
             "typePrefix": "ICM4",
+            "needsElectricity": true,
+            "backNormTime": "0",
+            "backAdditionTime": "0",
+            "startUpTime": "0",
+            "needsLoco": false,
+            "isLoco": false,
+            "idPrefix": 0
+        },
+        {
+            "displayName": "ICM5-5",
+            "carriages": 4,
+            "length": 100.0,
+            "combineDuration": "180",
+            "splitDuration": "120",
+            "travelSpeed": "10",
+            "typePrefix": "ICM5",
             "needsElectricity": true,
             "backNormTime": "0",
             "backAdditionTime": "0",

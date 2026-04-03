@@ -213,7 +213,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
     #       print(f"Mu[{i},{j},{t}] = {mu_values[i,j,t]}")    
     # print("objective", obj)     
     #endregion
-    lr_time = time.time()
+    # lr_time = time.time()
     conflicts = 0
     p_penalty = {(l, t): round(sum(p_values[a][l][t] for a in agents)) for l in nodes for t in time_window}
     x_penalty = {(g, t): round(sum(x_values[a][e][t] for a in agents for e in conflict_edges[g-1])) for g in range(1, len(conflict_edges)+1) for t in time_window}
@@ -251,8 +251,8 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
       print("NO MORE CONFLICT")
       solution_found = True
       break
-  if __name__ == "__main__":
-    pass
+  # if __name__ == "__main__":
+  #   pass
     # Output
     # print("\np[a,n,t] values:")
     # for a in agents:
@@ -282,8 +282,8 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
     #                 print(f"p[{a},{n},{t}] = {val}")
   
   end_time = time.time()
-  print("Total time (seconds):", end_time - start)
-  print(k)
+  # print("Total time (seconds):", end_time - start)
+  # print(k)
   p_values_filtered = []
   for agent in agents:
     for node in nodes:
@@ -314,7 +314,7 @@ if __name__ == "__main__":
   location = 'locations/location_solver.json'
   scenario = 'scenarios_solver_types/scenario_solver_5_trains_1_units6.json'
   # location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
-  # scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_final/1_type/scenario_solver_30_trains5.json'
+  # scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_final/1_type/scenario_solver_5_trains5.json'
   # scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/30_trains1.json'
   
   # location = 'locations/6_tracks_location.json'
