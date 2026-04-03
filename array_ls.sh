@@ -34,7 +34,7 @@ START=$((SLURM_ARRAY_TASK_ID * BATCH_SIZE + 1))
 END=$((START + BATCH_SIZE - 1))
 
 RESULT_FILE=~/Robust-Rail-NL/mathematical-models/results_ls/results_${SLURM_ARRAY_TASK_ID}.csv
-echo "scenario,cost_line,time_line,validation,plan_file" > $RESULT_FILE
+echo "scenario,cost_line,time_line,plan_file" > $RESULT_FILE
 
 # ------------------ LOOP OVER SCENARIOS ------------------
 
@@ -74,50 +74,52 @@ do
 
     # Evaluation scenario
     # EVAL_SCENARIO=$(echo "$SCENARIO" | sed 's/_solver//')
-    EVAL_SCENARIO=$(echo "$SCENARIO" \
-    | sed 's|scenarios_solver_types|scenarios_eval_type|' \
-    | sed 's|scenario_solver_|scenario_|')
+    # EVAL_SCENARIO=$(echo "$SCENARIO" \
+    # | sed 's|scenarios_solver_types|scenarios_eval_type|' \
+    # | sed 's|scenario_solver_|scenario_|')
 
     echo "SCENARIO: $SCENARIO"
-    echo "EVAL_SCENARIO: $EVAL_SCENARIO"
+    # echo "EVAL_SCENARIO: $EVAL_SCENARIO"
     # sed -i "s|PathScenario:.*|    PathScenario: \"$EVAL_SCENARIO\"|" $TMP_CONFIG
-    sed -i "s|^\([[:space:]]*\)PathScenario:.*|\1PathScenario: \"$EVAL_SCENARIO\"|" $TMP_CONFIG
+    # sed -i "s|^\([[:space:]]*\)PathScenario:.*|\1PathScenario: \"$EVAL_SCENARIO\"|" $TMP_CONFIG
 
     # Plan paths
     sed -i "s|PlanPath:.*|PlanPath: \"$PLAN_FILE\"|" $TMP_CONFIG
     # sed -i "s|PathPlan:.*|    PathPlan: \"$PLAN_FILE\"|" $TMP_CONFIG
-    sed -i "s|^\([[:space:]]*\)PathPlan:.*|\1PathPlan: \"$PLAN_FILE\"|" $TMP_CONFIG
+    # sed -i "s|^\([[:space:]]*\)PathPlan:.*|\1PathPlan: \"$PLAN_FILE\"|" $TMP_CONFIG
 
     # ------------------ RUN SOLVER ------------------
 
     timeout 1800s srun ./ServiceSiteScheduling --config=$TMP_CONFIG > $OUTPUT_FILE
 
-    # ------------------ EXTRACT RESULTS ------------------
+    # Extract all cost lines
+    COST_LINES=$(grep "Cost of next node:" $OUTPUT_FILE)
+    # Extract corresponding time elapsed lines
+    TIME_LINES=$(grep "Time elapsed:" $OUTPUT_FILE)
 
-    COST_LINE=$(grep "Cost =" $OUTPUT_FILE | tail -1)
+    # Convert to arrays
+    readarray -t COST_ARRAY <<< "$COST_LINES"
+    readarray -t TIME_ARRAY <<< "$TIME_LINES"
+
+    # Store each intermediate solution
+    for idx in "${!COST_ARRAY[@]}"; do
+        COST_LINE="${COST_ARRAY[$idx]}"
+        TIME_LINE="${TIME_ARRAY[$idx]}"
+        echo "\"$SCENARIO\",\"$COST_LINE\",\"$TIME_LINE\",\"$PLAN_FILE\"" >> $RESULT_FILE
+    done
+
+    # ------------------ EXTRACT FINAL RESULTS ------------------
+
+    # Last cost line
+    COST_LINE=$(grep "Cost of solution:" $OUTPUT_FILE | tail -1)
+    # Total computation time
     TIME_LINE=$(grep "Total computation time" $OUTPUT_FILE | tail -1)
-    VALID_LINE=$(grep -E "The plan is valid|The plan is not valid" $OUTPUT_FILE | tail -1)
-    
-    if [ -z "$COST_LINE" ]; then
-        COST_LINE="NO_COST_FOUND"
-    fi
+    [ -z "$COST_LINE" ] && COST_LINE="NO_COST_FOUND"
+    [ -z "$TIME_LINE" ] && TIME_LINE="NO_TIME_FOUND"
+    [ ! -f "$PLAN_FILE" ] && PLAN_FILE="NO_PLAN_CREATED"
 
-    if [ -z "$TIME_LINE" ]; then
-        TIME_LINE="NO_TIME_FOUND"
-    fi
-
-    if [ -z "$VALID_LINE" ]; then
-        VALID_LINE="NO_VALIDATION_FOUND"
-    fi
-
-    # Check if plan was created
-    if [ ! -f "$PLAN_FILE" ]; then
-        PLAN_FILE="NO_PLAN_CREATED"
-    fi
-
-    # ------------------ STORE RESULT ------------------
-
-    echo "\"$SCENARIO\",\"$COST_LINE\",\"$TIME_LINE\",\"$VALID_LINE\",\"$PLAN_FILE\"" >> $RESULT_FILE
+    # Store final solution as well
+    echo "\"$SCENARIO\",\"$COST_LINE\",\"$TIME_LINE\",\"$PLAN_FILE\"" >> $RESULT_FILE
 
     # Cleanup
     rm $TMP_CONFIG
