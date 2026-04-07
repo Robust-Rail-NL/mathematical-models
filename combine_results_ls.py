@@ -4,8 +4,8 @@ import os
 from glob import glob
 import math
 
-INPUT_FOLDER = "results_ls/"
-OUTPUT_FILE = "results_ls/combined_results.csv"
+INPUT_FOLDER = "results_ls_discreet/"
+OUTPUT_FILE = "results_ls_discreet/combined_results.csv"
 
 def extract_filename_info(path):
   match = re.search(r'scenario_solver_(\d+)_trains_(\d+)_units', path)

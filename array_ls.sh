@@ -21,7 +21,7 @@ PROJECT_DIR=~/Robust-Rail-NL/robust-rail-solver/ServiceSiteScheduling/publish
 CONFIG_TEMPLATE=~/Robust-Rail-NL/robust-rail-solver/ServiceSiteScheduling/config_cluster.yaml
 SCENARIO_LIST=~/Robust-Rail-NL/mathematical-models/scenarios_types.txt
 
-PLAN_DIR=~/Robust-Rail-NL/mathematical-models/local_search_plans
+PLAN_DIR=~/Robust-Rail-NL/mathematical-models/local_search_plans_discreet
 mkdir -p $PLAN_DIR
 
 BATCH_SIZE=5
@@ -33,7 +33,7 @@ cd $PROJECT_DIR
 START=$((SLURM_ARRAY_TASK_ID * BATCH_SIZE + 1))
 END=$((START + BATCH_SIZE - 1))
 
-RESULT_FILE=~/Robust-Rail-NL/mathematical-models/results_ls/results_${SLURM_ARRAY_TASK_ID}.csv
+RESULT_FILE=~/Robust-Rail-NL/mathematical-models/results_ls_discreet/results_${SLURM_ARRAY_TASK_ID}.csv
 echo "scenario,cost_line,time_line,plan_file" > $RESULT_FILE
 
 # ------------------ LOOP OVER SCENARIOS ------------------

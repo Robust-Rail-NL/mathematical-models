@@ -1,42 +1,114 @@
+import pandas as pd
+import re
 import os
-import csv
+from glob import glob
+import math
 
-input_folder = "results_types"
-output_file = "results_types/combined_results.csv"
+INPUT_FOLDER = "results_ls/"
+OUTPUT_FILE = "combined_results.csv"
 
-type_order = {
-  "1": 0,
-  "2": 1,
-  "1/3": 2,
-  "1/2": 3
-}
+def extract_filename_info(path):
+    match = re.search(r'scenario_solver_(\d+)_trains_(\d+)_units', path)
+    return int(match.group(1)), int(match.group(2))
 
-all_rows = []
-header = None
+def parse_time_to_seconds(timestr):
+    h, m, s = timestr.split(":")
+    return int(h)*3600 + int(m)*60 + float(s)
 
-for filename in os.listdir(input_folder):
-  if filename.endswith(".csv"):
-    filepath = os.path.join(input_folder, filename)
-    with open(filepath, "r", newline="") as f:
-      reader = csv.reader(f)
-      rows = list(reader)
-      if len(rows) <= 1:
-        continue
-      if header is None:
-        header = rows[0]
-      for row in rows[1:]:
-        all_rows.append(row)
+def extract_sm(cost_line):
+    if not isinstance(cost_line, str):
+        return None
+    match = re.search(r'sm=(\d+)', cost_line)
+    return int(match.group(1)) if match else None
 
-def sort_key(row):
-  num_trains = int(row[0])
-  type_val = row[1]
-  return (num_trains, type_order.get(type_val, 999))
+def extract_cost(cost_line):
+    if not isinstance(cost_line, str):
+        return None
+    match = re.search(r'Cost = ([0-9.]+)', cost_line)
+    return float(match.group(1)) if match else None
 
-all_rows.sort(key=sort_key)
+def process_file(filepath):
+    df = pd.read_csv(filepath)
+    df = df.fillna("")
+    results = []
 
-with open(output_file, "w", newline="") as f:
-  writer = csv.writer(f)
-  writer.writerow(header)
-  writer.writerows(all_rows)
+    for scenario, group in df.groupby("scenario"):
+        num_trains, typ = extract_filename_info(scenario)
 
-print(f"Combined file written to {output_file}")
+        total_time = None
+        num_movements = None
+        time_first_solution = None
+
+        for _, row in group.iterrows():
+            cost_line = row["cost_line"]
+            time_line = row["time_line"]
+
+            if "Time elapsed" in time_line:
+                elapsed = float(re.search(r'([0-9.]+)', time_line).group(1))
+                cost = extract_cost(cost_line)
+
+                if cost == 0.0 and time_first_solution is None:
+                    time_first_solution = elapsed
+                elif cost is None and time_first_solution is None:
+                    time_first_solution = elapsed
+
+            if "Cost of solution" in cost_line:
+                num_movements = extract_sm(cost_line)
+
+            if "Total computation time" in time_line:
+                time_str = time_line.split(": ", 1)[1]
+                total_time = parse_time_to_seconds(time_str)
+
+        if time_first_solution is None and total_time is not None:
+            time_first_solution = total_time
+
+        solution_found = total_time is not None and total_time <= 1800
+
+        results.append({
+            "num_trains": num_trains,
+            "type": typ,
+            "time": total_time,
+            "time_first_solution": time_first_solution,
+            "solution_found": solution_found,
+            "num_movements": num_movements
+        })
+
+    return results
+
+all_results = []
+
+for file in glob(os.path.join(INPUT_FOLDER, "*.csv")):
+    print(f"Processing {file}...")
+    file_results = process_file(file)
+    all_results.extend(file_results)
+
+out_df = pd.DataFrame(all_results)
+
+# Ensure num_trains and type are integers
+out_df['num_trains'] = out_df['num_trains'].astype(int)
+out_df['type'] = out_df['type'].astype(int)
+
+# Custom type order function
+def type_order(row):
+    n = row['num_trains']
+    t = row['type']
+    if t == 1:
+        return 1
+    elif t == 5:
+        return 2
+    elif t == math.ceil(n / 3):
+        return 3
+    elif t == n:
+        return 4
+    else:
+        return 5  # everything else goes last
+
+# Apply sorting
+out_df = out_df.sort_values(by=['num_trains'], ascending=True)
+out_df['type_order'] = out_df.apply(type_order, axis=1)
+out_df = out_df.sort_values(by=['num_trains', 'type_order'], ascending=True)
+out_df = out_df.drop(columns=['type_order'])
+
+out_df.to_csv(OUTPUT_FILE, index=False)
+
+print("Done! Saved to:", OUTPUT_FILE)
