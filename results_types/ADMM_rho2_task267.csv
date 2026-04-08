@@ -1,0 +1,10 @@
+num_trains,type,k,time,time_first_solution,solution_found,num_movements
+33,33,11,1903.572333574295,1903.572333574295,False,240
+num_trains,type,k,time,time_first_solution,solution_found,num_movements
+33,33,11,1954.0384171009064,1954.0384171009064,False,238
+num_trains,type,k,time,time_first_solution,solution_found,num_movements
+33,33,10,1948.4232788085938,1948.4232788085938,False,241
+num_trains,type,k,time,time_first_solution,solution_found,num_movements
+33,33,10,1827.2820296287537,1827.2820296287537,False,221
+num_trains,type,k,time,time_first_solution,solution_found,num_movements
+33,33,10,1813.3686876296997,1813.3686876296997,False,233
