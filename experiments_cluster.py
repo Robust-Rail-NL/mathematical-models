@@ -1,3 +1,5 @@
+import gc
+
 import Lagrangian as L
 import MILP as M
 import ADMM_constraint_edges as A
@@ -19,8 +21,8 @@ def extract_type_category(file_path, num_trains):
         return "1"
     elif num_types == 5:
         return "5"
-    elif num_types == math.ceil(num_trains / 2):
-        return "1/2"
+    # elif num_types == math.ceil(num_trains / 2):
+    #     return "1/2"
     elif num_types == math.ceil(num_trains / 3):
         return "1/3"
     elif num_types == math.ceil(num_trains):
@@ -59,15 +61,15 @@ elif algo == A.Lagrangian:
   algo_string = "ADMM"
 
 if algo == A.Lagrangian:
-  results_file = f"results_types/{algo_string}_rho{rho_string}"
-  solution_file = f"solutions_types/{algo_string}_rho{rho_string}"
+  results_file = f"results_types_120/{algo_string}_rho{rho_string}"
+  solution_file = f"solutions_types_120/{algo_string}_rho{rho_string}"
 else:
   results_file = f"results_final/{algo_string}"
   solution_file = f"solutions_final/{algo_string}"
 
 
 scenarios = []
-input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_solver_types/{input_folder}")
+input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_solver_types_120/{input_folder}")
 
 # for subfolder in sorted(input_folder.iterdir(), key=lambda p: p.name):
 #   for file_path in sorted(subfolder.iterdir(), key=lambda p: p.name):
@@ -139,3 +141,6 @@ with open(results_file_new, mode="w", newline="") as file:
       solution_writer.writerow([solution_found])
 
     print(f"Finished {scenario} | trains={num_trains}, k={k}, time={time}")
+    del nodes, edges, conflict_edges, agents
+    del x_values_filtered, p_values_filtered
+    gc.collect()
