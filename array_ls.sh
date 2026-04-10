@@ -1,15 +1,15 @@
 #!/bin/bash
 #SBATCH --job-name="rail_solver"
-#SBATCH --time=00:40:00
+#SBATCH --time=03:59:00
 #SBATCH --partition=compute
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=3968MB
 #SBATCH --account=education-eemcs-msc-cs
-#SBATCH --array=0-294
+#SBATCH --array=0-300
 
-#SBATCH --output=logs_ls/out_%A_%a.txt
-#SBATCH --error=logs_ls/err_%A_%a.txt
+#SBATCH --output=logs_ls_120/out_%A_%a.txt
+#SBATCH --error=logs_ls_120/err_%A_%a.txt
 
 # ------------------ SETUP ------------------
 
@@ -21,7 +21,7 @@ PROJECT_DIR=~/Robust-Rail-NL/robust-rail-solver/ServiceSiteScheduling/publish
 CONFIG_TEMPLATE=~/Robust-Rail-NL/robust-rail-solver/ServiceSiteScheduling/config_cluster.yaml
 SCENARIO_LIST=~/Robust-Rail-NL/mathematical-models/scenarios_types.txt
 
-PLAN_DIR=~/Robust-Rail-NL/mathematical-models/local_search_plans_discreet
+PLAN_DIR=~/Robust-Rail-NL/mathematical-models/local_search_plans_120
 mkdir -p $PLAN_DIR
 
 BATCH_SIZE=5
@@ -33,7 +33,7 @@ cd $PROJECT_DIR
 START=$((SLURM_ARRAY_TASK_ID * BATCH_SIZE + 1))
 END=$((START + BATCH_SIZE - 1))
 
-RESULT_FILE=~/Robust-Rail-NL/mathematical-models/results_ls_discreet/results_${SLURM_ARRAY_TASK_ID}.csv
+RESULT_FILE=~/Robust-Rail-NL/mathematical-models/results_ls_120/results_${SLURM_ARRAY_TASK_ID}.csv
 echo "scenario,cost_line,time_line,plan_file" > $RESULT_FILE
 
 # ------------------ LOOP OVER SCENARIOS ------------------
@@ -90,7 +90,7 @@ do
 
     # ------------------ RUN SOLVER ------------------
 
-    timeout 1800s srun ./ServiceSiteScheduling --config=$TMP_CONFIG > $OUTPUT_FILE
+    timeout 1900s srun ./ServiceSiteScheduling --config=$TMP_CONFIG > $OUTPUT_FILE
 
     # Extract all cost lines
     COST_LINES=$(grep "Cost of next node:" $OUTPUT_FILE)
