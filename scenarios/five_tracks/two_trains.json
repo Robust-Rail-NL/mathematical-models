@@ -3,8 +3,8 @@
         "trains": [
             {
                 "entryTrackPart": "10",
-                "arrival": "0",
-                "departure": "0",
+                "arrival": "600",
+                "departure": "600",
                 "id": "11111",
                 "members": [
                     {
@@ -28,15 +28,15 @@
             },
             {
                 "entryTrackPart": "12",
-                "arrival": "0",
-                "departure": "0",
+                "arrival": "600",
+                "departure": "600",
                 "id": "22222",
                 "members": [
                     {
                         "trainUnit": {
                             "id": "2222",
                             "type": {
-                                "displayName": "SLT",
+                                "displayName": "SLT2",
                                 "carriages": 4,
                                 "length": 69.36,
                                 "combineDuration": "180",
@@ -57,8 +57,8 @@
         "trainRequests": [
             {
                 "leaveTrackPart": "12",
-                "arrival": "600",
-                "departure": "600",
+                "arrival": "1800",
+                "departure": "1800",
                 "displayName": "11112",
                 "trainUnits": [
                     {
@@ -80,13 +80,13 @@
             },
             {
                 "leaveTrackPart": "10",
-                "arrival": "600",
-                "departure": "600",
+                "arrival": "1800",
+                "departure": "1800",
                 "displayName": "11222",
                 "trainUnits": [
                     {
                         "type": {
-                            "displayName": "SLT",
+                            "displayName": "SLT2",
                             "carriages": 4,
                             "length": 69.36,
                             "combineDuration": "180",
@@ -103,7 +103,7 @@
             }
         ]
     },
-    "endTime": "600",
+    "endTime": "1800",
     "startTime": "0",
     "inStanding": {},
     "outStanding": {}

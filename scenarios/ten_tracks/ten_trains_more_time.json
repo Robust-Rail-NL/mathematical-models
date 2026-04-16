@@ -256,7 +256,7 @@
     "out": {
         "trainRequests": [
             {
-                "leaveTrackPart": "101",
+                "leaveTrackPart": "1",
                 "arrival": "1440",
                 "departure": "1440",
                 "displayName": "11112",
@@ -279,7 +279,7 @@
                 "standingIndex": 0.0
             },
             {
-                "leaveTrackPart": "101",
+                "leaveTrackPart": "1",
                 "arrival": "960",
                 "departure": "960",
                 "displayName": "11112",
@@ -302,7 +302,7 @@
                 "standingIndex": 0.0
             },
             {
-                "leaveTrackPart": "101",
+                "leaveTrackPart": "1",
                 "arrival": "1020",
                 "departure": "1020",
                 "displayName": "11112",
@@ -325,7 +325,7 @@
                 "standingIndex": 0.0
             },
             {
-                "leaveTrackPart": "101",
+                "leaveTrackPart": "1",
                 "arrival": "1080",
                 "departure": "1080",
                 "displayName": "11112",
@@ -348,7 +348,7 @@
                 "standingIndex": 0.0
             },
             {
-                "leaveTrackPart": "101",
+                "leaveTrackPart": "1",
                 "arrival": "1140",
                 "departure": "1140",
                 "displayName": "11112",
@@ -371,7 +371,7 @@
                 "standingIndex": 0.0
             },
             {
-                "leaveTrackPart": "101",
+                "leaveTrackPart": "1",
                 "arrival": "1200",
                 "departure": "1200",
                 "displayName": "11112",
@@ -394,7 +394,7 @@
                 "standingIndex": 0.0
             },
             {
-                "leaveTrackPart": "101",
+                "leaveTrackPart": "1",
                 "arrival": "1260",
                 "departure": "1260",
                 "displayName": "11112",
@@ -417,7 +417,7 @@
                 "standingIndex": 0.0
             },
             {
-                "leaveTrackPart": "101",
+                "leaveTrackPart": "1",
                 "arrival": "1320",
                 "departure": "1320",
                 "displayName": "11112",
@@ -440,7 +440,7 @@
                 "standingIndex": 0.0
             },
             {
-                "leaveTrackPart": "101",
+                "leaveTrackPart": "1",
                 "arrival": "1380",
                 "departure": "1380",
                 "displayName": "11112",
@@ -463,9 +463,9 @@
                 "standingIndex": 0.0
             },
             {
-                "leaveTrackPart": "101",
-                "arrival": "600",
-                "departure": "600",
+                "leaveTrackPart": "1",
+                "arrival": "660",
+                "departure": "660",
                 "displayName": "11112",
                 "trainUnits": [
                     {
