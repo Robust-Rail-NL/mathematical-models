@@ -35,7 +35,15 @@ def setup(location, scenario):
   edges = sorted(edges)
   conflict_edges = sorted(conflict_edges)
   agents = sorted(agents)
-  
+  print(conflict_edges)
+  conflict_edges = []
+  all_conflcit_edges = []
+  for edge in edges:
+    i, j = edge
+    if i != j:
+      all_conflcit_edges.append(edge)
+  conflict_edges.append(all_conflcit_edges)
+  print("Conflict edges:", conflict_edges)
   lambda_values = {(i,t): 0.0 for i in nodes for t in time_window}
   mu_values = {(g,t): 0.0 for g in range(1, len(conflict_edges)+1) for t in time_window}
   node_admm_values = {(a,i,t,z): 0.0 for a in agents for i in nodes for t in time_window for z in range(2)}
@@ -106,21 +114,6 @@ def solve_agent(a, m, nodes, time_window, lambda_values, mu_values, node_admm_va
   y_values = {t: m.y[t].value for t in m.time_window}
   
   return x_values, p_values, y_values
-
-# def update_admm_values(agents, a, nodes, edges, conflict_edges, time_window, x_values, p_values, node_admm_values, edge_admm_values, rho):
-#   rho_half = rho/2
-#   for t in time_window:
-#     for l in nodes:
-#       # if l == "15":
-#       #   node_admm_values[a,l,t,0] = 10*rho/2*math.pow(max(0, (0 + sum(p_values[a1][l][t] for a1 in agents if a1 != a) - 1)), 2)
-#       #   node_admm_values[a,l,t,1] = 10*rho/2*math.pow(max(0, (1 + sum(p_values[a1][l][t] for a1 in agents if a1 != a) - 1)), 2)  
-#       # else:
-#       node_admm_values[a,l,t,0] = rho_half*math.pow(max(0, (sum(p_values[a1][l][t] for a1 in agents if a1 != a) - 1)), 2)
-#       node_admm_values[a,l,t,1] = rho_half*math.pow(max(0, (sum(p_values[a1][l][t] for a1 in agents if a1 != a))), 2)
-#     for g in range(1, len(conflict_edges)+1):
-#       edge_admm_values[a,g,t,0] = rho_half*math.pow(max(0, (sum(x_values[a1][e][t] for a1 in agents if a1 != a for e in conflict_edges[g-1]) - 1)), 2)
-#       edge_admm_values[a,g,t,1] = rho_half*math.pow(max(0, (sum(x_values[a1][e][t] for a1 in agents if a1 != a for e in conflict_edges[g-1]))), 2)
-#   return node_admm_values, edge_admm_values
 
 def update_admm_values(a, nodes, conflict_edges, time_window, x_values, p_values, node_admm_values, edge_admm_values, rho, p_sum, x_sum):
   rho_half = rho / 2
@@ -217,14 +210,14 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
     conflicts = 0
     p_penalty = {(l, t): round(sum(p_values[a][l][t] for a in agents)) for l in nodes for t in time_window}
     x_penalty = {(g, t): round(sum(x_values[a][e][t] for a in agents for e in conflict_edges[g-1])) for g in range(1, len(conflict_edges)+1) for t in time_window}
-    # for l in nodes:
-    #   for t in time_window:
-    #     if p_penalty[l,t] > 1.0:
-    #       print(f"p_penalty[{l},{t}] = {p_penalty[l,t]}")
-    # for t in time_window:
-    #   for g in range(1, len(conflict_edges)+1):
-    #     if x_penalty[g,t] > 1.0:
-    #       print(f"Conflict group {conflict_edges[g-1]} at time {t} has penalty {x_penalty[g,t]}")
+    for l in nodes:
+      for t in time_window:
+        if p_penalty[l,t] > 1.0:
+          print(f"p_penalty[{l},{t}] = {p_penalty[l,t]}")
+    for t in time_window:
+      for g in range(1, len(conflict_edges)+1):
+        if x_penalty[g,t] > 1.0:
+          print(f"Conflict group {conflict_edges[g-1]} at time {t} has penalty {x_penalty[g,t]}")
     for t in time_window:
       for l in nodes:
         penalty = 1/(k+1) * (p_penalty[l,t] - 1)
@@ -298,6 +291,11 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
       for t in time_window:
         if x_values[agent][edge][t] == 1:
           x_values_filtered.append((agent, i, j, t))
+  for p_val in p_values_filtered:
+    print(p_val)
+  print("x")
+  for x_val in x_values_filtered:
+    print(x_val)
   # print("ADMM update time total (seconds):", admm_update_time_total)
   # print("Solve time total (seconds):", solve_time_total)
   # print("LR update time total (seconds):", lr_update_time_total)
@@ -312,10 +310,12 @@ if __name__ == "__main__":
   # scenario = 'scenarios/9_tracks/7_trains_matching.json'
   # location = 'locations/binckhorst.json'
   location = 'locations/location_solver.json'
-  scenario = 'scenarios_solver_types/scenario_solver_5_trains_1_units6.json'
-  # location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
-  # scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_final/1_type/scenario_solver_5_trains5.json'
-  # scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/30_trains1.json'
+  # scenario = 'scenarios_solver_types/scenario_solver_5_trains_1_units6.json'
+  location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
+  scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_types_360/scenarios_solver_types/scenario_solver_20_trains_1_units6.json'
+  # scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/25_trains1.json'
+  # scenario = 'scenarios/time360_15.json'
+  # scenario = "data_types_360/scenarios_solver_types/scenario_solver_20_trains_1_units6.json"
   
   # location = 'locations/6_tracks_location.json'
   # scenario = 'scenarios/6_tracks/5_trains_difficult.json'
