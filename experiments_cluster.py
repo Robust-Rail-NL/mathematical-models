@@ -48,9 +48,9 @@ mixed_traffic = False
 matching = True # If matching is false, uncomment in load_scenario.py the i in the displayname of in and out trains
 rho_string = "2"
 rho = 2
-time_out = 1800
+time_out = 3600
 
-GROUP_SIZE = 5
+GROUP_SIZE = 3
 
 task_id = int(os.environ.get("SLURM_ARRAY_TASK_ID", 0))
 
@@ -69,7 +69,7 @@ else:
 
 
 scenarios = []
-input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_solver_types_120/{input_folder}")
+input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_types_360/scenarios_solver_types/{input_folder}")
 
 # for subfolder in sorted(input_folder.iterdir(), key=lambda p: p.name):
 #   for file_path in sorted(subfolder.iterdir(), key=lambda p: p.name):
