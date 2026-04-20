@@ -101,10 +101,7 @@ def solve_agent(a, m, nodes, time_window, lambda_values, mu_values, node_admm_va
         m.edge_admm[g,t,z] = edge_admm_values[a,g,t,z]
   # Solve
   solver = SolverFactory('gurobi')
-  # solver = SolverFactory('gurobi_persistent')
   solver.options['Seed'] = 1
-  # solver.set_instance(m)
-  # solver.set_gurobi_param('Threads', 1)
   solver.options['Threads'] = 1
   solver.solve(m, warmstart=True, keepfiles=False)
   
@@ -141,41 +138,40 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
   models = {}
   conflict_list = []
   start = time.time()
-  # model_creation_time = time.time()
+  model_creation_time = time.time()
   for a in agents:
     models[a] = create_model(agents, a, nodes, edges, conflict_edges, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, rho)
-  # print("Model creation time (seconds):", time.time() - model_creation_time)
+  total_model_creation_time = time.time() - model_creation_time
   x_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
   p_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
   y_values = {}
-  # admm_update_time_total = 0
-  # solve_time_total = 0
-  # lr_update_time_total = 0
+  admm_update_time_total = 0
+  solve_time_total = 0
+  lr_update_time_total = 0
   for k in range(n_iter):
     print(k)
-    # print(time.time() - start)
     
-    # admm_update_time = time.time()
+    admm_update_time = time.time()
     p_sum = {(l, t): sum((p_values[a1][l][t] or 0) for a1 in agents) for l in nodes for t in time_window}
     x_sum = {(e, t): sum((x_values[a1][e][t] or 0) for a1 in agents) for e in edges for t in time_window}
-    # admm_update_time_total += time.time() - admm_update_time
+    admm_update_time_total += time.time() - admm_update_time
     for a in agents:
-      # admm_update_time = time.time()
+      admm_update_time = time.time()
       node_admm_values, edge_admm_values = update_admm_values(a, nodes, conflict_edges, time_window, x_values, p_values, node_admm_values, edge_admm_values, rho, p_sum, x_sum)
       old_p = {l: {t: p_values[a][l][t] for t in time_window} for l in nodes}
       old_x = {e: {t: x_values[a][e][t] for t in time_window} for e in edges}
-      # admm_update_time_total += time.time() - admm_update_time
-      # solve_time = time.time()
+      admm_update_time_total += time.time() - admm_update_time
+      solve_time = time.time()
       x_values[a], p_values[a], y_values[a] = solve_agent(a, models[a], nodes, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values)
-      # solve_time_total += time.time() - solve_time
-      # admm_update_time = time.time()
+      solve_time_total += time.time() - solve_time
+      admm_update_time = time.time()
       for l in nodes:
         for t in time_window:
           p_sum[(l, t)] += (p_values[a][l][t] or 0) - (old_p[l][t] or 0)
       for e in edges:
         for t in time_window:
           x_sum[(e, t)] += (x_values[a][e][t] or 0) - (old_x[e][t] or 0)
-      # admm_update_time_total += time.time() - admm_update_time
+      admm_update_time_total += time.time() - admm_update_time
     #region print
     # if __name__ == "__main__":
     # print("x[a,(i,j),t] values:")
@@ -205,18 +201,22 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
     #       print(f"Mu[{i},{j},{t}] = {mu_values[i,j,t]}")    
     # print("objective", obj)     
     #endregion
-    # lr_time = time.time()
+    lr_time = time.time()
     conflicts = 0
     p_penalty = {(l, t): round(sum(p_values[a][l][t] for a in agents)) for l in nodes for t in time_window}
     x_penalty = {(g, t): round(sum(x_values[a][e][t] for a in agents for e in conflict_edges[g-1])) for g in range(1, len(conflict_edges)+1) for t in time_window}
-    # for l in nodes:
-    #   for t in time_window:
-    #     if p_penalty[l,t] > 1.0:
-    #       print(f"p_penalty[{l},{t}] = {p_penalty[l,t]}")
-    # for t in time_window:
-    #   for g in range(1, len(conflict_edges)+1):
-    #     if x_penalty[g,t] > 1.0:
-    #       print(f"Conflict group {conflict_edges[g-1]} at time {t} has penalty {x_penalty[g,t]}")
+    for l in nodes:
+      for t in time_window:
+        if p_penalty[l,t] > 1.0:
+          print(f"p_penalty[{l},{t}] = {p_penalty[l,t]}")
+    for t in time_window:
+      for g in range(1, len(conflict_edges)+1):
+        if x_penalty[g,t] > 1.0:
+          # print(f"Conflict group {conflict_edges[g-1]} at time {t} has penalty {x_penalty[g,t]}")
+          for a in agents: 
+            for e in conflict_edges[g-1]:
+              if x_values[a][e][t] == 1:
+                print(f"  Agent {a} uses edge {e} at time {t}")
     for t in time_window:
       for l in nodes:
         penalty = 1/(k+1) * (p_penalty[l,t] - 1)
@@ -232,10 +232,11 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
           conflicts += 1
         elif penalty < 0:
           mu_values[g,t] = max(0.0, mu_values[g,t] + penalty)
-    # lr_update_time_total += time.time() - lr_time
+    lr_update_time_total += time.time() - lr_time
     conflict_list.append((conflicts, time.time() - start))
     # if __name__ == "__main__":
     #   print("conflicts", conflicts)
+    print(time.time() - start)
     if time.time() - start > time_out:
       print("TIME LIMIT REACHED")
       break
@@ -274,8 +275,8 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
     #                 print(f"p[{a},{n},{t}] = {val}")
   
   end_time = time.time()
-  # print("Total time (seconds):", end_time - start)
-  # print(k)
+  print("Total time (seconds):", end_time - start)
+  print(k)
   p_values_filtered = []
   for agent in agents:
     for node in nodes:
@@ -298,7 +299,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
   # print("ADMM update time total (seconds):", admm_update_time_total)
   # print("Solve time total (seconds):", solve_time_total)
   # print("LR update time total (seconds):", lr_update_time_total)
-  return k, end_time - start, x_values_filtered, p_values_filtered, solution_found, conflict_list
+  return k, end_time - start, x_values_filtered, p_values_filtered, solution_found, conflict_list, total_model_creation_time, solve_time_total, admm_update_time_total, lr_update_time_total
 
 if __name__ == "__main__":
   # location = 'locations/circle_location_small.json'
@@ -310,7 +311,22 @@ if __name__ == "__main__":
   # scenario = 'scenarios/9_tracks/7_trains_matching.json'
   # location = 'locations/binckhorst.json'
   # location = 'locations/location_solver.json'
-  # scenario = 'scenarios_solver_types/scenario_solver_5_trains_1_units6.json'
+  
+  # scenario = 'scenarios_solver_types_120/scenario_solver_20_trains_1_units13.json'
+  # scenario = 'scenarios_solver_types_120/scenario_solver_20_trains_1_units17.json'
+  # scenario = 'scenarios_solver_types_120/scenario_solver_20_trains_5_units17.json'
+  # scenario = 'scenarios_solver_types_120/scenario_solver_20_trains_5_units22.json'
+  # scenario = 'scenarios_solver_types_120/scenario_solver_20_trains_5_units26.json'
+  # scenario = 'scenarios_solver_types_120/scenario_solver_20_trains_5_units5.json'
+  # scenario = 'scenarios_solver_types_120/scenario_solver_20_trains_7_units14.json'
+  # scenario = 'scenarios_solver_types_120/scenario_solver_20_trains_7_units15.json'
+  # scenario = 'scenarios_solver_types_120/scenario_solver_20_trains_7_units26.json'
+  # scenario = 'scenarios_solver_types_120/scenario_solver_20_trains_7_units28.json'
+  
+  # scenario = 'scenarios/25_2.json'
+  
+  
+  
   location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
   scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_types_360/scenarios_solver_types/scenario_solver_25_trains_1_units30.json'
   # scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/25_trains1.json'
@@ -329,4 +345,4 @@ if __name__ == "__main__":
   rho = 2
   nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values = setup(location, scenario)
   print("ADMM_constraint_edges", scenario, rho)
-  k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out)
+  k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list, total_model_creation_time, solve_time_total, admm_update_time_total, lr_update_time_total = Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out)
