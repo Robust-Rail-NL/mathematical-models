@@ -61,8 +61,8 @@ elif algo == A.Lagrangian:
   algo_string = "ADMM"
 
 if algo == A.Lagrangian:
-  results_file = f"results_types_120/{algo_string}_rho{rho_string}"
-  solution_file = f"solutions_types_120/{algo_string}_rho{rho_string}"
+  results_file = f"results_types_360/{algo_string}_rho{rho_string}"
+  solution_file = f"solutions_types_360/{algo_string}_rho{rho_string}"
 else:
   results_file = f"results_final/{algo_string}"
   solution_file = f"solutions_final/{algo_string}"
@@ -70,12 +70,16 @@ else:
 
 scenarios = []
 input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_types_360/scenarios_solver_types/{input_folder}")
-
+results_file = f"results_missing/{algo_string}_rho{rho_string}"
+solution_file = f"solutions_missing/{algo_string}_rho{rho_string}"
 # for subfolder in sorted(input_folder.iterdir(), key=lambda p: p.name):
 #   for file_path in sorted(subfolder.iterdir(), key=lambda p: p.name):
     # scenarios.append((location, file_path))
 for file_path in sorted(input_folder.iterdir(), key=lambda p: p.name):
   if file_path.is_file() and file_path.suffix == ".json":
+      # scenarios.append((location, file_path))
+    name = file_path.name
+    if name.startswith("scenario_solver_10_trains_5_units"):
       scenarios.append((location, file_path))
 
 num_scenarios = len(scenarios)
