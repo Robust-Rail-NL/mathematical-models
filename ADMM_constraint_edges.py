@@ -205,18 +205,18 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
     conflicts = 0
     p_penalty = {(l, t): round(sum(p_values[a][l][t] for a in agents)) for l in nodes for t in time_window}
     x_penalty = {(g, t): round(sum(x_values[a][e][t] for a in agents for e in conflict_edges[g-1])) for g in range(1, len(conflict_edges)+1) for t in time_window}
-    for l in nodes:
-      for t in time_window:
-        if p_penalty[l,t] > 1.0:
-          print(f"p_penalty[{l},{t}] = {p_penalty[l,t]}")
-    for t in time_window:
-      for g in range(1, len(conflict_edges)+1):
-        if x_penalty[g,t] > 1.0:
-          # print(f"Conflict group {conflict_edges[g-1]} at time {t} has penalty {x_penalty[g,t]}")
-          for a in agents: 
-            for e in conflict_edges[g-1]:
-              if x_values[a][e][t] == 1:
-                print(f"  Agent {a} uses edge {e} at time {t}")
+    # for l in nodes:
+    #   for t in time_window:
+    #     if p_penalty[l,t] > 1.0:
+    #       print(f"p_penalty[{l},{t}] = {p_penalty[l,t]}")
+    # for t in time_window:
+    #   for g in range(1, len(conflict_edges)+1):
+    #     if x_penalty[g,t] > 1.0:
+    #       # print(f"Conflict group {conflict_edges[g-1]} at time {t} has penalty {x_penalty[g,t]}")
+    #       for a in agents: 
+    #         for e in conflict_edges[g-1]:
+    #           if x_values[a][e][t] == 1:
+    #             print(f"  Agent {a} uses edge {e} at time {t}")
     for t in time_window:
       for l in nodes:
         penalty = 1/(k+1) * (p_penalty[l,t] - 1)
