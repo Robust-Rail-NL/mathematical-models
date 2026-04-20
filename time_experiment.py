@@ -23,7 +23,7 @@ algo = A.Lagrangian
 location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
 rho_string = "2"
 rho = 2
-time_out = 1800
+time_out = 3600
 
 GROUP_SIZE = 5
 

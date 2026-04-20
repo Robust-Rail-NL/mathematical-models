@@ -4,8 +4,10 @@ import os
 from glob import glob
 import math
 
-INPUT_FOLDER = "results_ls_discreet/"
-OUTPUT_FILE = "results_ls_discreet/combined_results.csv"
+INPUT_FOLDER = "results_ls_discreet_120/"
+OUTPUT_FILE = "results_ls_discreet_120/combined_results.csv"
+INPUT_FOLDER = "data_types_360/results_ls_discreet/"
+OUTPUT_FILE = "data_types_360/results_ls_discreet/combined_results.csv"
 
 def extract_filename_info(path):
   match = re.search(r'scenario_solver_(\d+)_trains_(\d+)_units', path)
@@ -31,8 +33,9 @@ def process_file(filepath):
   df = pd.read_csv(filepath)
   df = df.fillna("")
   results = []
-
+  high_cost_count = 0
   for scenario, group in df.groupby("scenario"):
+    final_cost = None
     num_trains, typ = extract_filename_info(scenario)
 
     total_time = None
@@ -54,6 +57,7 @@ def process_file(filepath):
 
       if "Cost of solution" in cost_line:
         num_movements = extract_sm(cost_line)
+        final_cost = extract_cost(cost_line)
 
       if "Total computation time" in time_line:
         time_str = time_line.split(": ", 1)[1]
@@ -63,7 +67,11 @@ def process_file(filepath):
       time_first_solution = total_time
 
     solution_found = total_time is not None and total_time <= 1800
-
+    if final_cost is not None and final_cost > 2:
+      solution_found = False
+    if final_cost is not None and final_cost > 0:
+      print(f"High cost scenario: {scenario} with cost {final_cost}")
+      high_cost_count += 1
     results.append({
       "num_trains": int(num_trains),
       "type": int(typ),
@@ -73,30 +81,31 @@ def process_file(filepath):
       "num_movements": num_movements
     })
 
-  return results
+  return results, high_cost_count
 
 all_results = []
+total_high_cost = 0
 
 for file in glob(os.path.join(INPUT_FOLDER, "*.csv")):
   print(f"Processing {file}...")
-  file_results = process_file(file)
+  file_results, file_high_cost = process_file(file)
   all_results.extend(file_results)
+  total_high_cost += file_high_cost
 
 out_df = pd.DataFrame(all_results)
-
 out_df['num_trains'] = out_df['num_trains'].astype(int)
-out_df['type'] = out_df['type'].astype(int)
+out_df['type'] = out_df.apply(lambda row: ("num_trains" if int(row['type']) == int(row['num_trains']) else "1/3" if int(row['type']) == math.ceil(int(row['num_trains']) / 3) else row['type']), axis=1)
 
 def type_order(row):
   n = int(row['num_trains'])
-  t = int(row['type'])
+  t = row['type']
   if t == 1:
     return 1
   elif t == 5:
-    return 2
-  elif t == math.ceil(n / 3):
+      return 2
+  elif t == "1/3":
     return 3
-  elif t == n:
+  elif t == "num_trains":
     return 4
   else:
     return 5
@@ -106,5 +115,5 @@ out_df = out_df.sort_values(by=['num_trains', 'type_order'], ascending=True)
 out_df = out_df.drop(columns=['type_order'])
 
 out_df.to_csv(OUTPUT_FILE, index=False)
-
+print(f"Scenarios with final cost > 2: {total_high_cost}")
 print("Done! Saved to:", OUTPUT_FILE)

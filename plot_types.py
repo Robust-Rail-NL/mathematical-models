@@ -1,252 +1,429 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
-import re
+import numpy as np
 
-df = pd.read_csv("results_types/combined_results.csv")
+type_colors = {
+  "1": "#bdd7e7",
+  "5": "#6baed6",
+  "1/3": "#3182bd",
+  "num_trains": "#08519c"
+}
 
-df["solution_found"] = df["solution_found"].astype(bool)
+algo_colors = {
+  "ALR": "#1f77b4",
+  "LS Continuous": "#ff7f0e",
+  "LS Discreet": "#2ca02c"
+}
 
-type_order = ["1", "2", "1/3", "1/2"]
-df_success = df[df["solution_found"] == True]
+algorithms = {
+  "ALR": "results_types_360",
+  "LS Continuous": "data_types_360/results_ls",
+  "LS Discreet": "data_types_360/results_ls_discreet"
+}
 
-avg_time = (
-  df_success
-  .groupby(["num_trains", "type"])["time"]
-  .mean()
-  .unstack()
-)
-plt.figure()
+x_ticks = [5,10,15,20,25,30]
+all_types = ["1", "5", "1/3", "num_trains"]
 
-for t in type_order:
-  if t in avg_time.columns:
-    plt.plot(avg_time.index, avg_time[t], marker='o', label=f"Type {t}")
+results_time = {}
+results_solved = {}
 
-plt.xlabel("Number of trains")
-plt.ylabel("Time (minutes)")
-plt.yscale("log")
+# =========================
+# COLLECT DATA PER ALGO
+# =========================
+for algo_name, folder in algorithms.items():
+  df = pd.read_csv(f"{folder}/combined_results.csv")
+  df["solution_found"] = df["solution_found"].astype(bool)
+  df["type"] = df["type"].astype(str)
 
-# Set y-ticks at desired minute values (converted to seconds)
-minute_ticks = [1,2,3,4,5, 10, 15, 20]
-second_ticks = [m * 60 for m in minute_ticks]
+  df.loc[~df["solution_found"], "time"] = 30*60
 
-plt.yticks(second_ticks, labels=minute_ticks)
+  # ---- TIME ----
+  df_time = df.copy()
+  df_time["time"] = df_time["time"] / 60
 
-plt.grid(True, which="both", linestyle="--", linewidth=0.5)
-plt.title("Average Time (successful runs only)")
-plt.legend()
+  avg_time = df_time.groupby(["num_trains","type"])["time"].mean().unstack()
+  avg_time_filled = avg_time.copy()
 
-plt.savefig("results/types.png", dpi=300, bbox_inches="tight")
+  for n in avg_time.index:
+    # t_static = str(int(n / 3))
+    t_static_val = n / 3
+    t_static = str(int(t_static_val)) if t_static_val.is_integer() else None
+    t_n = str(n)
 
+    if t_static and "1/3" in avg_time.columns and t_static in avg_time.columns:
+      v_static = avg_time.loc[n, t_static]
+      v_n3 = avg_time.loc[n, "1/3"]
 
+      if pd.isna(v_n3) and not pd.isna(v_static):
+        avg_time_filled.loc[n, "1/3"] = v_static
+      if pd.isna(v_static) and not pd.isna(v_n3):
+        avg_time_filled.loc[n, t_static] = v_n3
 
-#with fails
-df = pd.read_csv("results_types/combined_results.csv")
+    if "num_trains" in avg_time.columns and t_n in avg_time.columns:
+      v_static = avg_time.loc[n, t_n]
+      v_nval = avg_time.loc[n, "num_trains"]
 
-df["solution_found"] = df["solution_found"].astype(bool)
+      if pd.isna(v_nval) and not pd.isna(v_static):
+        avg_time_filled.loc[n, "num_trains"] = v_static
+      if pd.isna(v_static) and not pd.isna(v_nval):
+        avg_time_filled.loc[n, t_n] = v_nval
 
-# Assign 1800 seconds (30 minutes) to runs where no solution was found
-df.loc[~df["solution_found"], "time"] = 1800
+  results_time[algo_name] = avg_time_filled
 
-type_order = ["1", "2", "1/3", "1/2"]
+  # ---- SOLVED ----
+  solved_count = df.groupby(["num_trains", "type"])["solution_found"].sum().unstack()
+  solved_count_filled = solved_count.copy()
 
-# Include all runs for averaging
-avg_time = (
-  df
-  .groupby(["num_trains", "type"])["time"]
-  .mean()
-  .unstack()
-)
+  for n in solved_count.index:
+    t_static_val = n / 3
+    t_static = str(int(t_static_val)) if t_static_val.is_integer() else None
+    # t_static = str(int(n / 3))
+    t_n = str(n)
 
-plt.figure()
+    if t_static and "1/3" in solved_count.columns and t_static in solved_count.columns:
+      v_static = solved_count.loc[n, t_static]
+      v_n3 = solved_count.loc[n, "1/3"]
 
-for t in type_order:
-  if t in avg_time.columns:
-    plt.plot(avg_time.index, avg_time[t], marker='o', label=f"Type {t}")
+      if pd.isna(v_n3) and not pd.isna(v_static):
+        solved_count_filled.loc[n, "1/3"] = v_static
+      if pd.isna(v_static) and not pd.isna(v_n3):
+        solved_count_filled.loc[n, t_static] = v_n3
 
-plt.xlabel("Number of trains")
-plt.ylabel("Time (minutes)")
-plt.yscale("log")
+    if "num_trains" in solved_count.columns and t_n in solved_count.columns:
+      v_static = solved_count.loc[n, t_n]
+      v_nval = solved_count.loc[n, "num_trains"]
 
-# Y-axis ticks in minutes
-minute_ticks = [1, 2, 3, 4, 5, 10, 15, 20, 25]
-second_ticks = [m * 60 for m in minute_ticks]
-plt.yticks(second_ticks, labels=minute_ticks)
+      if pd.isna(v_nval) and not pd.isna(v_static):
+        solved_count_filled.loc[n, "num_trains"] = v_static
+      if pd.isna(v_static) and not pd.isna(v_nval):
+        solved_count_filled.loc[n, t_n] = v_nval
 
-plt.grid(True, which="both", linestyle="--", linewidth=0.5)
-plt.title("Average Time (failures as 30 min)")
-plt.legend()
-
-plt.savefig("results/types_failures.png", dpi=300, bbox_inches="tight")
-
-
-# solved_count = (
-#   df.groupby(["num_trains", "type"])["solution_found"]
-#   .sum()
-#   .unstack()
-# )
-
-# plt.figure()
-
-# for t in type_order:
-#   if t in solved_count.columns:
-#     plt.plot(solved_count.index, solved_count[t], marker='o', label=f"Type {t}")
-
-# plt.xlabel("Number of trains")
-# plt.ylabel("Solved instances (out of 20)")
-# plt.title("Number of solved instances")
-# plt.legend()
-# plt.grid()
-
-# plt.savefig("results/solutions_found.png", dpi=300, bbox_inches="tight")
+  results_solved[algo_name] = solved_count_filled
 
 
-# avg_movements = (
-#   df[df["solution_found"] == True]
-#   .groupby("num_trains")["num_movements"]
-#   .mean()
-# )
+# =========================
+# GLOBAL Y-SCALE (TIME)
+# =========================
+all_times = []
+for df in results_time.values():
+  vals = df.values.flatten()
+  vals = vals[~pd.isna(vals)]
+  vals = vals[vals > 0]
+  all_times.extend(vals)
 
-# min_movements = {
-#   5: 10,
-#   10: 22,
-#   15: 42,
-#   20: 66,
-#   25: 102,
-#   30: 134
+y_min = min(all_times) * 0.8 if len(all_times) > 0 else 0.1
+y_max = 35
+
+
+# =========================
+# TIME PLOTS PER TYPE
+# =========================
+# for t in all_types:
+#   plt.figure()
+
+#   for algo_name, df_algo in results_time.items():
+#     if t in df_algo.columns:
+#       x = df_algo.index
+#       y = df_algo[t]
+
+#       plt.plot(
+#         x, y,
+#         marker='o',
+#         color=type_colors[t],
+#         label=algo_name
+#       )
+
+#   plt.xlabel("Number of trains")
+#   plt.ylabel("Time (minutes)")
+#   plt.xticks(x_ticks)
+#   plt.yscale("log")
+
+#   plt.ylim(y_min, y_max)
+#   plt.yticks([1,2,5,10,20,30])
+
+#   plt.grid(True, which="both", linestyle="--", linewidth=0.5)
+#   plt.title(f"Type {t}: Average Time")
+#   plt.legend()
+
+#   filename_t = t.replace("/", "_")
+#   os.makedirs("results/360", exist_ok=True)
+#   plt.savefig(f"results/360/time_type_{filename_t}.png", dpi=300, bbox_inches="tight")
+#   plt.close()
+for t in all_types:
+  plt.figure()
+
+  for algo_name, df_algo in results_time.items():
+    if t in df_algo.columns:
+      x = df_algo.index
+      y = df_algo[t]
+
+      plt.plot(
+        x, y,
+        marker='o',
+        color=algo_colors[algo_name],
+        label=algo_name
+      )
+
+  plt.xlabel("Number of trains")
+  plt.ylabel("Time (minutes)")
+  plt.xticks(x_ticks)
+  plt.yscale("log")
+
+  # ---- EXACTLY your original scaling ----
+  minute_ticks = [1,2,5,10,20,30]
+  y_max = 35
+
+  all_times = []
+  for df in results_time.values():
+    vals = df.values.flatten()
+    vals = vals[~pd.isna(vals)]
+    all_times.extend(vals)
+
+  all_times = np.array(all_times)
+  nonzero_times = all_times[all_times > 0]
+  y_min = nonzero_times.min() * 0.8 if len(nonzero_times) > 0 else 0.1
+
+  plt.ylim(0.007891121555555556, y_max)
+  print(y_min)
+
+  plt.yticks(minute_ticks, labels=minute_ticks)
+
+  plt.grid(True, which="both", linestyle="--", linewidth=0.5)
+  plt.title(f"Type {t}: Average Time")
+  plt.legend()
+
+  filename_t = t.replace("/", "_")
+  plt.savefig(f"results/360/time_type_{filename_t}.png", dpi=300, bbox_inches="tight")
+  plt.close()
+
+
+# =========================
+# SOLVED PLOTS PER TYPE
+# =========================
+for t in all_types:
+  plt.figure()
+
+  for algo_name, df_algo in results_solved.items():
+    if t in df_algo.columns:
+      x = df_algo.index
+      y = df_algo[t]
+
+      plt.plot(x, y, marker='o', color=algo_colors[algo_name], label=algo_name)
+
+  plt.xlabel("Number of trains")
+  plt.ylabel("Solved instances")
+  plt.xticks(x_ticks)
+  plt.ylim(0, 32)
+
+  plt.grid(True, linestyle="--", linewidth=0.5)
+  plt.title(f"Type {t}: Solved instances")
+  plt.legend()
+
+  filename_t = t.replace("/", "_")
+  plt.savefig(f"results/360/solved_type_{filename_t}.png", dpi=300, bbox_inches="tight")
+  plt.close()
+
+# import pandas as pd
+# import matplotlib.pyplot as plt
+# import os
+# import re
+# import math
+# import numpy as np
+
+# type_colors = {
+#   "1": "#bdd7e7",
+#   "5": "#6baed6",
+#   "1/3": "#3182bd",
+#   "num_trains": "#08519c"
 # }
 
-# min_x = list(min_movements.keys())
-# min_y = list(min_movements.values())
-
-# plt.figure()
-
-# plt.plot(avg_movements.index, avg_movements.values, marker='o', label="Average movements")
-# plt.plot(min_x, min_y, linestyle="--", marker='o', label="Minimum required movements")
-
-# plt.xlabel("Number of trains")
-# plt.ylabel("Number of movements")
-# plt.title("Average vs Minimum Movements")
-
-# plt.legend()
-# plt.grid()
-
-# plt.savefig("results/movements_plot.png", dpi=300, bbox_inches="tight")
-
-
-
-
-
-
-
-
-
-
-
-# folder = "solutions_types"
-# max_gap = 5
-
-# pattern = re.compile(r"(\d+)_trains")
-
-# results = []
-
-# for filename in os.listdir(folder):
-#   if not filename.endswith(".json"):
-#     continue
-  
-#   match = pattern.search(filename)
-#   if not match:
-#     continue
-  
-#   num_trains = int(match.group(1))
-#   filepath = os.path.join(folder, filename)
-  
-#   with open(filepath, "r") as f:
-#     lines = f.readlines()
-  
-#   start_idx = None
-#   for i, line in enumerate(lines):
-#     if line.strip() == "agent,i,j,t":
-#       start_idx = i + 1
-#       break
-  
-#   if start_idx is None:
-#     continue
-  
-#   movement_lines = []
-#   for line in lines[start_idx:]:
-#     line = line.strip()
-#     if not line:
-#       continue
-#     if line in ["agent,n,t", "conflicts,time"]:
-#       break
-#     movement_lines.append(line)
-  
-#   if not movement_lines:
-#     continue
-  
-#   data = [l.split(",") for l in movement_lines]
-#   df = pd.DataFrame(data, columns=["agent","i","j","t"])
-  
-#   df["agent"] = df["agent"].astype(int)
-#   df["t"] = df["t"].astype(int)
-  
-#   df = df[df["i"] != df["j"]]
-  
-#   total_sequences = 0
-  
-#   for agent, group in df.groupby("agent"):
-#     times = sorted(group["t"].tolist())
-    
-#     if not times:
-#       continue
-    
-#     sequences = 1
-    
-#     for prev, curr in zip(times, times[1:]):
-#       if curr - prev > max_gap:
-#         sequences += 1
-    
-#     total_sequences += sequences
-  
-#   results.append({
-#     "num_trains": num_trains,
-#     "num_movements": total_sequences
-#   })
-
-# df_results = pd.DataFrame(results)
-
-# avg_movements = (
-#   df_results
-#   .groupby("num_trains")["num_movements"]
-#   .mean()
-# )
-
-# print(avg_movements)
-
-# min_movements = {
-#   5: 10,
-#   10: 20,
-#   15: 30,
-#   20: 40,
-#   25: 50,
-#   30: 60
+# algorithms = {
+#   "ALR": "results_types_360",
+#   "LS Continuous": "data_types_360/results_ls",
+#   "LS Discreet": "data_types_360/results_ls_discreet"
 # }
 
-# min_x = list(min_movements.keys())
-# min_y = list(min_movements.values())
+# static_types = ["1", "5"]
+# x_ticks = [5,10,15,20,25,30]
 
-# plt.figure()
 
-# plt.plot(avg_movements.index, avg_movements.values, marker='o', label="Average movements")
-# plt.plot(min_x, min_y, linestyle="--", marker='o', label="Minimum required movements")
+# for algo_name, folder in algorithms.items():
+#   df = pd.read_csv(f"{folder}/combined_results.csv")
+#   df["solution_found"] = df["solution_found"].astype(bool)
+#   df["type"] = df["type"].astype(str)
 
-# plt.xlabel("Number of trains")
-# plt.ylabel("Number of movements")
-# plt.title("Average vs Minimum Movements (continuous)")
+#   df.loc[~df["solution_found"], "time"] = 30*60
 
-# plt.legend()
-# plt.grid()
+#   # ---- TIME PLOT ----
+#   df_time = df.copy()
+#   # df_time = df[df["solution_found"]].copy()
+#   df_time["time"] = df_time["time"]/60
 
-# plt.savefig("results/movements_continues_plot.png", dpi=300, bbox_inches="tight")
+#   avg_time = df_time.groupby(["num_trains","type"])["time"].mean().unstack()
+#   avg_time_filled = avg_time.copy()
 
+#   for n in avg_time.index:
+#     t_static = str(int(n / 3))
+#     t_n = str(n)
+
+#     # ---- n/3 <-> static (e.g. 15 <-> 5)
+#     if "1/3" in avg_time.columns and t_static in avg_time.columns:
+#       v_static = avg_time.loc[n, t_static] if t_static in avg_time.columns else None
+#       v_n3 = avg_time.loc[n, "1/3"]
+
+#       if pd.isna(v_n3) and not pd.isna(v_static):
+#         avg_time_filled.loc[n, "1/3"] = v_static
+#       if pd.isna(v_static) and not pd.isna(v_n3):
+#         avg_time_filled.loc[n, t_static] = v_n3
+
+#     # ---- n <-> static (e.g. 5 <-> 5)
+#     if "num_trains" in avg_time.columns and t_n in avg_time.columns:
+#       v_static = avg_time.loc[n, t_n]
+#       v_nval = avg_time.loc[n, "num_trains"]
+
+#       if pd.isna(v_nval) and not pd.isna(v_static):
+#         avg_time_filled.loc[n, "num_trains"] = v_static
+#       if pd.isna(v_static) and not pd.isna(v_nval):
+#         avg_time_filled.loc[n, t_n] = v_nval
+#   plt.figure()
+  
+#   for t in static_types:
+#     if t in avg_time_filled.columns:
+#       x = avg_time_filled.index
+#       y = avg_time_filled[t]
+
+#       plt.plot(x, y,
+#               marker='o',
+#               color=type_colors[t],
+#               label=f"Type {t}")
+
+#   if "1/3" in avg_time_filled.columns:
+#     x = avg_time_filled.index
+#     y = avg_time_filled["1/3"]
+
+#     plt.plot(x, y,
+#             marker='o',
+#             linestyle='-.',
+#             color=type_colors["1/3"],
+#             label="Type n/3")
+
+#   if "num_trains" in avg_time_filled.columns:
+#     x = avg_time_filled.index
+#     y = avg_time_filled["num_trains"]
+
+#     plt.plot(x, y,
+#             marker='o',
+#             linestyle='--',
+#             color=type_colors["num_trains"],
+#             label="Type n")
+
+#   plt.xlabel("Number of trains")
+#   plt.ylabel("Time (minutes)")
+#   plt.xticks(x_ticks)
+#   plt.yscale("log")
+
+#   minute_ticks = [1,2,5,10,20,30]
+#   y_max = 35
+#   all_times = avg_time.values.flatten()
+#   all_times = all_times[~pd.isna(all_times)]
+#   nonzero_times = all_times[all_times > 0]
+#   y_min = nonzero_times.min() * 0.8 if len(nonzero_times) > 0 else 0.1
+#   plt.ylim(0.007891121555555556, y_max)
+#   print(y_min)
+
+#   plt.yticks(minute_ticks, labels=minute_ticks)
+
+#   plt.grid(True, which="both", linestyle="--", linewidth=0.5)
+#   plt.title(f"{algo_name}: Average Time")
+#   plt.legend()
+
+#   os.makedirs("results", exist_ok=True)
+#   plt.savefig(f"results/360/{algo_name}_time_360.png", dpi=300, bbox_inches="tight")
+#   plt.close()
+
+#   # ---- SOLUTIONS FOUND PLOT ----
+#   solved_count = (
+#     df.groupby(["num_trains", "type"])["solution_found"].sum().unstack())
+#   solved_count_filled = solved_count.copy()
+
+#   solved_count_filled = solved_count.copy()
+
+#   for n in solved_count.index:
+#     t_static = str(int(n / 3))
+#     t_n = str(n)
+
+#     # ---- n/3 <-> static (e.g. 15 <-> 5)
+#     if "1/3" in solved_count.columns and t_static in solved_count.columns:
+#       v_static = solved_count.loc[n, t_static] if t_static in solved_count.columns else None
+#       v_n3 = solved_count.loc[n, "1/3"]
+
+#       if pd.isna(v_n3) and not pd.isna(v_static):
+#         solved_count_filled.loc[n, "1/3"] = v_static
+#       if pd.isna(v_static) and not pd.isna(v_n3):
+#         solved_count_filled.loc[n, t_static] = v_n3
+
+#     # ---- n <-> static (e.g. 5 <-> 5)
+#     if "num_trains" in solved_count.columns and t_n in solved_count.columns:
+#       v_static = solved_count.loc[n, t_n]
+#       v_nval = solved_count.loc[n, "num_trains"]
+
+#       if pd.isna(v_nval) and not pd.isna(v_static):
+#         solved_count_filled.loc[n, "num_trains"] = v_static
+#       if pd.isna(v_static) and not pd.isna(v_nval):
+#         solved_count_filled.loc[n, t_n] = v_nval
+#   plt.figure()
+
+#   for t in static_types:
+#     if t in solved_count_filled.columns:
+#       x = solved_count_filled.index
+#       y = solved_count_filled[t]
+
+#       print(f"{algo_name} SOLVED Type {t}:")
+#       for xi, yi in zip(x, y):
+#         print(f"  trains={xi}, value={yi}")
+
+#       plt.plot(x, y,
+#               marker='o',
+#               color=type_colors[t],
+#               label=f"Type {t}")
+
+#   if "1/3" in solved_count_filled.columns:
+#     x = solved_count_filled.index
+#     y = solved_count_filled["1/3"]
+
+#     print(f"{algo_name} SOLVED Type n/3:")
+#     for xi, yi in zip(x, y):
+#       print(f"  trains={xi}, value={yi}")
+
+#     plt.plot(x, y,
+#             marker='o',
+#             linestyle='-.',
+#             color=type_colors["1/3"],
+#             label="Type n/3")
+
+#   if "num_trains" in solved_count_filled.columns:
+#     x = solved_count_filled.index
+#     y = solved_count_filled["num_trains"]
+
+#     print(f"{algo_name} SOLVED Type n:")
+#     for xi, yi in zip(x, y):
+#       print(f"  trains={xi}, value={yi}")
+
+#     plt.plot(x, y,
+#             marker='o',
+#             linestyle='--',
+#             color=type_colors["num_trains"],
+#             label="Type n")
+
+#   plt.ylim(0, 32)
+#   plt.xlabel("Number of trains")
+#   plt.ylabel("Solved instances")
+#   plt.xticks(x_ticks)
+
+#   plt.grid(True, linestyle="--", linewidth=0.5)
+#   plt.title(f"{algo_name}: Number of solved instances")
+#   plt.legend()
+
+#   plt.savefig(f"results/360/{algo_name}_solutions_360.png", dpi=300, bbox_inches="tight")
+#   plt.close()

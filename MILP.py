@@ -167,11 +167,12 @@ def solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, depar
 	return 0, end - start, x_values_filtered, p_values_filtered, time_first_solution, solution_found
     
 if __name__ == "__main__":
-	# location = 'locations/location_solver.json'
+	location = 'locations/location_solver.json'
 	# scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/1_type/5_trains5.json'
-	location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
-	scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_final/1_type/scenario_solver_5_trains5.json'
-	time_out = 600
+	# location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
+	# scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_final/1_type/scenario_solver_5_trains5.json'
+	scenario = 'scenarios_solver_types_120/scenario_solver_25_trains_25_units1.json'
+	time_out = 1800
 	# location = 'locations/five_tracks_location.json'
 	# scenario = 'scenarios/five_tracks/two_trains.json'
 	# scenario = 'scenarios/binckhorst_mixed_traffic_false/15_trains5.json'

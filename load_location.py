@@ -281,9 +281,9 @@ if __name__ == "__main__":
   # data = load_json('locations/detour_location.json')
   # nodes, edges, conflict_edges = load_location(data)
   nodes, edges, conflict_edges,traversal_time_edges  = load_location_time(data)
-  # print("Nodes:", nodes)
-  # print("Edges:", edges)
+  print("Nodes:", sorted(nodes))
+  print("Edges:", sorted(edges))
   conflict_edges = sort_conflict_sets(conflict_edges)
-  # for conflict in conflict_edges:
-  #   print("Conflict set:", conflict)
+  for conflict in conflict_edges:
+    print("Conflict set:", conflict)
   
