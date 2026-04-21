@@ -162,7 +162,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
       old_x = {e: {t: x_values[a][e][t] for t in time_window} for e in edges}
       # admm_update_time_total += time.time() - admm_update_time
       # solve_time = time.time()
-      # x_values[a], p_values[a], y_values[a] = solve_agent(a, models[a], nodes, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values)
+      x_values[a], p_values[a], y_values[a] = solve_agent(a, models[a], nodes, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values)
       # solve_time_total += time.time() - solve_time
       # admm_update_time = time.time()
       for l in nodes:
@@ -235,7 +235,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
     # lr_update_time_total += time.time() - lr_time
     conflict_list.append((conflicts, time.time() - start))
     # if __name__ == "__main__":
-    #   print("conflicts", conflicts)
+    # print("conflicts", conflicts)
     print(time.time() - start)
     if time.time() - start > time_out:
       print("TIME LIMIT REACHED")
@@ -310,7 +310,8 @@ if __name__ == "__main__":
   # location = 'locations/9_tracks_location.json'
   # scenario = 'scenarios/9_tracks/7_trains_matching.json'
   # location = 'locations/binckhorst.json'
-  # location = 'locations/location_solver.json'
+  location = 'locations/location_solver.json'
+  scenario = 'time_experiment_scenarios/scenario_solver_30_trains_5_units1.json'
   
   # scenario = 'scenarios_solver_types_120/scenario_solver_20_trains_1_units13.json'
   # scenario = 'scenarios_solver_types_120/scenario_solver_20_trains_1_units17.json'
@@ -327,20 +328,11 @@ if __name__ == "__main__":
   
   
   
-  location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
-  scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_types_360/scenarios_solver_types/scenario_solver_25_trains_1_units30.json'
-  # scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/4_type/25_trains1.json'
-  # scenario = 'scenarios/time360_15.json'
-  # scenario = "data_types_360/scenarios_solver_types/scenario_solver_25_trains_1_units30.json"
-  # scenario = "scenarios/25_trains_24t.json"
-  # location = 'locations/five_tracks_location.json'
-  # scenario = 'scenarios/five_tracks/three_trains_difficult.json'
-  # location = 'locations/6_tracks_location.json'
-  # scenario = 'scenarios/6_tracks/5_trains_difficult.json'
-  # location = 'locations/ten_tracks_location.json'
-  # scenario = 'scenarios/ten_tracks/nine_trains_more_time.json'
-  # location = 'locations/ten_tracks_location.json'
-  # scenario = 'scenarios/ten_tracks/ten_trains_more_time.json'
+  # location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
+  # scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_types_360/scenarios_solver_types/scenario_solver_25_trains_1_units30.json'
+  
+  
+
   time_out = 3600
   rho = 2
   nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values = setup(location, scenario)
