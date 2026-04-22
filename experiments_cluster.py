@@ -11,6 +11,15 @@ import math
 
 random.seed(1)
 
+def extract_end_time(file_path):
+    name = os.path.basename(file_path)
+    name = name.replace(".json", "")
+    parts = name.split("_")
+    
+    # last part is the end time
+    end_time = int(parts[-1])
+    return end_time
+
 def extract_type_category(file_path, num_trains):
     name = os.path.basename(file_path)
 
@@ -48,9 +57,9 @@ mixed_traffic = False
 matching = True # If matching is false, uncomment in load_scenario.py the i in the displayname of in and out trains
 rho_string = "2"
 rho = 2
-time_out = 3600
+time_out = 1800
 
-GROUP_SIZE = 3
+GROUP_SIZE = 5
 
 task_id = int(os.environ.get("SLURM_ARRAY_TASK_ID", 0))
 
@@ -69,9 +78,9 @@ else:
 
 
 scenarios = []
-input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_types_360/scenarios_solver_types/{input_folder}")
-results_file = f"results_missing/{algo_string}_rho{rho_string}"
-solution_file = f"solutions_missing/{algo_string}_rho{rho_string}"
+input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_solver_time_20/{input_folder}")
+results_file = f"results_time_20{algo_string}_rho{rho_string}"
+solution_file = f"solutions_time_20/{algo_string}_rho{rho_string}"
 # for subfolder in sorted(input_folder.iterdir(), key=lambda p: p.name):
 #   for file_path in sorted(subfolder.iterdir(), key=lambda p: p.name):
     # scenarios.append((location, file_path))
@@ -101,7 +110,7 @@ solution_file_new = f"{solution_file}_task{task_id}"
 with open(results_file_new, mode="w", newline="") as file:
   writer = csv.writer(file)
   # writer.writerow(["num_trains", "k", "time", "time_first_solution", "solution_found", "num_movements"])
-  writer.writerow(["num_trains", "type", "k", "time", "time_first_solution", "solution_found", "num_movements"])
+  writer.writerow(["num_trains", "end_time", "k", "time", "time_first_solution", "solution_found", "num_movements"])
 
   for loc, scenario in subset:
     print(f"Processing scenario {scenario}")
@@ -119,11 +128,13 @@ with open(results_file_new, mode="w", newline="") as file:
       k, time, x_values_filtered, p_values_filtered, time_first_solution, solution_found = M.solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_out)
 
     num_trains = len(agents)
-    type_category = extract_type_category(scenario, num_trains)
+    # type_category = extract_type_category(scenario, num_trains)
+    end_time_val = extract_end_time(scenario)
     num_movements = compute_number_of_movements(x_values_filtered)
-
+    
     # writer.writerow([num_trains, k, time, time, solution_found, num_movements])
-    writer.writerow([num_trains, type_category, k, time, time, solution_found, num_movements])
+    # writer.writerow([num_trains, type_category, k, time, time, solution_found, num_movements])
+    writer.writerow([num_trains, end_time_val, k, time, time, solution_found, num_movements])
 
     with open(solution_file_new2, mode="w", newline="") as s_file:
       solution_writer = csv.writer(s_file)
