@@ -310,8 +310,9 @@ if __name__ == "__main__":
   # location = 'locations/9_tracks_location.json'
   # scenario = 'scenarios/9_tracks/7_trains_matching.json'
   # location = 'locations/binckhorst.json'
-  location = 'locations/location_solver.json'
-  scenario = 'time_experiment_scenarios/scenario_solver_30_trains_5_units1.json'
+  # location = 'locations/location_solver.json'
+  # scenario = 'time_experiment_scenarios/scenario_solver_30_trains_5_units1.json'
+  # scenario = 'scenarios/30_180_97.json'
   
   # scenario = 'scenarios_solver_types_120/scenario_solver_20_trains_1_units13.json'
   # scenario = 'scenarios_solver_types_120/scenario_solver_20_trains_1_units17.json'
@@ -328,8 +329,8 @@ if __name__ == "__main__":
   
   
   
-  # location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
-  # scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_types_360/scenarios_solver_types/scenario_solver_25_trains_1_units30.json'
+  location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
+  scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_types_360/scenarios_solver_types/scenario_solver_25_trains_1_units30.json'
   
   
 
