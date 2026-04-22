@@ -86,10 +86,7 @@ solution_file = f"solutions_time_20/{algo_string}_rho{rho_string}"
     # scenarios.append((location, file_path))
 for file_path in sorted(input_folder.iterdir(), key=lambda p: p.name):
   if file_path.is_file() and file_path.suffix == ".json":
-      # scenarios.append((location, file_path))
-    name = file_path.name
-    if name.startswith("scenario_solver_10_trains_5_units"):
-      scenarios.append((location, file_path))
+    scenarios.append((location, file_path))
 
 num_scenarios = len(scenarios)
 
