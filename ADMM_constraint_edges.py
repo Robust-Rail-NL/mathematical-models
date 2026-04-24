@@ -312,7 +312,7 @@ if __name__ == "__main__":
   # location = 'locations/binckhorst.json'
   # location = 'locations/location_solver.json'
   # scenario = 'time_experiment_scenarios/scenario_solver_30_trains_5_units1.json'
-  # scenario = 'scenarios/30_180_97.json'
+  # scenario = 'scenarios/20_stretched.json'
   
   # scenario = 'scenarios_solver_types_120/scenario_solver_20_trains_1_units13.json'
   # scenario = 'scenarios_solver_types_120/scenario_solver_20_trains_1_units17.json'
@@ -334,7 +334,7 @@ if __name__ == "__main__":
   
   
 
-  time_out = 3600
+  time_out = 1800
   rho = 2
   nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values = setup(location, scenario)
   print("ADMM_constraint_edges", scenario, rho)

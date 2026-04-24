@@ -79,7 +79,7 @@ else:
 
 scenarios = []
 input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_solver_time_20/{input_folder}")
-results_file = f"results_time_20{algo_string}_rho{rho_string}"
+results_file = f"results_time_20/{algo_string}_rho{rho_string}"
 solution_file = f"solutions_time_20/{algo_string}_rho{rho_string}"
 # for subfolder in sorted(input_folder.iterdir(), key=lambda p: p.name):
 #   for file_path in sorted(subfolder.iterdir(), key=lambda p: p.name):
