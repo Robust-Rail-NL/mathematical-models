@@ -7,7 +7,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=3968MB
 #SBATCH --account=education-eemcs-msc-cs
-#SBATCH --array=0-23
+#SBATCH --array=0-29
 
 #SBATCH --output=logs/out_%A_%a.txt
 #SBATCH --error=logs/err_%A_%a.txt
