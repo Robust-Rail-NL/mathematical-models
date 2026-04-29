@@ -20,4 +20,4 @@ module load pyomo
 cd /home/thomasverwaal/Robust-Rail-NL/mathematical-models
 source ~/pyomo_project/env/bin/activate
 
-srun python3 rho_experiment.py
+srun python3 milp_experiment.py
