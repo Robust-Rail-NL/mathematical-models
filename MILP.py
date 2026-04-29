@@ -39,6 +39,14 @@ def setup(location, scenario):
 	nodes, edges, conflict_edges = ll.load_location(data)
 	data = ll.load_json(scenario)
 	agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = ls.load_scenario(data)
+	# Add all non self edges to conflict edges such that no two trains can move at the same time
+	conflict_edges = []
+	all_conflcit_edges = []
+	for edge in edges:
+		i, j = edge
+		if i != j:
+			all_conflcit_edges.append(edge)
+	conflict_edges.append(all_conflcit_edges)
 	return nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types
 
 def create_model(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window):
@@ -147,7 +155,7 @@ def solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, depar
 	# 			print(f"y[{a},{t}] = {val}")    
 	print("Time taken (seconds):", end - start)
 	print("Time to first solution (seconds):", time_first_solution)
- 
+	end_time = time.time()
 	p_values_filtered = []
 	for a in model.agents:
 		for n in model.nodes:
@@ -164,14 +172,15 @@ def solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, depar
 					x_values_filtered.append((a, i, j, t))
 	# print(x_values_filtered)
 	# print(p_values_filtered)
-	return 0, end - start, x_values_filtered, p_values_filtered, time_first_solution, solution_found
+	return 0, end_time, x_values_filtered, p_values_filtered, time_first_solution, solution_found
     
 if __name__ == "__main__":
 	location = 'locations/location_solver.json'
 	# scenario = 'scenarios/binckhorst_matching_mixed_traffic_false/1_type/5_trains5.json'
 	# location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
 	# scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_final/1_type/scenario_solver_5_trains5.json'
-	scenario = 'scenarios_solver_types_120/scenario_solver_25_trains_25_units1.json'
+	# scenario = 'scenarios_solver_types_120/scenario_solver_25_trains_25_units1.json'
+	scenario = 'scenarios_solver_time_20/scenario_solver_20_trains_5_units1_4800.json'
 	time_out = 1800
 	# location = 'locations/five_tracks_location.json'
 	# scenario = 'scenarios/five_tracks/two_trains.json'
