@@ -33,7 +33,7 @@ def setup(location, scenario):
   return nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values
 
 
-def create_graph_per_agent(a, start_node, arrival_time, departures, train_type, time_window):
+def create_graph_per_agent(a, nodes, edges, start_node, arrival_time, departures, train_type, time_window):
   g = rx.PyDiGraph()
   graph_nodes = {}
 
@@ -145,7 +145,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
   
   edge_infos = {}
   for a in agents:
-    graphs[a], starts[a], sinks[a], edge_infos[a] = create_graph_per_agent(a, start_nodes[a], arrival_time[a], departures, train_types[a], time_window)
+    graphs[a], starts[a], sinks[a], edge_infos[a] = create_graph_per_agent(a, nodes, edges, start_nodes[a], arrival_time[a], departures, train_types[a], time_window)
   p_sum = {(l, t): 0 for (l, t) in node_time_pairs}
   x_sum = {(e, t): 0 for (e, t) in edge_time_pairs}
   for k in range(n_iter):
@@ -235,12 +235,12 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
 if __name__ == "__main__":
   # location = 'locations/five_tracks_location.json'
   # scenario = 'scenarios/five_tracks/three_trains_difficult.json'
-  # location = 'locations/location_solver.json'
+  location = 'locations/location_solver.json'
   # scenario = 'data_types_360/scenarios_solver_types/scenario_solver_33_trains_1_units30.json'
-  # scenario = 'data_time_20_old/scenarios_solver_time_20/scenario_solver_20_trains_5_units10_4800.json'
+  scenario = 'data_time_20_old/scenarios_solver_time_20/scenario_solver_20_trains_5_units10_4800.json'
   # scenario = 'scenarios_solver_milp/scenario_solver_5_trains_5_units1.json'
-  location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
-  scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_time_20_old/scenarios_solver_time_20/scenario_solver_20_trains_5_units10_4800.json'
+  # location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
+  # scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_time_20_old/scenarios_solver_time_20/scenario_solver_20_trains_5_units10_4800.json'
   
   time_out = 1800
   rho = 0.5
