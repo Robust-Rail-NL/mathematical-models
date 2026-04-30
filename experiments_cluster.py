@@ -79,7 +79,8 @@ algo_string = "sp"
 
 
 scenarios = []
-input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_solver_time_20/{input_folder}")
+# input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_solver_time_20/{input_folder}")
+input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_types_360/scenarios_solver_types/{input_folder}")
 results_file = f"results_360_sp/{algo_string}_rho{rho_string}"
 solution_file = f"solutions_360_sp/{algo_string}_rho{rho_string}"
 # for subfolder in sorted(input_folder.iterdir(), key=lambda p: p.name):
