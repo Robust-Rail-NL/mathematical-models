@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 #SBATCH --job-name="test_array"
-#SBATCH --time=03:30:00
+#SBATCH --time=02:40:00
 #SBATCH --partition=compute
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
@@ -20,4 +20,4 @@ module load pyomo
 cd /home/thomasverwaal/Robust-Rail-NL/mathematical-models
 source ~/pyomo_project/env/bin/activate
 
-srun python3 milp_experiment.py
+srun python3 experiments_cluster.py

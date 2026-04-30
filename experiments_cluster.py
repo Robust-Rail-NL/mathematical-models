@@ -1,8 +1,8 @@
 import gc
-
 import Lagrangian as L
 import MILP as M
 import ADMM_constraint_edges as A
+import shortest_path as SP
 import csv
 import os
 from pathlib import Path
@@ -56,7 +56,7 @@ input_folder = ""
 mixed_traffic = False
 matching = True # If matching is false, uncomment in load_scenario.py the i in the displayname of in and out trains
 rho_string = "2"
-rho = 2
+rho = 0.5
 time_out = 1800
 
 GROUP_SIZE = 5
@@ -68,19 +68,20 @@ if algo == L.Lagrangian:
   algo_string = "Lagrangian"
 elif algo == A.Lagrangian:
   algo_string = "ADMM"
+algo_string = "sp"
 
-if algo == A.Lagrangian:
-  results_file = f"results_types_360/{algo_string}_rho{rho_string}"
-  solution_file = f"solutions_types_360/{algo_string}_rho{rho_string}"
-else:
-  results_file = f"results_final/{algo_string}"
-  solution_file = f"solutions_final/{algo_string}"
+# if algo == A.Lagrangian:
+#   results_file = f"results_types_360/{algo_string}_rho{rho_string}"
+#   solution_file = f"solutions_types_360/{algo_string}_rho{rho_string}"
+# else:
+#   results_file = f"results_final/{algo_string}"
+  # solution_file = f"solutions_final/{algo_string}"
 
 
 scenarios = []
 input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_solver_time_20/{input_folder}")
-results_file = f"results_time_20/{algo_string}_rho{rho_string}"
-solution_file = f"solutions_time_20/{algo_string}_rho{rho_string}"
+results_file = f"results_360_sp/{algo_string}_rho{rho_string}"
+solution_file = f"solutions_360_sp/{algo_string}_rho{rho_string}"
 # for subfolder in sorted(input_folder.iterdir(), key=lambda p: p.name):
 #   for file_path in sorted(subfolder.iterdir(), key=lambda p: p.name):
     # scenarios.append((location, file_path))
@@ -106,32 +107,33 @@ solution_file_new = f"{solution_file}_task{task_id}"
 
 with open(results_file_new, mode="w", newline="") as file:
   writer = csv.writer(file)
-  # writer.writerow(["num_trains", "k", "time", "time_first_solution", "solution_found", "num_movements"])
-  writer.writerow(["num_trains", "end_time", "k", "time", "time_first_solution", "solution_found", "num_movements"])
+  writer.writerow(["num_trains", "type", "k", "time", "time_first_solution", "solution_found", "num_movements"])
+  # writer.writerow(["num_trains", "end_time", "k", "time", "time_first_solution", "solution_found", "num_movements"])
 
   for loc, scenario in subset:
     print(f"Processing scenario {scenario}")
 
     solution_file_new2 = f"{solution_file_new}_{os.path.basename(scenario)}"
-
-    if algo == A.Lagrangian:
-      nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values = A.setup(loc, scenario)
-      k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = A.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out)
-    elif algo == L.Lagrangian:
-      nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values = L.setup(loc, scenario)
-      k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = L.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, time_out)
-    else:
-      nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = M.setup(loc, scenario)
-      k, time, x_values_filtered, p_values_filtered, time_first_solution, solution_found = M.solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_out)
+    nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values = SP.setup(loc, scenario)
+    k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = SP.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out)
+    # if algo == A.Lagrangian:
+    #   nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values = A.setup(loc, scenario)
+    #   k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = A.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out)
+    # elif algo == L.Lagrangian:
+    #   nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values = L.setup(loc, scenario)
+    #   k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = L.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, time_out)
+    # else:
+    #   nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = M.setup(loc, scenario)
+    #   k, time, x_values_filtered, p_values_filtered, time_first_solution, solution_found = M.solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_out)
 
     num_trains = len(agents)
-    # type_category = extract_type_category(scenario, num_trains)
-    end_time_val = extract_end_time(scenario)
+    type_category = extract_type_category(scenario, num_trains)
+    # end_time_val = extract_end_time(scenario)
     num_movements = compute_number_of_movements(x_values_filtered)
     
     # writer.writerow([num_trains, k, time, time, solution_found, num_movements])
-    # writer.writerow([num_trains, type_category, k, time, time, solution_found, num_movements])
-    writer.writerow([num_trains, end_time_val, k, time, time, solution_found, num_movements])
+    writer.writerow([num_trains, type_category, k, time, time, solution_found, num_movements])
+    # writer.writerow([num_trains, end_time_val, k, time, time, solution_found, num_movements])
 
     with open(solution_file_new2, mode="w", newline="") as s_file:
       solution_writer = csv.writer(s_file)
