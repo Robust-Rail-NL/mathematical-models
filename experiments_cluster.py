@@ -3,6 +3,7 @@ import Lagrangian as L
 import MILP as M
 import ADMM_constraint_edges as A
 import shortest_path as SP
+import shortest_path_continuous as SPc
 import csv
 import os
 from pathlib import Path
@@ -49,25 +50,26 @@ def compute_number_of_movements(x_values):
 # ================= SETTINGS =================
 # algo = M.solve
 # algo = L.Lagrangian
-algo = A.Lagrangian
+# algo = A.Lagrangian
+algo = SPc.Lagrangian
 
 location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
 input_folder = ""
 mixed_traffic = False
 matching = True # If matching is false, uncomment in load_scenario.py the i in the displayname of in and out trains
-rho_string = "2"
+rho_string = "0.5"
 rho = 0.5
 time_out = 1800
-
+# SET SUBGRADIENT TO VALUE FROM RESULTS
 GROUP_SIZE = 5
 
 task_id = int(os.environ.get("SLURM_ARRAY_TASK_ID", 0))
 
-algo_string = "MILP"
-if algo == L.Lagrangian:
-  algo_string = "Lagrangian"
-elif algo == A.Lagrangian:
-  algo_string = "ADMM"
+# algo_string = "MILP"
+# if algo == L.Lagrangian:
+#   algo_string = "Lagrangian"
+# elif algo == A.Lagrangian:
+#   algo_string = "ADMM"
 algo_string = "sp"
 
 # if algo == A.Lagrangian:
@@ -81,8 +83,8 @@ algo_string = "sp"
 scenarios = []
 # input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_solver_time_20/{input_folder}")
 input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_types_360/scenarios_solver_types/{input_folder}")
-results_file = f"results_360_sp/{algo_string}_rho{rho_string}"
-solution_file = f"solutions_360_sp/{algo_string}_rho{rho_string}"
+results_file = f"results_360_sp_c/{algo_string}_rho{rho_string}"
+solution_file = f"solutions_360_sp_c/{algo_string}_rho{rho_string}"
 # for subfolder in sorted(input_folder.iterdir(), key=lambda p: p.name):
 #   for file_path in sorted(subfolder.iterdir(), key=lambda p: p.name):
     # scenarios.append((location, file_path))
@@ -115,8 +117,8 @@ with open(results_file_new, mode="w", newline="") as file:
     print(f"Processing scenario {scenario}")
 
     solution_file_new2 = f"{solution_file_new}_{os.path.basename(scenario)}"
-    nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values = SP.setup(loc, scenario)
-    k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = SP.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out)
+    nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, macro_edge_nodes, node_to_idx, edge_to_idx, agent_to_idx, edge_group_matrix = SPc.setup(loc, scenario)
+    k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = SPc.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho=0.5, time_out=1800, macro_edge_nodes=macro_edge_nodes, node_to_idx=node_to_idx, edge_to_idx=edge_to_idx, agent_to_idx=agent_to_idx, edge_group_matrix=edge_group_matrix) 
     # if algo == A.Lagrangian:
     #   nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values = A.setup(loc, scenario)
     #   k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = A.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out)
