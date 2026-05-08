@@ -9,71 +9,13 @@ import numpy as np
 
 random.seed(1)
 
-def node_index(node):
-  return int(node.split("_")[1])
-
-def build_equivalent_nodes(nodes):
-  groups = defaultdict(list)
-  for node in nodes:
-    underscore_index = node.find("_")
-    if underscore_index != -1:
-      base = node[:underscore_index]
-      groups[base].append(node)
-  for values in groups.values():
-    values.sort(key=lambda x: int(x.split("_")[1]))
-  return dict(groups)
-
-def build_macro_edges(edges, equivalent_nodes):
-  # create lookup for which group a node belongs to and its index in that group
-  node_to_group = {}
-  group_index = {}
-  for group_nodes in equivalent_nodes.values():
-    for idx, node in enumerate(group_nodes):
-      node_to_group[node] = group_nodes
-      group_index[node] = idx
-  expanded_edges = set(edges)
-  # add edges between all nodes in the same group and edges to next group if 
-  # there is an edge to one of the nodes in the group, also store occupied nodes for macro edges
-  macro_edge_nodes = {}
-  for u, v in edges:
-    u_group = node_to_group.get(u)
-    v_group = node_to_group.get(v)
-    for uu in (u_group or (u,)):
-      for vv in (v_group or (v,)):
-        if uu == vv:
-          continue
-        expanded_edges.add((uu, vv))
-        occupied = {vv}
-        if u_group and v_group and u_group is v_group:
-          u_idx = group_index[uu]
-          v_idx = group_index[vv]
-          if u_idx < v_idx:
-            occupied.update(u_group[u_idx + 1:v_idx + 1])
-          elif u_idx > v_idx:
-            occupied.update(u_group[v_idx:u_idx])
-        elif not u_group and v_group:
-          v_idx = group_index[vv]
-          occupied.update(v_group[:v_idx + 1])
-        elif u_group and not v_group:
-          u_idx = group_index[uu]
-          occupied.update(u_group[:u_idx])
-          
-        macro_edge_nodes[(uu, vv)] = sorted(occupied)
-  return expanded_edges, macro_edge_nodes
-  
 def setup(location, scenario):
   data = ll.load_json(location)
-  nodes, edges, conflict_edges = ll.load_location(data)
+  nodes, edges, conflict_edges, expanded_edges, macro_edge_nodes = ll.load_location_sp(data)
   data = ll.load_json(scenario)
   agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = ls.load_scenario(data)
   time_window = range(start_time, end_time+1)
-  
-  # create dictionary of equivalent nodes based on naming convention and 
-  # build macro edges between them. Also adds edges like 15 -> 1_2 if 15 -> 1_1 is an edge
-  equivalent_nodes = build_equivalent_nodes(nodes)
-  expanded_edges, macro_edge_nodes = build_macro_edges(edges, equivalent_nodes)
-  
-  edges = sorted(expanded_edges)
+  edges = sorted(set(expanded_edges))
   nodes = sorted(nodes)
   agents = sorted(agents)
   # Add all non self edges to conflict edges such that no two trains can move at the same time
@@ -89,7 +31,6 @@ def setup(location, scenario):
   node_admm_values = {(a,i,t): 0.0 for a in agents for i in nodes for t in time_window}
   edge_admm_values = {(a,g,t): 0.0 for a in agents for g in range(1, len(conflict_edges)+1) for t in time_window}
   return nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, macro_edge_nodes
-
 
 def create_graph_per_agent(a, nodes, edges, start_node, arrival_time, departures, train_type, time_window):
   g = rx.PyDiGraph()
@@ -132,17 +73,14 @@ def set_cost_per_agent_graph(g_a, a, lambda_values, mu_values, node_admm_values,
     u, t = u_data
     v, t_next = v_data
     base_cost = 0.0 if u == v else 0.01
-    # node_cost = lambda_values[(v, t_next)] + node_admm_values[(a, v, t_next)]
     occupied_nodes = macro_edge_nodes.get((u, v), [v])
     node_cost = sum(lambda_values[(n, t_next)] + node_admm_values[(a, n, t_next)] for n in occupied_nodes)
-    
     edge_cost = 0.0
     g = edge_to_group.get((u, v))
     if g is not None:
       edge_cost = mu_values[(g, t)] + edge_admm_values[(a, g, t)]
 
     g_a.update_edge_by_index(edge_idx, base_cost + node_cost + edge_cost)
-
   return g_a
 
 def update_admm_values(a, nodes, conflict_edges, time_window, x_values, p_values, node_admm_values, edge_admm_values, rho, x_sum, p_sum):
@@ -169,28 +107,21 @@ def update_admm_values(a, nodes, conflict_edges, time_window, x_values, p_values
 def extract_path(a, path, macro_edge_nodes):
     x_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
     p_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
-
     # initial occupancy
     start_node, start_t = path[0]
-    if start_node != "sink":
-        p_values[a][start_node][start_t] = 1
-
+    p_values[a][start_node][start_t] = 1
     for i in range(len(path) - 1):
-        (u, t) = path[i]
-        (v, t2) = path[i + 1]
+      (u, t) = path[i]
+      (v, t2) = path[i + 1]
+      if u == "sink" or v == "sink":
+          continue
+      # edge usage
+      x_values[a][(u, v)][t] = 1
 
-        if u == "sink" or v == "sink":
-            continue
-
-        # edge usage
-        x_values[a][(u, v)][t] = 1
-
-        # occupancy AFTER movement
-        occupied_nodes = macro_edge_nodes.get((u, v), [v])
-
-        for n in occupied_nodes:
-            p_values[a][n][t2] = 1
-
+      # occupancy during/after movement
+      occupied_nodes = macro_edge_nodes.get((u, v), [v])
+      for n in occupied_nodes:
+        p_values[a][n][t2] = 1
     return p_values, x_values
 
 def debug_compare(a, path):
@@ -231,6 +162,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
       old_edge = x_values[a]
       
       sink_data = graphs[a][sinks[a]]
+      
       path_indices = rx.astar_shortest_path(graphs[a], starts[a], lambda node: node == sink_data, edge_cost_fn=lambda x: x, estimate_cost_fn=lambda _: 0)
       path = [graphs[a][i] for i in path_indices]
       # debug_compare(a, path, node_admm_values, edge_admm_values)
@@ -344,7 +276,7 @@ if __name__ == "__main__":
   location = 'locations/location_solver.json'
   # scenario = 'data_types_360/scenarios_solver_types/scenario_solver_33_trains_33_units1.json'
   # scenario = 'data_time_20_old/scenarios_solver_time_20/scenario_solver_20_trains_5_units10_4800.json'
-  scenario = 'data_types_120/scenarios_solver_types_120/scenario_solver_20_trains_20_units11.json'
+  scenario = 'data_types_120/scenarios_solver_types_120/scenario_solver_33_trains_33_units30.json'
   # scenario = 'scenarios_solver_milp/scenario_solver_5_trains_5_units1.json'
   # location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
   # scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_time_20_old/scenarios_solver_time_20/scenario_solver_20_trains_5_units10_4800.json'

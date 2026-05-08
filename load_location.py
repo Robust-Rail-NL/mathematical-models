@@ -202,6 +202,8 @@ def sort_conflict_sets(conflict_sets):
   sorted_outer = sorted(sorted_inner, key=lambda s: s[0] if s else ("", ""))
   return sorted_outer
 
+# function to compute traversal time for each edge based on the track parts used in that edge,
+# not used in the current model
 def traversal_time(edges, track_parts_used, track_Parts):
   traversal_time_edges = {}
   for i,j in edges:
@@ -223,6 +225,68 @@ def traversal_time(edges, track_parts_used, track_Parts):
       traversal_time_edges[(j,i)] = 2+math.ceil(traversal_time_edges[(j,i)]/2)
   return traversal_time_edges
 
+def build_equivalent_nodes(nodes):
+  groups = defaultdict(list)
+  for node in nodes:
+    underscore_index = node.find("_")
+    if underscore_index != -1:
+      base = node[:underscore_index]
+      groups[base].append(node)
+  for values in groups.values():
+    values.sort(key=lambda x: int(x.split("_")[1]))
+  return dict(groups)
+
+def build_macro_edges(edges, equivalent_nodes):
+  # create lookup for which group a node belongs to and its index in that group
+  node_to_group = {}
+  group_index = {}
+  for group_nodes in equivalent_nodes.values():
+    for idx, node in enumerate(group_nodes):
+      node_to_group[node] = group_nodes
+      group_index[node] = idx
+  expanded_edges = set(edges)
+  # add edges between all nodes in the same group and edges to next group if 
+  # there is an edge to one of the nodes in the group, also store occupied nodes for macro edges
+  macro_edge_nodes = {}
+  for u, v in edges:
+    u_group = node_to_group.get(u)
+    v_group = node_to_group.get(v)
+    for uu in (u_group or (u,)):
+      for vv in (v_group or (v,)):
+        if uu == vv:
+          continue
+        expanded_edges.add((uu, vv))
+        occupied = {vv}
+        if u_group and v_group and u_group is v_group:
+          u_idx = group_index[uu]
+          v_idx = group_index[vv]
+          if u_idx < v_idx:
+            occupied.update(u_group[u_idx + 1:v_idx + 1])
+          elif u_idx > v_idx:
+            occupied.update(u_group[v_idx:u_idx])
+        elif not u_group and v_group:
+          v_idx = group_index[vv]
+          occupied.update(v_group[:v_idx + 1])
+        elif u_group and not v_group:
+          u_idx = group_index[uu]
+          occupied.update(u_group[u_idx + 1:])
+        elif u_group and v_group:
+          u_idx = group_index[uu]
+          v_idx = group_index[vv]
+          occupied.update(u_group[u_idx + 1:])
+          occupied.update(v_group[:v_idx + 1])
+        macro_edge_nodes[(uu, vv)] = sorted(occupied)
+  return expanded_edges, macro_edge_nodes
+
+def add_reverse_macro_edges(macro_edge_nodes):
+  original_items = list(macro_edge_nodes.items())
+  for (u, v), occupied in original_items:
+    rev_edge = (v, u)
+    rev_occupied = set(occupied)
+    rev_occupied.discard(v)
+    rev_occupied.add(u)
+    macro_edge_nodes[rev_edge] = sorted(rev_occupied)
+  return macro_edge_nodes
 
 def pre_load_location(data):
   track_Parts = []
@@ -252,38 +316,48 @@ def pre_load_location(data):
   nodes, edges, self_loop_edges, main_nodes = convert_to_graph(track_Parts)
   nodes, edges, track_parts_used = convert_to_compressed_graph(track_Parts, edges, main_nodes)
   
-  traversal_time_edges = traversal_time(edges, track_parts_used, track_Parts)
+  # traversal_time_edges = traversal_time(edges, track_parts_used, track_Parts)
   
   # Add self loops to edges
   edges += self_loop_edges
   # Compute edge conflcits based on shared track parts, then merge conflict set
   conflict_edges = compute_conflicts(edges, track_parts_used)
   conflict_edges = merge_conflict_sets(conflict_edges, track_parts_used)
+  
+  # for shortest path with continuous tracks we need extra data structures
+  # create dictionary of equivalent nodes based on naming convention and 
+  # build macro edges between them. Also adds edges like 15 -> 1_2 if 15 -> 1_1 is an edge
+  equivalent_nodes = build_equivalent_nodes(nodes)
+  expanded_edges, macro_edge_nodes = build_macro_edges(edges, equivalent_nodes)
+  macro_edge_nodes = add_reverse_macro_edges(macro_edge_nodes)
+  expanded_edges = add_reverse_edges(expanded_edges)
+  
+  
   # Add reverse edges to ensure undirected graph representation
   edges = add_reverse_edges(edges)
+  expanded_edges = add_reverse_edges(expanded_edges)  
   
   conflict_edges = add_reverse_edges_to_conflicts(conflict_edges)
   # Sort for printing
   conflict_edges = sort_conflict_sets(conflict_edges)
-  return nodes, edges, conflict_edges, traversal_time_edges
+  return nodes, edges, conflict_edges, expanded_edges, macro_edge_nodes
 
 def load_location(data):
-  nodes, edges, conflict_edges, traversal_time_edges = pre_load_location(data)
+  nodes, edges, conflict_edges, expanded_edges, macro_edge_nodes = pre_load_location(data)
   return nodes, edges, conflict_edges
 
-def load_location_time(data):
-  nodes, edges, conflict_edges, traversal_time_edges = pre_load_location(data)
-  print(traversal_time_edges)
-  return nodes, edges, conflict_edges, traversal_time_edges
+def load_location_sp(data):
+  nodes, edges, conflict_edges, expanded_edges, macro_edge_nodes = pre_load_location(data)
+  return nodes, edges, conflict_edges, expanded_edges, macro_edge_nodes
 
 if __name__ == "__main__":
   data = load_json('locations/location_solver.json')
   # data = load_json('locations/detour_location.json')
   # nodes, edges, conflict_edges = load_location(data)
-  nodes, edges, conflict_edges,traversal_time_edges  = load_location_time(data)
-  print("Nodes:", sorted(nodes))
-  print("Edges:", sorted(edges))
-  conflict_edges = sort_conflict_sets(conflict_edges)
-  for conflict in conflict_edges:
-    print("Conflict set:", conflict)
+  nodes, edges, conflict_edges, expanded_edges, macro_edge_nodes = load_location_sp(data)
+  # print("Nodes:", sorted(nodes))
+  # print("Edges:", sorted(edges))
+  # conflict_edges = sort_conflict_sets(conflict_edges)
+  # for conflict in conflict_edges:
+  #   print("Conflict set:", conflict)
   
