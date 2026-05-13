@@ -34,7 +34,7 @@ if __name__ == "__main__":
   generate_scenario_list(folder, output_file, local_prefix, cluster_prefix)
   
 #   python3.10 create_scenariolist.py \
-# scenarios_solver_types_120 \
+# scenarios_solver_time_20 \
 # scenarios_types.txt \
 # /home/thomas/projects/Robust-Rail-Nl/mathematical-models \
 # /home/thomasverwaal/Robust-Rail-NL/mathematical-models

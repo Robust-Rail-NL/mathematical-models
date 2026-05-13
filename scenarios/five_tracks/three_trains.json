@@ -3,8 +3,8 @@
         "trains": [
             {
                 "entryTrackPart": "13",
-                "arrival": "120",
-                "departure": "120",
+                "arrival": "0",
+                "departure": "0",
                 "id": "11111",
                 "members": [
                     {
@@ -53,15 +53,15 @@
             },
             {
                 "entryTrackPart": "12",
-                "arrival": "60",
-                "departure": "60",
+                "arrival": "0",
+                "departure": "0",
                 "id": "22222",
                 "members": [
                     {
                         "trainUnit": {
                             "id": "2222",
                             "type": {
-                                "displayName": "SLT",
+                                "displayName": "SLT2",
                                 "carriages": 4,
                                 "length": 69.36,
                                 "combineDuration": "180",
@@ -134,7 +134,7 @@
                 "trainUnits": [
                     {
                         "type": {
-                            "displayName": "SLT",
+                            "displayName": "SLT2",
                             "carriages": 4,
                             "length": 69.36,
                             "combineDuration": "180",

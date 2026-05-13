@@ -1,3 +1,5 @@
+from networkx import edges
+
 import rustworkx as rx
 import load_location as ll
 import load_scenario as ls
@@ -134,9 +136,6 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
   
   p_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
   x_values = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
-  
-  node_time_pairs = [(l, t) for l in nodes for t in time_window]
-  edge_time_pairs = [(e, t) for e in edges for t in time_window]
 
   edge_to_group = {}
   for g, group in enumerate(conflict_edges, start=1):
@@ -146,8 +145,8 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
   edge_infos = {}
   for a in agents:
     graphs[a], starts[a], sinks[a], edge_infos[a] = create_graph_per_agent(a, nodes, edges, start_nodes[a], arrival_time[a], departures, train_types[a], time_window)
-  p_sum = {(l, t): 0 for (l, t) in node_time_pairs}
-  x_sum = {(e, t): 0 for (e, t) in edge_time_pairs}
+  p_sum = {(l, t): 0 for l in nodes for t in time_window}
+  x_sum = {(e, t): 0 for e in edges for t in time_window}
   for k in range(n_iter):
     # print(k)
     for a in agents:
@@ -171,22 +170,23 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
     p_penalty = {(l, t): round(sum(p_values[a][l][t] for a in agents)) for l in nodes for t in time_window}
     x_penalty = {(g, t): round(sum(x_values[a][e][t] for a in agents for e in conflict_edges[g-1])) for g in range(1, len(conflict_edges)+1) for t in time_window}
     
-    # for l in nodes:
-    #   for t in time_window:
-    #     if p_penalty[l,t] > 1.0:
-    #       print(f"p_penalty[{l},{t}] = {p_penalty[l,t]}")
-    # for t in time_window:
-    #   for g in range(1, len(conflict_edges)+1):
-    #     if x_penalty[g,t] > 1.0:
-    #       for a in agents: 
-    #         for e in conflict_edges[g-1]:
-    #           if x_values[a][e][t] == 1:
-    #             print(f"  Agent {a} uses edge {e} at time {t}")
+    for l in nodes:
+      for t in time_window:
+        if p_penalty[l,t] > 1.0:
+          print(f"p_penalty[{l},{t}] = {p_penalty[l,t]}")
+    for t in time_window:
+      for g in range(1, len(conflict_edges)+1):
+        if x_penalty[g,t] > 1.0:
+          for a in agents: 
+            for e in conflict_edges[g-1]:
+              if x_values[a][e][t] == 1:
+                print(f"  Agent {a} uses edge {e} at time {t}")
     for t in time_window:
       for l in nodes:
         penalty = 1/(k+1) * (p_penalty[l,t] - 1)
         if penalty > 0:
           lambda_values[l,t] = max(0.0, lambda_values[l,t] + penalty)
+          print(f"lambda_values[{l},{t}] = {lambda_values[l,t]}")
           conflicts += 1
         elif penalty < 0:
           lambda_values[l,t] = max(0.0, lambda_values[l,t] + penalty)
@@ -194,13 +194,14 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
         penalty = 1/(k+1) * (x_penalty[g,t] - 1)
         if penalty > 0:
           mu_values[g,t] = max(0.0, mu_values[g,t] + penalty)
+          print(f"mu_values[{g},{t}] = {mu_values[g,t]}")
           conflicts += 1
         elif penalty < 0:
           mu_values[g,t] = max(0.0, mu_values[g,t] + penalty)
 
     conflict_list.append((conflicts, time.time() - start_time))
-    # print("conflicts", conflicts)
-    # print(time.time() - start_time)
+    print("conflicts", conflicts)
+    print(time.time() - start_time)
     if time.time() - start_time > time_out:
       print("TIME LIMIT REACHED")
       break
@@ -236,12 +237,15 @@ if __name__ == "__main__":
   # location = 'locations/five_tracks_location.json'
   # scenario = 'scenarios/five_tracks/three_trains_difficult.json'
   location = 'locations/location_solver.json'
-  # scenario = 'data_types_360/scenarios_solver_types/scenario_solver_33_trains_1_units30.json'
-  scenario = 'data_time_20_old/scenarios_solver_time_20/scenario_solver_20_trains_5_units10_4800.json'
+  scenario = 'data_types_360/scenarios_solver_types/scenario_solver_33_trains_11_units30.json'
+  scenario = 'data_types_120/scenarios_solver_types_120/scenario_solver_33_trains_11_units17.json'
+  scenario = 'data_types_120/scenarios_solver_types_120/scenario_solver_20_trains_20_units11.json'
+  # scenario = 'data_time_20_old/scenarios_solver_time_20/scenario_solver_20_trains_5_units10_4800.json'
+  # scenario = 'data_types_120/scenarios_solver_types_120/scenario_solver_30_trains_10_units17.json'
   # scenario = 'scenarios_solver_milp/scenario_solver_5_trains_5_units1.json'
   # location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
   # scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_time_20_old/scenarios_solver_time_20/scenario_solver_20_trains_5_units10_4800.json'
-  
+  # scenario = 'scenarios_solver_milp/scenario_solver_20_trains_5_units1.json'
   time_out = 1800
   rho = 0.5
   print(scenario)

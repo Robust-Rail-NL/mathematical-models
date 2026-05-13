@@ -176,6 +176,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
   x_sum = x_values.sum(axis=0)
   for k in range(n_iter):
     print(k)
+    cost = 0
     for a_idx, a in enumerate(agents):
       node_admm_values, edge_admm_values = update_admm_values(a_idx, x_values, p_values, node_admm_values, edge_admm_values, rho, x_sum, p_sum, edge_group_matrix)
       graphs[a] = set_cost_per_agent_graph(graphs[a], a_idx, lambda_values, mu_values, node_admm_values, edge_admm_values, edge_to_group, edge_infos[a], node_to_idx, macro_edge_nodes)
@@ -186,6 +187,8 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
       
       path_indices = rx.astar_shortest_path(graphs[a], starts[a], lambda node: node == sink_data, edge_cost_fn=lambda x: x, estimate_cost_fn=lambda _: 0)
       path = [graphs[a][i] for i in path_indices]
+      # for u, v in zip(path_indices, path_indices[1:]):
+      #   cost += graphs[a].get_edge_data(u, v)
       # debug_compare(a, path, node_admm_values, edge_admm_values)
       p_values, x_values = extract_path(a_idx, path, p_values, x_values, node_to_idx, edge_to_idx, macro_edge_nodes)
       # print(f"p_values for agent {a}:")
@@ -261,6 +264,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
     conflict_list.append((conflicts, time.time() - start_time))
     print("conflicts", conflicts)
     print(time.time() - start_time)
+  
     if time.time() - start_time > time_out:
       print("TIME LIMIT REACHED")
       break
@@ -299,9 +303,10 @@ if __name__ == "__main__":
   # location = 'locations/four_tracks_location.json'
   # scenario = 'scenarios/four_tracks/two_trains_simple.json'
   location = 'locations/location_solver.json'
-  scenario = 'data_types_360/scenarios_solver_types/scenario_solver_30_trains_10_units1.json'
+  # scenario = 'data_types_360/scenarios_solver_types/scenario_solver_30_trains_10_units1.json'
+  scenario = '../scenario-planning-inputs/Location_KleineBinckhorst/scenarios/20_trains1.json'
   # scenario = 'data_time_20_old/scenarios_solver_time_20/scenario_solver_20_trains_5_units10_4800.json'
-  # scenario = 'data_types_120/scenarios_solver_types_120/scenario_solver_33_trains_33_units29.json'
+  # scenario = 'data_types_120/scenarios_solver_types_120/scenario_solver_33_trains_33_units28.json'
   # scenario = 'scenarios_solver_milp/scenario_solver_5_trains_5_units1.json'
   # location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
   # scenario = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_time_20_old/scenarios_solver_time_20/scenario_solver_20_trains_5_units10_4800.json'

@@ -72,7 +72,7 @@
             ],
             "length": 100.0,
             "name": "rail_2",
-            "parkingAllowed": true,
+            "parkingAllowed": false,
             "type": "RailRoad",
             "sawMovementAllowed": true
         },
@@ -149,20 +149,6 @@
             "parkingAllowed": false
         }
     ],
-    "facilities": [
-        {
-            "id": "20",
-            "type": "Reinigingsperron",
-            "relatedTrackParts": [
-                "1"
-            ],
-            "taskTypes": [
-                {
-                    "other": "Reinigingsperron"
-                }
-            ],
-            "simultaneousUsageCount": 1
-        }
-    ],
+    "facilities": [],
     "taskTypes": []
 }
