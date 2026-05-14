@@ -1,184 +1,184 @@
-import os
-import csv
+# import os
+# import csv
 
-input_folder = "results_360_sp_c"
-output_file = "results_360_sp_c/combined_results.csv"
+# input_folder = "results_360_sp_c"
+# output_file = "results_360_sp_c/combined_results.csv"
 
-type_order = {
-  "1": 0,
-  "5": 1,
-  "1/3": 2,
-  "num_trains": 3
-}
+# type_order = {
+#   "1": 0,
+#   "5": 1,
+#   "1/3": 2,
+#   "num_trains": 3
+# }
 
-all_rows = []
-header = None
+# all_rows = []
+# header = None
 
-for filename in os.listdir(input_folder):
-  if filename.startswith("combined"):
-    continue
-  if filename.endswith(".csv"):
-    filepath = os.path.join(input_folder, filename)
-    with open(filepath, "r", newline="") as f:
-      reader = csv.reader(f)
-      rows = list(reader)
-      if len(rows) <= 1:
-        continue
-      if header is None:
-        header = rows[0]
-      for row in rows[1:]:
-        if row == header:
-          continue
-        num_trains = int(row[0])
-        if num_trains == 5:
-          print(filename)
-        type_val = row[1]
-        if type_val.isdigit() and int(type_val) == num_trains:
-          row[1] = "num_trains"
-        all_rows.append(row)
+# for filename in os.listdir(input_folder):
+#   if filename.startswith("combined"):
+#     continue
+#   if filename.endswith(".csv"):
+#     filepath = os.path.join(input_folder, filename)
+#     with open(filepath, "r", newline="") as f:
+#       reader = csv.reader(f)
+#       rows = list(reader)
+#       if len(rows) <= 1:
+#         continue
+#       if header is None:
+#         header = rows[0]
+#       for row in rows[1:]:
+#         if row == header:
+#           continue
+#         num_trains = int(row[0])
+#         if num_trains == 5:
+#           print(filename)
+#         type_val = row[1]
+#         if type_val.isdigit() and int(type_val) == num_trains:
+#           row[1] = "num_trains"
+#         all_rows.append(row)
 
-def sort_key(row):
-  num_trains = int(row[0])
-  type_val = row[1]
-  return (num_trains, type_order.get(type_val, 999))
+# def sort_key(row):
+#   num_trains = int(row[0])
+#   type_val = row[1]
+#   return (num_trains, type_order.get(type_val, 999))
 
-all_rows.sort(key=sort_key)
+# all_rows.sort(key=sort_key)
 
-with open(output_file, "w", newline="") as f:
-  writer = csv.writer(f)
-  writer.writerow(header)
-  writer.writerows(all_rows)
+# with open(output_file, "w", newline="") as f:
+#   writer = csv.writer(f)
+#   writer.writerow(header)
+#   writer.writerows(all_rows)
 
-print(f"Combined file written to {output_file}")
+# print(f"Combined file written to {output_file}")
 
-import os
-import csv
+# import os
+# import csv
 
-input_folder = "results_rho_experiment"
-output_file = "results_rho_experiment/combined_results.csv"
+# input_folder = "results_rho_experiment"
+# output_file = "results_rho_experiment/combined_results.csv"
 
-all_rows = []
-header = None
+# all_rows = []
+# header = None
 
-for filename in os.listdir(input_folder):
-    if filename.startswith("combined"):
-        continue
-    if filename.endswith(".csv"):
-        filepath = os.path.join(input_folder, filename)
-        with open(filepath, "r", newline="") as f:
-            reader = csv.reader(f)
-            rows = list(reader)
+# for filename in os.listdir(input_folder):
+#     if filename.startswith("combined"):
+#         continue
+#     if filename.endswith(".csv"):
+#         filepath = os.path.join(input_folder, filename)
+#         with open(filepath, "r", newline="") as f:
+#             reader = csv.reader(f)
+#             rows = list(reader)
 
-            if len(rows) <= 1:
-                continue
+#             if len(rows) <= 1:
+#                 continue
 
-            if header is None:
-                header = rows[0]
+#             if header is None:
+#                 header = rows[0]
 
-            for row in rows[1:]:
-                if row == header:
-                    continue
-                all_rows.append(row)
+#             for row in rows[1:]:
+#                 if row == header:
+#                     continue
+#                 all_rows.append(row)
 
-# Sort by rho (column 0, float)
-def sort_key(row):
-    return float(row[0])
+# # Sort by rho (column 0, float)
+# def sort_key(row):
+#     return float(row[0])
 
-all_rows.sort(key=sort_key)
+# all_rows.sort(key=sort_key)
 
-with open(output_file, "w", newline="") as f:
-    writer = csv.writer(f)
-    writer.writerow(header)
-    writer.writerows(all_rows)
+# with open(output_file, "w", newline="") as f:
+#     writer = csv.writer(f)
+#     writer.writerow(header)
+#     writer.writerows(all_rows)
 
-print(f"Combined file written to {output_file}")
+# print(f"Combined file written to {output_file}")
 
 
-import os
-import csv
-from collections import defaultdict
+# import os
+# import csv
+# from collections import defaultdict
 
-input_folder = "results_n_experiment"
-output_file = "results_n_experiment/combined_results.csv"
+# input_folder = "results_n_experiment"
+# output_file = "results_n_experiment/combined_results.csv"
 
-all_rows = []
-header = None
+# all_rows = []
+# header = None
 
-# Stats
-true_counts = defaultdict(int)
-total_counts = defaultdict(int)
+# # Stats
+# true_counts = defaultdict(int)
+# total_counts = defaultdict(int)
 
-time_sums = defaultdict(float)
-time_counts = defaultdict(int)
+# time_sums = defaultdict(float)
+# time_counts = defaultdict(int)
 
-success_time_sums = defaultdict(float)
-success_time_counts = defaultdict(int)
+# success_time_sums = defaultdict(float)
+# success_time_counts = defaultdict(int)
 
-for filename in os.listdir(input_folder):
-    if filename.startswith("combined"):
-        continue
-    if filename.endswith(".csv"):
-        filepath = os.path.join(input_folder, filename)
-        with open(filepath, "r", newline="") as f:
-            reader = csv.reader(f)
-            rows = list(reader)
+# for filename in os.listdir(input_folder):
+#     if filename.startswith("combined"):
+#         continue
+#     if filename.endswith(".csv"):
+#         filepath = os.path.join(input_folder, filename)
+#         with open(filepath, "r", newline="") as f:
+#             reader = csv.reader(f)
+#             rows = list(reader)
 
-            if len(rows) <= 1:
-                continue
+#             if len(rows) <= 1:
+#                 continue
 
-            if header is None:
-                header = rows[0]
+#             if header is None:
+#                 header = rows[0]
 
-            for row in rows[1:]:
-                if row == header:
-                    continue
+#             for row in rows[1:]:
+#                 if row == header:
+#                     continue
 
-                rho = float(row[0])
-                time_val = float(row[3])
-                solution_found = row[5].strip().lower() == "true"
+#                 rho = float(row[0])
+#                 time_val = float(row[3])
+#                 solution_found = row[5].strip().lower() == "true"
 
-                # Counts
-                total_counts[rho] += 1
-                if solution_found:
-                    true_counts[rho] += 1
+#                 # Counts
+#                 total_counts[rho] += 1
+#                 if solution_found:
+#                     true_counts[rho] += 1
 
-                # Time stats (all runs)
-                time_sums[rho] += time_val
-                time_counts[rho] += 1
+#                 # Time stats (all runs)
+#                 time_sums[rho] += time_val
+#                 time_counts[rho] += 1
 
-                # Time stats (successful runs only)
-                if solution_found:
-                    success_time_sums[rho] += time_val
-                    success_time_counts[rho] += 1
+#                 # Time stats (successful runs only)
+#                 if solution_found:
+#                     success_time_sums[rho] += time_val
+#                     success_time_counts[rho] += 1
 
-                all_rows.append(row)
+#                 all_rows.append(row)
 
-# Sort by rho
-all_rows.sort(key=lambda row: float(row[0]))
+# # Sort by rho
+# all_rows.sort(key=lambda row: float(row[0]))
 
-# Write combined file
-with open(output_file, "w", newline="") as f:
-    writer = csv.writer(f)
-    writer.writerow(header)
-    writer.writerows(all_rows)
+# # Write combined file
+# with open(output_file, "w", newline="") as f:
+#     writer = csv.writer(f)
+#     writer.writerow(header)
+#     writer.writerows(all_rows)
 
-print(f"Combined file written to {output_file}")
+# print(f"Combined file written to {output_file}")
 
-# ---- RESULTS ----
+# # ---- RESULTS ----
 
-print("\nSuccess count per n:")
-for rho in sorted(total_counts.keys()):
-    print(f"n={rho}: {true_counts[rho]}/{total_counts[rho]}")
+# print("\nSuccess count per n:")
+# for rho in sorted(total_counts.keys()):
+#     print(f"n={rho}: {true_counts[rho]}/{total_counts[rho]}")
 
-print("\nAverage computation time per n (all runs):")
-for rho in sorted(time_counts.keys()):
-    avg_time = time_sums[rho] / time_counts[rho]
-    print(f"n={rho}: {avg_time:.2f} s")
+# print("\nAverage computation time per n (all runs):")
+# for rho in sorted(time_counts.keys()):
+#     avg_time = time_sums[rho] / time_counts[rho]
+#     print(f"n={rho}: {avg_time:.2f} s")
 
-print("\nAverage computation time per n (successful runs only):")
-for rho in sorted(success_time_counts.keys()):
-    avg_time = success_time_sums[rho] / success_time_counts[rho]
-    print(f"n={rho}: {avg_time:.2f} s")
+# print("\nAverage computation time per n (successful runs only):")
+# for rho in sorted(success_time_counts.keys()):
+#     avg_time = success_time_sums[rho] / success_time_counts[rho]
+#     print(f"n={rho}: {avg_time:.2f} s")
 
 # combine time
 # import os
