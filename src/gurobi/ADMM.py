@@ -1,4 +1,7 @@
 from pyomo.environ import ConcreteModel, Set, Param, Var, Objective, Constraint, Binary, minimize, SolverFactory, NonNegativeReals, value, RangeSet
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 import constraints_lagrangian as c
 import load_location as ll
 import load_scenario as ls
@@ -167,7 +170,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
       for e in edges:
         for t in time_window:
           x_sum[(e, t)] += (x_values[a][e][t] or 0) - (old_x[e][t] or 0)
-    # Update lagrangian penalties based on remaining conflicts
+    # Update lagrangian penalties based and remaining conflicts
     conflicts = 0
     p_penalty = {(l, t): round(sum(p_values[a][l][t] for a in agents)) for l in nodes for t in time_window}
     x_penalty = {(g, t): round(sum(x_values[a][e][t] for a in agents for e in conflict_edges[g-1])) for g in range(1, len(conflict_edges)+1) for t in time_window}
@@ -187,6 +190,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
         elif penalty < 0:
           mu_values[g,t] = max(0.0, mu_values[g,t] + penalty)
     conflict_list.append((conflicts, time.time() - start))
+    print("conflicts", conflicts)
     print(time.time() - start)
     if time.time() - start > time_out:
       print("TIME LIMIT REACHED")
@@ -215,8 +219,8 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
   return k, end_time - start, x_values_filtered, p_values_filtered, solution_found, conflict_list
 
 if __name__ == "__main__":
-  location = '../data/locations/location_solver.json'
-  scenario = '../data/data_types_7hours/scenarios_solver/scenario_solver_25_trains_1_units30.json'
+  location = '../../data/locations/location_solver.json'
+  scenario = '../../data/data_types_7hours/scenarios_solver/scenario_solver_25_trains_1_units30.json'
   time_out = 1800
   rho = 0.5
   nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values = setup(location, scenario)
