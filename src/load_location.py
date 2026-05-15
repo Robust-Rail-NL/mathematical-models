@@ -39,7 +39,7 @@ def load_json(file_path):
 # Convert track parts to graph representation including all parts
 # only use edges from aside
 # also compute main_nodes, which are the nodes that represent actual track parts with length > 0
-# also compute self loops for parking allowed track for later
+# also compute self loops for parking allowed tracks for later
 def convert_to_graph(track_parts):
   nodes = []
   self_loop_edges = []
@@ -52,7 +52,7 @@ def convert_to_graph(track_parts):
   
   for track_part in track_parts:
     if track_part.type == "RailRoad":
-      # If the track part is long and allows parking,
+      # If the track part is longer than 199m and allows parking,
       # split it into segments of 100m to allow parking in multiple places,
       # Otherwise, just add the track part as a node
       if track_part.length >= 200 and getattr(track_part, "parkingAllowed", False):
@@ -203,7 +203,7 @@ def sort_conflict_sets(conflict_sets):
   return sorted_outer
 
 # function to compute traversal time for each edge based on the track parts used in that edge,
-# not used in the current model
+# NOT USED IN THE CURRENT MODEL
 def traversal_time(edges, track_parts_used, track_Parts):
   traversal_time_edges = {}
   for i,j in edges:
@@ -225,6 +225,7 @@ def traversal_time(edges, track_parts_used, track_Parts):
       traversal_time_edges[(j,i)] = 2+math.ceil(traversal_time_edges[(j,i)]/2)
   return traversal_time_edges
 
+# This is used for the continuous version of the graph
 def build_equivalent_nodes(nodes):
   groups = defaultdict(list)
   for node in nodes:
@@ -236,6 +237,7 @@ def build_equivalent_nodes(nodes):
     values.sort(key=lambda x: int(x.split("_")[1]))
   return dict(groups)
 
+# This is used for the continuous version of the graph
 def build_macro_edges(edges, equivalent_nodes):
   # create lookup for which group a node belongs to and its index in that group
   node_to_group = {}
@@ -278,6 +280,7 @@ def build_macro_edges(edges, equivalent_nodes):
         macro_edge_nodes[(uu, vv)] = sorted(occupied)
   return expanded_edges, macro_edge_nodes
 
+# This is used for the continuous version of the graph
 def add_reverse_macro_edges(macro_edge_nodes):
   original_items = list(macro_edge_nodes.items())
   for (u, v), occupied in original_items:
@@ -315,9 +318,7 @@ def pre_load_location(data):
   # and compute which track parts are used in each edge for conflict computation
   nodes, edges, self_loop_edges, main_nodes = convert_to_graph(track_Parts)
   nodes, edges, track_parts_used = convert_to_compressed_graph(track_Parts, edges, main_nodes)
-  
-  # traversal_time_edges = traversal_time(edges, track_parts_used, track_Parts)
-  
+    
   # Add self loops to edges
   edges += self_loop_edges
   # Compute edge conflcits based on shared track parts, then merge conflict set
@@ -351,13 +352,6 @@ def load_location_sp(data):
   return nodes, edges, conflict_edges, expanded_edges, macro_edge_nodes
 
 if __name__ == "__main__":
-  data = load_json('locations/location_solver.json')
-  # data = load_json('locations/detour_location.json')
-  # nodes, edges, conflict_edges = load_location(data)
+  data = load_json("scenarios/four_tracks/two_trains.json")
   nodes, edges, conflict_edges, expanded_edges, macro_edge_nodes = load_location_sp(data)
-  # print("Nodes:", sorted(nodes))
-  # print("Edges:", sorted(edges))
-  # conflict_edges = sort_conflict_sets(conflict_edges)
-  # for conflict in conflict_edges:
-  #   print("Conflict set:", conflict)
   
