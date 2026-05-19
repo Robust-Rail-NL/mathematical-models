@@ -20,7 +20,7 @@ def compute_number_of_movements(x_values):
 
 algo = SP.Lagrangian
 
-location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
+location = '../../data/locations/location_solver.json'
 
 # rho_list = [0.1, 0.5, 1, 1.5, 2, 3]
 n_list = [0.1, 0.5, 1, 1.5, 2, 3]
@@ -38,7 +38,7 @@ base_results_dir.mkdir(exist_ok=True)
 
 # --- Load scenarios ---
 scenarios = []
-input_folder = Path("/home/thomasverwaal/Robust-Rail-NL/mathematical-models/time_experiment_scenarios/")
+input_folder = Path(f"../../data/data_rho_n/scenarios_solver/")
 
 for file_path in sorted(input_folder.iterdir(), key=lambda p: p.name):
   if file_path.is_file() and file_path.suffix == ".json":

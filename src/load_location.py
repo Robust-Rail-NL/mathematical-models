@@ -347,11 +347,11 @@ def load_location(data):
   nodes, edges, conflict_edges, expanded_edges, macro_edge_nodes = pre_load_location(data)
   return nodes, edges, conflict_edges
 
-def load_location_sp(data):
+def load_location_sp_continuous(data):
   nodes, edges, conflict_edges, expanded_edges, macro_edge_nodes = pre_load_location(data)
   return nodes, edges, conflict_edges, expanded_edges, macro_edge_nodes
 
 if __name__ == "__main__":
   data = load_json("scenarios/four_tracks/two_trains.json")
-  nodes, edges, conflict_edges, expanded_edges, macro_edge_nodes = load_location_sp(data)
+  nodes, edges, conflict_edges, expanded_edges, macro_edge_nodes = load_location_sp_continuous(data)
   

@@ -102,8 +102,8 @@ plt.grid(True, linestyle="--", linewidth=0.5)
 plt.legend()
 plt.title("Feasible Solutions vs Time Window")
 
-os.makedirs("results/end_time_sp", exist_ok=True)
-plt.savefig("results/end_time_sp/feasible_vs_endtime.png", dpi=300, bbox_inches="tight")
+os.makedirs("../plots/end_time_sp", exist_ok=True)
+plt.savefig("../plots/end_time_sp/feasible_vs_endtime.png", dpi=300, bbox_inches="tight")
 plt.close()
 
 
@@ -135,5 +135,5 @@ plt.legend()
 plt.title("Average Computation Time vs Time Window")
 
 # overwrite existing
-plt.savefig("results/end_time_sp/time_vs_endtime.png", dpi=300, bbox_inches="tight")
+plt.savefig("../plots/end_time_sp/time_vs_endtime.png", dpi=300, bbox_inches="tight")
 plt.close()

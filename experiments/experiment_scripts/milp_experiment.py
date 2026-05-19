@@ -8,17 +8,14 @@ import math
 
 random.seed(1)
 algo = M.solve
-
-location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
-mixed_traffic = False
+location = '../../data/locations/location_solver.json'
 time_out = 1800
-
 GROUP_SIZE = 5
 
 task_id = int(os.environ.get("SLURM_ARRAY_TASK_ID", 0))
 
 scenarios = []
-input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/scenarios_solver_milp/")
+input_folder = Path(f"../../data/data_milp/scenarios_solver/")
 results_file = f"results_milp/MILP"
 for file_path in sorted(input_folder.iterdir(), key=lambda p: p.name):
   if file_path.is_file() and file_path.suffix == ".json":

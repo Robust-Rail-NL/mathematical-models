@@ -14,7 +14,7 @@ random.seed(1)
 # Load all data and initalize penalty data structures
 def setup(location, scenario):
   data = ll.load_json(location)
-  nodes, edges, conflict_edges, expanded_edges, macro_edge_nodes = ll.load_location_sp(data)
+  nodes, edges, conflict_edges, expanded_edges, macro_edge_nodes = ll.load_location_sp_continuous(data)
   data = ll.load_json(scenario)
   agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = ls.load_scenario(data)
   time_window = range(start_time, end_time+1)
@@ -238,7 +238,9 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
 
 if __name__ == "__main__":
   location = '../data/locations/location_solver.json'
-  scenario = '../data/data_types_7hours/scenarios_solver/scenario_solver_25_trains_1_units30.json'
+  # scenario = '../data/data_types_7hours/scenarios_solver/scenario_solver_25_trains_1_units30.json'
+  scenario = '../../scenario-planning-inputs/Location_KleineBinckhorst/scenarios/20_trains1.json'
+  scenario = '../../scenario-planning-inputs/Location_KleineBinckhorst/scenarios_solver/scenario_solver_25_trains_5_units4_3420.json'
   time_out = 1800
   rho = 0.5
   nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, macro_edge_nodes, node_to_idx, edge_to_idx, agent_to_idx, edge_group_matrix = setup(location, scenario)

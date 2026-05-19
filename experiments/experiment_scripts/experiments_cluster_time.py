@@ -9,6 +9,8 @@ from pathlib import Path
 import random
 import math
 
+# Imports need to be fixed
+
 random.seed(1)
 
 def extract_end_time(file_path):
@@ -20,24 +22,6 @@ def extract_end_time(file_path):
     end_time = int(parts[-1])
     return end_time
 
-def extract_type_category(file_path, num_trains):
-    name = os.path.basename(file_path)
-
-    parts = name.split("_")
-    num_types = int(parts[4])
-
-    if num_types == 1:
-        return "1"
-    elif num_types == 5:
-        return "5"
-    # elif num_types == math.ceil(num_trains / 2):
-    #     return "1/2"
-    elif num_types == math.ceil(num_trains / 3):
-        return "1/3"
-    elif num_types == math.ceil(num_trains):
-        return str(num_trains)
-    else:
-        return "unknown"
 
 def compute_number_of_movements(x_values):
   count = 0
@@ -46,15 +30,10 @@ def compute_number_of_movements(x_values):
       count += 1
   return count
 
-# ================= SETTINGS =================
 algo = SP.Lagrangian
-
-location = '/home/thomasverwaal/Robust-Rail-NL/mathematical-models/locations/location_solver.json'
-# location = 'locations/location_solver.json'
-input_folder = ""
-mixed_traffic = False
-matching = True # If matching is false, uncomment in load_scenario.py the i in the displayname of in and out trains
+location = '../../data/locations/location_solver.json'
 rho_string = "0.5"
+algo_string = "sp"
 rho = 0.5
 time_out = 1800
 
@@ -62,15 +41,13 @@ GROUP_SIZE = 5
 
 task_id = int(os.environ.get("SLURM_ARRAY_TASK_ID", 0))
 
-algo_string = "sp"
-
 
 scenarios = []
-input_folder = Path(f"/home/thomasverwaal/Robust-Rail-NL/mathematical-models/data_time_20/scenarios_solver_time_20/{input_folder}")
-# input_folder = Path(f"data_time_20/scenarios_solver_time_20/{input_folder}")
+input_folder = Path(f"../../data_time_window/scenarios_solver/")
 
-results_file = f"results_time_20_sp/{algo_string}_rho{rho_string}"
-solution_file = f"solutions_time_20_sp/{algo_string}_rho{rho_string}"
+# Folders to store results and solutions
+results_file = f"results_time_window_sp/{algo_string}_rho{rho_string}"
+solution_file = f"solutions_time_window_sp/{algo_string}_rho{rho_string}"
 
 for file_path in sorted(input_folder.iterdir(), key=lambda p: p.name):
   if file_path.is_file() and file_path.suffix == ".json":
@@ -100,7 +77,6 @@ with open(results_file_new, mode="w", newline="") as file:
     k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = SP.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out)
 
     num_trains = len(agents)
-    type_category = extract_type_category(scenario, num_trains)
     end_time_val = extract_end_time(scenario)
     num_movements = compute_number_of_movements(x_values_filtered)
     

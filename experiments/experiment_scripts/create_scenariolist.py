@@ -1,6 +1,7 @@
 import os
 import sys
 
+# Creates list of scenarios used by ls_experiments.sh
 def generate_scenario_list(folder, output_file, local_prefix, cluster_prefix):
   if not os.path.isdir(folder):
     print(f"Error: folder '{folder}' does not exist")
