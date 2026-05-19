@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name="rail_solver"
-#SBATCH --time=03:20:00
+#SBATCH --time=03:00:00
 #SBATCH --partition=compute
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1

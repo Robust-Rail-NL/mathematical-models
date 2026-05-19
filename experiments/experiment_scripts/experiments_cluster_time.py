@@ -1,8 +1,15 @@
 import gc
+
+import sys
+
+sys.path.append("../../src/")
+sys.path.append("../../src/gurobi")
+
 import Lagrangian as L
 import MILP as M
-import ADMM_constraint_edges as A
+import ADMM as A
 import shortest_path as SP
+import shortest_path_continuous as SPC
 import csv
 import os
 from pathlib import Path
@@ -30,7 +37,7 @@ def compute_number_of_movements(x_values):
       count += 1
   return count
 
-algo = SP.Lagrangian
+algo = SPC.Lagrangian
 location = '../../data/locations/location_solver.json'
 rho_string = "0.5"
 algo_string = "sp"
@@ -43,11 +50,13 @@ task_id = int(os.environ.get("SLURM_ARRAY_TASK_ID", 0))
 
 
 scenarios = []
-input_folder = Path(f"../../data_time_window/scenarios_solver/")
+input_folder = Path(f"../../data/data_time_window_continuous/scenarios_solver/")
 
 # Folders to store results and solutions
-results_file = f"results_time_window_sp/{algo_string}_rho{rho_string}"
-solution_file = f"solutions_time_window_sp/{algo_string}_rho{rho_string}"
+results_file = f"results_time_window_sp_continuous/{algo_string}_rho{rho_string}"
+solution_file = f"solutions_time_window_sp_continuous/{algo_string}_rho{rho_string}"
+os.makedirs(results_file, exist_ok=True)
+os.makedirs(solution_file, exist_ok=True)
 
 for file_path in sorted(input_folder.iterdir(), key=lambda p: p.name):
   if file_path.is_file() and file_path.suffix == ".json":
@@ -73,8 +82,9 @@ with open(results_file_new, mode="w", newline="") as file:
     print(f"Processing scenario {scenario}")
 
     solution_file_new2 = f"{solution_file_new}_{os.path.basename(scenario)}"
-    nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values = SP.setup(loc, scenario)
-    k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = SP.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out)
+    # nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values = SP.setup(loc, scenario)
+    nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, macro_edge_nodes, node_to_idx, edge_to_idx, agent_to_idx, edge_group_matrix = SPC.setup(loc, scenario)
+    k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = SPC.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out, macro_edge_nodes=macro_edge_nodes, node_to_idx=node_to_idx, edge_to_idx=edge_to_idx, agent_to_idx=agent_to_idx, edge_group_matrix=edge_group_matrix)
 
     num_trains = len(agents)
     end_time_val = extract_end_time(scenario)

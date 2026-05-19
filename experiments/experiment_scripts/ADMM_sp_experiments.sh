@@ -7,7 +7,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=3968MB
 #SBATCH --account=education-eemcs-msc-cs
-#SBATCH --array=0-299
+#SBATCH --array=0-65
 
 #SBATCH --output=logs/out_%A_%a.txt
 #SBATCH --error=logs/err_%A_%a.txt
@@ -19,5 +19,5 @@ module load pyomo
 
 cd /home/thomasverwaal/Robust-Rail-NL/mathematical-models
 source ~/pyomo_project/env/bin/activate
-
-srun python3 experiments_cluster.py
+cd /home/thomasverwaal/Robust-Rail-NL/mathematical-models/experiments/experiments_scripts
+srun python3 experiments_cluster_time.py
