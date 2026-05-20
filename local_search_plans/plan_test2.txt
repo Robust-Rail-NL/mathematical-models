@@ -1,3 +1,0 @@
-2422 : rail_4 (Arrival 00:00 - 00:00), rail_4 (parking 00:00 - 00:08), rail_3 (departure 00:10 - 00:10)
-2301 : rail_5 (Arrival 00:00 - 00:00), rail_4 (parking 00:02 - 00:05), rail_3 (parking 00:07 - 00:10), rail_3 (departure 00:10 - 00:10)
-2222 : rail_3 (Arrival 00:00 - 00:00), rail_3 (parking 00:00 - 00:03), rail_5 (parking 00:05 - 00:10), rail_5 (departure 00:10 - 00:10)
