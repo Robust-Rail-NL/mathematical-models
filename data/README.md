@@ -1,6 +1,6 @@
 # Experimental data and results
 This folder contains the scenarios used for the experimental evaluation in the thesis TODO (add link) and the results of the evaluation. It also contains some simple locations and scenarios that were used for testing.
-Most of the data folders also contain a script that was used to combine the results into one csv file, and a folder called scenarios_eval which are the scenarios in the format for the evaluator.
+Most of the data folders also contain a script that was used to combine the results into one csv file, and a folder called scenarios_eval which are the scenarios in the format for the evaluator. The resulting plots and the code used to create these plots is also in this folder.
 
 Folders:
 - [data_milp](https://github.com/Robust-Rail-NL/mathematical-models/data/data_milp): this folder contains the scenarios and results for the evalution of [MILP.py](https://github.com/Robust-Rail-NL/mathematical-models/src/gurobi/MILP.py).
@@ -19,5 +19,7 @@ and [shortest_path_continuous.py](https://github.com/Robust-Rail-NL/mathematical
 It also contains [location_solver.json](https://github.com/Robust-Rail-NL/mathematical-models/data/locations/location_solver.json) which is the location file used for the continuous LS, ADMM and SP experiments,
 and [binckhorst_split/location_solver.json](https://github.com/Robust-Rail-NL/mathematical-models/data/locations/binckhorst_split/location_solver.json) which is the location file used for discrete LS in which tracks are split into multiple
 tracks of 100 meters long.
-- [scenarios](https://github.com/Robust-Rail-NL/mathematical-models/data/locations): this folder contains a number of scenarios taking place at the locations in the locations folder that were used for testing.
+- [scenarios](https://github.com/Robust-Rail-NL/mathematical-models/data/scenarios): this folder contains a number of scenarios taking place at the locations in the locations folder that were used for testing.
 Most of these were created before restricting the model to only allow one movement at the same time and thus may have a to small time window to have a feasible solution.
+- [plots](https://github.com/Robust-Rail-NL/mathematical-models/data/plots): this folder contains the resulting plots created from the results. The figures with "common" in the name are plots in which the average computation time of only commonly solved instances is used.
+- [plotting_code](https://github.com/Robust-Rail-NL/mathematical-models/data/plotting_code): this folder contains the code used to create the plots.
