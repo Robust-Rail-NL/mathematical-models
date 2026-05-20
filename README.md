@@ -1,2 +1,2 @@
 # mathematical-models
-Mathematical models for solving the Train Unit Shunting (and Servicing) Problem.
+This repository contains different approach that solve a mathematical model of the Train Unit Shunting (and Servicing) Problem. These approach were used in the thesis TODO (add link). The different approach are located in the ```src``` folder. The ```data``` folder contains the data and results of the experimental evaluation of the different approaches. The ```experiments``` folder contains the scripts used for running the experiments. For more details on the exact contents of each folder see there respective ```READMEs```.
