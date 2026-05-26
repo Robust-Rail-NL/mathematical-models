@@ -1,0 +1,158 @@
+{
+    "trackParts": [
+        {
+            "id": "10",
+            "type": "Bumper",
+            "aSide": [
+                "1"
+            ],
+            "name": "bumper_10",
+            "bSide": [],
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "11",
+            "type": "Bumper",
+            "aSide": [],
+            "bSide": [
+                "5"
+            ],
+            "name": "bumper_11",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "1",
+            "aSide": [
+                "20"
+            ],
+            "bSide": [
+                "10"
+            ],
+            "length": 100.0,
+            "name": "rail_1",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "2",
+            "aSide": [
+                "21"
+            ],
+            "bSide": [
+                "20"
+            ],
+            "length": 100.0,
+            "name": "rail_2",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "3",
+            "aSide": [
+                "22"
+            ],
+            "bSide": [
+                "20"
+            ],
+            "length": 100.0,
+            "name": "rail_3",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "4",
+            "aSide": [
+                "22"
+            ],
+            "bSide": [
+                "21"
+            ],
+            "length": 100.0,
+            "name": "rail_4",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "5",
+            "aSide": [
+                "11"
+            ],
+            "bSide": [
+                "22"
+            ],
+            "length": 100.0,
+            "name": "rail_5",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "20",
+            "type": "Switch",
+            "aSide": [
+                "2",
+                "3"
+            ],
+            "bSide": [
+                "1"
+            ],
+            "name": "switch_20",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "21",
+            "type": "Switch",
+            "aSide": [
+                "4"
+            ],
+            "bSide": [
+                "2"
+            ],
+            "name": "switch_21",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "22",
+            "type": "Switch",
+            "aSide": [
+                "5"
+            ],
+            "bSide": [
+                "3",
+                "4"
+            ],
+            "name": "switch_22",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        }
+    ],
+    "facilities": [
+        {
+            "id": "20",
+            "type": "Reinigingsperron",
+            "relatedTrackParts": [
+                "1"
+            ],
+            "taskTypes": [
+                {
+                    "other": "Reinigingsperron"
+                }
+            ],
+            "simultaneousUsageCount": 1
+        }
+    ],
+    "taskTypes": []
+}

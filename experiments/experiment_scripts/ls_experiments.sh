@@ -1,0 +1,130 @@
+#!/bin/bash
+#SBATCH --job-name="rail_solver"
+#SBATCH --time=03:00:00
+#SBATCH --partition=compute
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=3968MB
+#SBATCH --account=education-eemcs-msc-cs
+#SBATCH --array=0-65
+
+#SBATCH --output=logs_ls_120/out_%A_%a.txt
+#SBATCH --error=logs_ls_120/err_%A_%a.txt
+
+# ------------------ SETUP ------------------
+
+module load 2025
+export DOTNET_ROOT=$HOME/dotnet
+export PATH=$DOTNET_ROOT:$PATH
+
+PROJECT_DIR=~/Robust-Rail-NL/robust-rail-solver/ServiceSiteScheduling/publish
+CONFIG_TEMPLATE=~/Robust-Rail-NL/robust-rail-solver/ServiceSiteScheduling/config_cluster.yaml
+SCENARIO_LIST=~/Robust-Rail-NL/mathematical-models/experiments/experiment_scripts/scenarios_types.txt
+
+PLAN_DIR=~/Robust-Rail-NL/mathematical-models/data/data_time_window_continuous/local_search_plans_time_25
+mkdir -p $PLAN_DIR
+
+BATCH_SIZE=5
+
+cd $PROJECT_DIR
+
+# ------------------ COMPUTE RANGE ------------------
+
+START=$((SLURM_ARRAY_TASK_ID * BATCH_SIZE + 1))
+END=$((START + BATCH_SIZE - 1))
+
+RESULT_FILE=~/Robust-Rail-NL/mathematical-models/results_ls_continuous_time_20/results_${SLURM_ARRAY_TASK_ID}.csv
+echo "scenario,cost_line,time_line,plan_file" > $RESULT_FILE
+
+# ------------------ LOOP OVER SCENARIOS ------------------
+
+for i in $(seq $START $END)
+do
+    SCENARIO=$(sed -n "${i}p" $SCENARIO_LIST)
+
+    if [ -z "$SCENARIO" ]; then
+        break
+    fi
+
+    echo "Running scenario: $SCENARIO"
+
+    TMP_CONFIG=tmp_config_${SLURM_ARRAY_TASK_ID}_${i}.yaml
+    OUTPUT_FILE=tmp_output_${SLURM_ARRAY_TASK_ID}_${i}.txt
+
+    # ------------------ CREATE PLAN NAME ------------------
+
+    BASENAME=$(basename "$SCENARIO" .json)
+
+    # Remove prefixes
+    BASENAME=${BASENAME/_solver/}
+    BASENAME=${BASENAME/scenario_/}
+
+    PLAN_FILE=$PLAN_DIR/plan_${BASENAME}.json
+
+    # ------------------ CREATE CONFIG ------------------
+
+    cp $CONFIG_TEMPLATE $TMP_CONFIG
+    if [ ! -f "$TMP_CONFIG" ]; then
+      echo "ERROR: Config $TMP_CONFIG not found"
+      exit 1
+    fi
+
+    # Solver scenario
+    sed -i "s|ScenarioPath:.*|ScenarioPath: \"$SCENARIO\"|" $TMP_CONFIG
+
+    # Evaluation scenario
+    # EVAL_SCENARIO=$(echo "$SCENARIO" | sed 's/_solver//')
+    # EVAL_SCENARIO=$(echo "$SCENARIO" \
+    # | sed 's|scenarios_solver_types|scenarios_eval_type|' \
+    # | sed 's|scenario_solver_|scenario_|')
+
+    echo "SCENARIO: $SCENARIO"
+    # echo "EVAL_SCENARIO: $EVAL_SCENARIO"
+    # sed -i "s|PathScenario:.*|    PathScenario: \"$EVAL_SCENARIO\"|" $TMP_CONFIG
+    # sed -i "s|^\([[:space:]]*\)PathScenario:.*|\1PathScenario: \"$EVAL_SCENARIO\"|" $TMP_CONFIG
+
+    # Plan paths
+    sed -i "s|PlanPath:.*|PlanPath: \"$PLAN_FILE\"|" $TMP_CONFIG
+    # sed -i "s|PathPlan:.*|    PathPlan: \"$PLAN_FILE\"|" $TMP_CONFIG
+    # sed -i "s|^\([[:space:]]*\)PathPlan:.*|\1PathPlan: \"$PLAN_FILE\"|" $TMP_CONFIG
+
+    # ------------------ RUN SOLVER ------------------
+
+    timeout 1900s srun ./ServiceSiteScheduling --config=$TMP_CONFIG > $OUTPUT_FILE
+
+    # Extract all cost lines
+    COST_LINES=$(grep "Cost of next node:" $OUTPUT_FILE)
+    # Extract corresponding time elapsed lines
+    TIME_LINES=$(grep "Time elapsed:" $OUTPUT_FILE)
+
+    # Convert to arrays
+    readarray -t COST_ARRAY <<< "$COST_LINES"
+    readarray -t TIME_ARRAY <<< "$TIME_LINES"
+
+    # Store each intermediate solution
+    for idx in "${!COST_ARRAY[@]}"; do
+        COST_LINE="${COST_ARRAY[$idx]}"
+        TIME_LINE="${TIME_ARRAY[$idx]}"
+        echo "\"$SCENARIO\",\"$COST_LINE\",\"$TIME_LINE\",\"$PLAN_FILE\"" >> $RESULT_FILE
+    done
+
+    # ------------------ EXTRACT FINAL RESULTS ------------------
+
+    # Last cost line
+    COST_LINE=$(grep "Cost of solution:" $OUTPUT_FILE | tail -1)
+    # Total computation time
+    TIME_LINE=$(grep "Total computation time" $OUTPUT_FILE | tail -1)
+    [ -z "$COST_LINE" ] && COST_LINE="NO_COST_FOUND"
+    [ -z "$TIME_LINE" ] && TIME_LINE="NO_TIME_FOUND"
+    [ ! -f "$PLAN_FILE" ] && PLAN_FILE="NO_PLAN_CREATED"
+
+    # Store final solution as well
+    echo "\"$SCENARIO\",\"$COST_LINE\",\"$TIME_LINE\",\"$PLAN_FILE\"" >> $RESULT_FILE
+
+    # Cleanup
+    rm $TMP_CONFIG
+    rm $OUTPUT_FILE
+
+done
+
+echo "Task ${SLURM_ARRAY_TASK_ID} finished."

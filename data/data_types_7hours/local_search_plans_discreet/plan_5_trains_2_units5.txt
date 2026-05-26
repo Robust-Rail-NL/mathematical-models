@@ -1,0 +1,5 @@
+3 : 906a (Arrival 01:18 - 01:18), 112 (parking 01:20 - 06:04), 906a (departure 06:06 - 06:06)
+2 : 906a (Arrival 01:24 - 01:24), 52 (parking 01:25 - 04:59), 906a (departure 05:00 - 05:00)
+1 : 906a (Arrival 00:30 - 00:30), 53 (parking 00:31 - 06:17), 906a (departure 06:18 - 06:18)
+0 : 906a (Arrival 00:42 - 00:42), 1412 (parking 00:47 - 05:37), 906a (departure 05:42 - 05:42)
+4 : 906a (Arrival 00:48 - 00:48), 113 (parking 00:51 - 06:09), 906a (departure 06:12 - 06:12)

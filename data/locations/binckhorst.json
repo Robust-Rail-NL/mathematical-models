@@ -1,0 +1,1022 @@
+{
+    "trackParts": [
+        {
+            "id": "101",
+            "type": "Bumper",
+            "aSide": [
+                "15"
+            ],
+            "name": "bumper_101",
+            "bSide": [],
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "102",
+            "type": "Bumper",
+            "aSide": [],
+            "name": "bumper_102",
+            "bSide": ["9062"],
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "103",
+            "type": "Bumper",
+            "aSide": [],
+            "name": "bumper_103",
+            "bSide": ["1044"],
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "104",
+            "type": "Bumper",
+            "aSide": [],
+            "name": "bumper_104",
+            "bSide": ["632"],
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "15",
+            "aSide": [
+                "963"
+            ],
+            "bSide": [
+                "101"
+            ],
+            "length": 1.0,
+            "name": "rail_15",
+            "parkingAllowed": false,
+            "type": "RailRoad",
+            "sawMovementAllowed": false
+        },
+        {
+            "id": "906",
+            "aSide": [
+                "9062"
+            ],
+            "bSide": [
+                "963"
+            ],
+            "length": 100.0,
+            "name": "rail_906",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "9062",
+            "aSide": [
+                "102"
+            ],
+            "bSide": [
+                "906"
+            ],
+            "length": 100.0,
+            "name": "rail_9062",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "52",
+            "aSide": [
+                "522"
+            ],
+            "bSide": [
+                "963"
+            ],
+            "length": 100.0,
+            "name": "rail_52",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "522",
+            "aSide": [
+                "523"
+            ],
+            "bSide": [
+                "52"
+            ],
+            "length": 100.0,
+            "name": "rail_522",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "523",
+            "aSide": [
+                "524"
+            ],
+            "bSide": [
+                "522"
+            ],
+            "length": 100.0,
+            "name": "rail_523",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "524",
+            "aSide": [
+                "555"
+            ],
+            "bSide": [
+                "523"
+            ],
+            "length": 100.0,
+            "name": "rail_524",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "53",
+            "aSide": [
+                "532"
+            ],
+            "bSide": [
+                "963"
+            ],
+            "length": 100.0,
+            "name": "rail_53",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "532",
+            "aSide": [
+                "533"
+            ],
+            "bSide": [
+                "53"
+            ],
+            "length": 100.0,
+            "name": "rail_532",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "533",
+            "aSide": [
+                "534"
+            ],
+            "bSide": [
+                "532"
+            ],
+            "length": 100.0,
+            "name": "rail_533",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "534",
+            "aSide": [
+                "555"
+            ],
+            "bSide": [
+                "533"
+            ],
+            "length": 100.0,
+            "name": "rail_534",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "54",
+            "aSide": [
+                "542"
+            ],
+            "bSide": [
+                "963"
+            ],
+            "length": 100.0,
+            "name": "rail_54",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "542",
+            "aSide": [
+                "543"
+            ],
+            "bSide": [
+                "54"
+            ],
+            "length": 100.0,
+            "name": "rail_542",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "543",
+            "aSide": [
+                "555"
+            ],
+            "bSide": [
+                "542"
+            ],
+            "length": 100.0,
+            "name": "rail_543",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "55",
+            "aSide": [
+                "552"
+            ],
+            "bSide": [
+                "963"
+            ],
+            "length": 100.0,
+            "name": "rail_55",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "552",
+            "aSide": [
+                "553"
+            ],
+            "bSide": [
+                "55"
+            ],
+            "length": 100.0,
+            "name": "rail_552",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "553",
+            "aSide": [
+                "555"
+            ],
+            "bSide": [
+                "552"
+            ],
+            "length": 100.0,
+            "name": "rail_553",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "56",
+            "aSide": [
+                "562"
+            ],
+            "bSide": [
+                "963"
+            ],
+            "length": 100.0,
+            "name": "rail_56",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "562",
+            "aSide": [
+                "558"
+            ],
+            "bSide": [
+                "56"
+            ],
+            "length": 100.0,
+            "name": "rail_562",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "57",
+            "aSide": [
+                "572"
+            ],
+            "bSide": [
+                "963"
+            ],
+            "length": 100.0,
+            "name": "rail_57",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "572",
+            "aSide": [
+                "558"
+            ],
+            "bSide": [
+                "57"
+            ],
+            "length": 100.0,
+            "name": "rail_572",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "58",
+            "aSide": [
+                "582"
+            ],
+            "bSide": [
+                "963"
+            ],
+            "length": 100.0,
+            "name": "rail_58",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "582",
+            "aSide": [
+                "558"
+            ],
+            "bSide": [
+                "58"
+            ],
+            "length": 100.0,
+            "name": "rail_582",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "59",
+            "aSide": [
+                "592"
+            ],
+            "bSide": [
+                "963"
+            ],
+            "length": 100.0,
+            "name": "rail_59",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "592",
+            "aSide": [
+                "558"
+            ],
+            "bSide": [
+                "59"
+            ],
+            "length": 100.0,
+            "name": "rail_592",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "556",
+            "aSide": [
+                "557"
+            ],
+            "bSide": [
+                "555"
+            ],
+            "length": 0.0,
+            "name": "rail_556",
+            "parkingAllowed": false,
+            "type": "RailRoad",
+            "sawMovementAllowed": false
+        },
+        {
+            "id": "559",
+            "aSide": [
+                "560"
+            ],
+            "bSide": [
+                "558"
+            ],
+            "length": 0.0,
+            "name": "rail_559",
+            "parkingAllowed": false,
+            "type": "RailRoad",
+            "sawMovementAllowed": false
+        },
+        {
+            "id": "104",
+            "aSide": [
+                "1042"
+            ],
+            "bSide": [
+                "557",
+                "560"
+            ],
+            "length": 0.0,
+            "name": "rail_104",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "1042",
+            "aSide": [
+                "1043"
+            ],
+            "bSide": [
+                "104"
+            ],
+            "length": 0.0,
+            "name": "rail_1042",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "1043",
+            "aSide": [
+                "1044"
+            ],
+            "bSide": [
+                "1042"
+            ],
+            "length": 0.0,
+            "name": "rail_1043",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "1044",
+            "aSide": [
+                "103"
+            ],
+            "bSide": [
+                "1043"
+            ],
+            "length": 0.0,
+            "name": "rail_1044",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "60",
+            "aSide": [
+                "602"
+            ],
+            "bSide": [
+                "557",
+                "560"
+            ],
+            "length": 0.0,
+            "name": "rail_60",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "602",
+            "aSide": [
+                "964"
+            ],
+            "bSide": [
+                "60"
+            ],
+            "length": 0.0,
+            "name": "rail_602",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "61",
+            "aSide": [
+                "612"
+            ],
+            "bSide": [
+                "560"
+            ],
+            "length": 0.0,
+            "name": "rail_61",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "612",
+            "aSide": [
+                "964"
+            ],
+            "bSide": [
+                "61"
+            ],
+            "length": 0.0,
+            "name": "rail_612",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "62",
+            "aSide": [
+                "622"
+            ],
+            "bSide": [
+                "560"
+            ],
+            "length": 0.0,
+            "name": "rail_62",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "622",
+            "aSide": [
+                "964"
+            ],
+            "bSide": [
+                "62"
+            ],
+            "length": 0.0,
+            "name": "rail_622",
+            "parkingAllowed": true,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "63",
+            "aSide": [
+                "632"
+            ],
+            "bSide": [
+                "964"
+            ],
+            "length": 0.0,
+            "name": "rail_63",
+            "parkingAllowed": false,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },
+        {
+            "id": "632",
+            "aSide": [
+                "104"
+            ],
+            "bSide": [
+                "63"
+            ],
+            "length": 0.0,
+            "name": "rail_632",
+            "parkingAllowed": false,
+            "type": "RailRoad",
+            "sawMovementAllowed": true
+        },        
+        {
+            "id": "963",
+            "type": "Switch",
+            "aSide": [
+                "906",
+                "52",
+                "53",
+                "54",
+                "55",
+                "56",
+                "57",
+                "58",
+                "59"
+            ],
+            "bSide": [
+                "15"
+            ],
+            "name": "switch_963",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "555",
+            "type": "Switch",
+            "aSide": [
+                "556"
+            ],
+            "bSide": [
+                "524",
+                "534",
+                "543",
+                "553"
+            ],
+            "name": "switch_555",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "557",
+            "type": "Switch",
+            "aSide": [
+                "104",
+                "60"
+            ],
+            "bSide": [
+                "556"
+            ],
+            "name": "switch_557",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "558",
+            "type": "Switch",
+            "aSide": [
+                "559"
+            ],
+            "bSide": [
+                "562",
+                "572",
+                "582",
+                "592"
+            ],
+            "name": "switch_558",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "560",
+            "type": "Switch",
+            "aSide": [
+                "60",
+                "61",
+                "62",
+                "104"
+            ],
+            "bSide": [
+                "559"
+            ],
+            "name": "switch_560",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "964",
+            "type": "Switch",
+            "aSide": [
+                "63"
+            ],
+            "bSide": [
+                "602",
+                "612",
+                "622"
+            ],
+            "name": "switch_964",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "906_9062",
+            "type": "Switch",
+            "aSide": [
+                "9062"
+            ],
+            "bSide": [
+                "906"
+            ],
+            "name": "switch_906_9062",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "52_522",
+            "type": "Switch",
+            "aSide": [
+                "522"
+            ],
+            "bSide": [
+                "52"
+            ],
+            "name": "switch_52_522",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "522_523",
+            "type": "Switch",
+            "aSide": [
+                "523"
+            ],
+            "bSide": [
+                "522"
+            ],
+            "name": "switch_522_523",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "523_524",
+            "type": "Switch",
+            "aSide": [
+                "524"
+            ],
+            "bSide": [
+                "523"
+            ],
+            "name": "switch_523_524",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "53_532",
+            "type": "Switch",
+            "aSide": [
+                "532"
+            ],
+            "bSide": [
+                "53"
+            ],
+            "name": "switch_53_532",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "532_533",
+            "type": "Switch",
+            "aSide": [
+                "533"
+            ],
+            "bSide": [
+                "532"
+            ],
+            "name": "switch_532_533",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "533_534",
+            "type": "Switch",
+            "aSide": [
+                "534"
+            ],
+            "bSide": [
+                "533"
+            ],
+            "name": "switch_533_534",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "54_542",
+            "type": "Switch",
+            "aSide": [
+                "542"
+            ],
+            "bSide": [
+                "54"
+            ],
+            "name": "switch_54_542",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "542_543",
+            "type": "Switch",
+            "aSide": [
+                "543"
+            ],
+            "bSide": [
+                "542"
+            ],
+            "name": "switch_542_543",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "55_552",
+            "type": "Switch",
+            "aSide": [
+                "552"
+            ],
+            "bSide": [
+                "55"
+            ],
+            "name": "switch_55_552",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "552_553",
+            "type": "Switch",
+            "aSide": [
+                "553"
+            ],
+            "bSide": [
+                "552"
+            ],
+            "name": "switch_552_553",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "56_562",
+            "type": "Switch",
+            "aSide": [
+                "562"
+            ],
+            "bSide": [
+                "56"
+            ],
+            "name": "switch_56_562",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "57_572",
+            "type": "Switch",
+            "aSide": [
+                "572"
+            ],
+            "bSide": [
+                "57"
+            ],
+            "name": "switch_57_572",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "58_582",
+            "type": "Switch",
+            "aSide": [
+                "582"
+            ],
+            "bSide": [
+                "58"
+            ],
+            "name": "switch_58_582",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "59_592",
+            "type": "Switch",
+            "aSide": [
+                "592"
+            ],
+            "bSide": [
+                "59"
+            ],
+            "name": "switch_59_592",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "104_1042",
+            "type": "Switch",
+            "aSide": [
+                "1042"
+            ],
+            "bSide": [
+                "104"
+            ],
+            "name": "switch_104_1042",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "1042_1043",
+            "type": "Switch",
+            "aSide": [
+                "1043"
+            ],
+            "bSide": [
+                "1042"
+            ],
+            "name": "switch_1042_1043",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "1043_1044",
+            "type": "Switch",
+            "aSide": [
+                "1044"
+            ],
+            "bSide": [
+                "1043"
+            ],
+            "name": "switch_1043_1044",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "60_602",
+            "type": "Switch",
+            "aSide": [
+                "602"
+            ],
+            "bSide": [
+                "60"
+            ],
+            "name": "switch_60_602",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "61_612",
+            "type": "Switch",
+            "aSide": [
+                "612"
+            ],
+            "bSide": [
+                "61"
+            ],
+            "name": "switch_61_612",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "62_622",
+            "type": "Switch",
+            "aSide": [
+                "622"
+            ],
+            "bSide": [
+                "62"
+            ],
+            "name": "switch_62_622",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        },
+        {
+            "id": "63_632",
+            "type": "Switch",
+            "aSide": [
+                "632"
+            ],
+            "bSide": [
+                "63"
+            ],
+            "name": "switch_63_632",
+            "length": 0.0,
+            "sawMovementAllowed": false,
+            "parkingAllowed": false
+        }
+    ],
+    "facilities": [
+        {
+            "id": "25",
+            "type": "Reinigingsperron",
+            "relatedTrackParts": [
+                "1"
+            ],
+            "taskTypes": [
+                {
+                    "other": "Reinigingsperron"
+                }
+            ],
+            "simultaneousUsageCount": 1
+        }
+    ],
+    "taskTypes": []
+}
