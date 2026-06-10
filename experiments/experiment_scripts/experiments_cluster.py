@@ -1,7 +1,11 @@
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "src"))
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "src", "gurobi"))
+
 import gc
 import Lagrangian as L
 import MILP as M
-import ADMM_constraint_edges as A
 import shortest_path as SP
 import shortest_path_continuous as SPc
 import csv
@@ -9,8 +13,6 @@ import os
 from pathlib import Path
 import random
 import math
-
-# Imports need to be fixed
 
 random.seed(1)
 
@@ -40,10 +42,10 @@ def compute_number_of_movements(x_values):
 
 algo = SPc.Lagrangian
 
-location = '../../data/locations/location_solver.json'
-rho_string = "0.5"
+location = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "locations", "location_solver.json")
 algo_string = "sp"
 rho = 0.5
+rho_string = str(rho).replace(".", "")
 time_out = 1800
 
 GROUP_SIZE = 5
@@ -52,11 +54,8 @@ task_id = int(os.environ.get("SLURM_ARRAY_TASK_ID", 0))
 
 
 scenarios = []
-input_folder = Path(f"../../data_types_7hours/scenarios_solver/")
+input_folder = Path(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "data_types_7hours", "scenarios_solver"))
 
-# Folders to store results and solutions
-results_file = f"results_360_sp_c/{algo_string}_rho{rho_string}"
-solution_file = f"solutions_360_sp_c/{algo_string}_rho{rho_string}"
 
 for file_path in sorted(input_folder.iterdir(), key=lambda p: p.name):
   if file_path.is_file() and file_path.suffix == ".json":
@@ -71,17 +70,23 @@ subset = scenarios[start_idx:end_idx]
 
 print(f"Task {task_id} processing scenarios {start_idx} to {end_idx - 1}")
 
-results_file_new = f"{results_file}_task{task_id}.csv"
-solution_file_new = f"{solution_file}_task{task_id}"
+# Folders to store results and solutions
+output_folder = os.path.join(os.path.dirname(__file__), "output")
+result_folder = os.path.join(output_folder, "results_360_sp_c")
+solution_folder = os.path.join(output_folder, "solutions_360_sp_c")
+results_file = os.path.join(result_folder, f"{algo_string}_rho{rho_string}_task{task_id}.csv")
+solution_file = os.path.join(solution_folder, f"{algo_string}_rho{rho_string}_task{task_id}")
+os.makedirs(result_folder, exist_ok=True)
+os.makedirs(solution_folder, exist_ok=True)
 
-with open(results_file_new, mode="w", newline="") as file:
+with open(results_file, mode="w", newline="") as file:
   writer = csv.writer(file)
   writer.writerow(["num_trains", "type", "k", "time", "time_first_solution", "solution_found", "num_movements"])
 
   for loc, scenario in subset:
     print(f"Processing scenario {scenario}")
 
-    solution_file_new2 = f"{solution_file_new}_{os.path.basename(scenario)}"
+    current_solution_file = f"{solution_file}_{os.path.basename(scenario)}.csv"
     nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, macro_edge_nodes, node_to_idx, edge_to_idx, agent_to_idx, edge_group_matrix = SPc.setup(loc, scenario)
     k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = SPc.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho=0.5, time_out=1800, macro_edge_nodes=macro_edge_nodes, node_to_idx=node_to_idx, edge_to_idx=edge_to_idx, agent_to_idx=agent_to_idx, edge_group_matrix=edge_group_matrix) 
 
@@ -91,7 +96,7 @@ with open(results_file_new, mode="w", newline="") as file:
     
     writer.writerow([num_trains, type_category, k, time, time, solution_found, num_movements])
 
-    with open(solution_file_new2, mode="w", newline="") as s_file:
+    with open(current_solution_file, mode="w", newline="") as s_file:
       solution_writer = csv.writer(s_file)
 
       solution_writer.writerow(["agent", "i", "j", "t"])

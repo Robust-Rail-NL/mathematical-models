@@ -1,21 +1,27 @@
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "src"))
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "src", "gurobi"))
+
 import gc
 import MILP as M
 import csv
-import os
 from pathlib import Path
 import random
-import math
 
 random.seed(1)
+
 algo = M.solve
-location = '../../data/locations/location_solver.json'
+location = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "locations", "location_solver.json")
 time_out = 1800
 GROUP_SIZE = 5
 
 task_id = int(os.environ.get("SLURM_ARRAY_TASK_ID", 0))
+algo_string = "MILP"
 
 scenarios = []
-input_folder = Path(f"../../data/data_milp/scenarios_solver/")
+input_folder = Path(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "data_milp", "scenarios_solver"))
+
 results_file = f"results_milp/MILP"
 for file_path in sorted(input_folder.iterdir(), key=lambda p: p.name):
   if file_path.is_file() and file_path.suffix == ".json":
@@ -25,16 +31,18 @@ num_scenarios = len(scenarios)
 
 start_idx = task_id * GROUP_SIZE
 end_idx = min(start_idx + GROUP_SIZE, num_scenarios)
-
-
 subset = scenarios[start_idx:end_idx]
 
 print(f"Task {task_id} processing scenarios {start_idx} to {end_idx - 1}")
 
-results_file_new = f"{results_file}_task{task_id}.csv"
 
+# Folders to store results and solutions
+output_folder = os.path.join(os.path.dirname(__file__), "output")
+result_folder = os.path.join(output_folder, "results_milp")
+results_file = os.path.join(result_folder, f"{algo_string}_task{task_id}.csv")
+os.makedirs(result_folder, exist_ok=True)
 
-with open(results_file_new, mode="w", newline="") as file:
+with open(results_file, mode="w", newline="") as file:
   writer = csv.writer(file)
   writer.writerow(["num_trains", "time", "time_first_solution", "solution_found"])
 

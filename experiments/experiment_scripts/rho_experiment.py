@@ -1,13 +1,16 @@
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "src"))
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "src", "gurobi"))
+
 import gc
-import shortest_path2 as SP
+from pathlib import Path
+import shortest_path as SP
 import Lagrangian as L
 import MILP as M
-import ADMM_constraint_edges as A
 import csv
-import os
 from pathlib import Path
 import random
-import math
 
 random.seed(1)
 
@@ -20,7 +23,7 @@ def compute_number_of_movements(x_values):
 
 algo = SP.Lagrangian
 
-location = '../../data/locations/location_solver.json'
+location = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "locations", "location_solver.json")
 
 # rho_list = [0.1, 0.5, 1, 1.5, 2, 3]
 n_list = [0.1, 0.5, 1, 1.5, 2, 3]
@@ -33,12 +36,9 @@ task_id = int(os.environ.get("SLURM_ARRAY_TASK_ID", 0))
 
 algo_string = "ADMM"
 
-base_results_dir = Path("results_n_experiment")
-base_results_dir.mkdir(exist_ok=True)
-
 # --- Load scenarios ---
 scenarios = []
-input_folder = Path(f"../../data/data_rho_n/scenarios_solver/")
+input_folder = Path(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "data_rho_n", "scenarios_solver"))
 
 for file_path in sorted(input_folder.iterdir(), key=lambda p: p.name):
   if file_path.is_file() and file_path.suffix == ".json":
@@ -60,7 +60,12 @@ subset = jobs[start_idx:end_idx]
 print(f"Task {task_id} processing jobs {start_idx} to {end_idx - 1}")
 
 # --- One output file per task ---
-results_file = base_results_dir/f"{algo_string}_task{task_id}.csv"
+
+# Folders to store results and solutions
+output_folder = os.path.join(os.path.dirname(__file__), "output")
+result_folder = os.path.join(output_folder, "results_360_sp_c")
+results_file = os.path.join(result_folder, f"{algo_string}_task{task_id}.csv")
+os.makedirs(result_folder, exist_ok=True)
 
 with open(results_file, mode="w", newline="") as file:
   writer = csv.writer(file)
@@ -70,7 +75,7 @@ with open(results_file, mode="w", newline="") as file:
     print(f"Processing scenario {scenario} with n={n}")
 
     nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values = SP.setup(loc, scenario)
-    k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = SP.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out, n)
+    k, time, x_values_filtered, p_values_filtered, solution_found, conflict_list = SP.Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out)
 
     num_trains = len(agents)
     num_movements = compute_number_of_movements(x_values_filtered)

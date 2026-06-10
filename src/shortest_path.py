@@ -132,7 +132,7 @@ def extract_path(a, path):
 
   return p_values, x_values
 
-# Main loop, initailize, solve and update penalties
+# Main loop, initialize, solve and update penalties
 def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho, time_out):
   n_iter = 1000000
   solution_found = False
