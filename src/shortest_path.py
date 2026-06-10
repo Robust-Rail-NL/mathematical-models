@@ -5,10 +5,16 @@ import load_location as ll
 import load_scenario as ls
 import random
 import time
-import math
 from collections import defaultdict
+import os
+import argparse
 
-random.seed(1)
+parser = argparse.ArgumentParser("ALR with Shortest Path")
+parser.add_argument("-r", "--random-seed", help="An integer random seed (default=42).", type=int, default=42, required=False)
+parser.add_argument("-l", "--location", help="The name of the location file (default folder is data/location unless specified otherwise). Default=location_solver.json.", type=str, default="location_solver.json", required=False)
+parser.add_argument("-s", "--scenario", help="The path to the scenario file. Default='data/data_types_7hours/scenarios_solver/scenario_solver_25_trains_1_units30.json'.", type=str, default="data/data_types_7hours/scenarios_solver/scenario_solver_25_trains_1_units30.json", required=False)
+parser.add_argument("-t", "--timeout", help="Timeout (integer) in seconds. (default=1800)", type=int, default=1800, required=False)
+parser.add_argument("-p", "--rho", help="Rho (float between 0 and 1). (default=0.5)", type=float, default=0.5, required=False)
 
 # Load all data and initalize penalty data structures
 def setup(location, scenario):
@@ -155,7 +161,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
   x_sum = {(e, t): 0 for e in edges for t in time_window}
   # Each iteration solve for each agent and update penalties
   for k in range(n_iter):
-    print(k)
+    print("iteration", k)
     # Solve for each agent and update admm penalties before solving
     for a in agents:
       node_admm_values, edge_admm_values = update_admm_values(a, nodes, conflict_edges, time_window, x_values, p_values, node_admm_values, edge_admm_values, rho, x_sum, p_sum)
@@ -195,7 +201,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
           mu_values[g,t] = max(0.0, mu_values[g,t] + penalty)
     conflict_list.append((conflicts, time.time() - start_time))
     print("conflicts", conflicts)
-    print(time.time() - start_time)
+    print("time", time.time() - start_time)
     if time.time() - start_time > time_out:
       print("TIME LIMIT REACHED")
       break
@@ -205,7 +211,7 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
       break
   end_time = time.time()
   print("Total time (seconds):", end_time - start_time)
-  print(k)
+  print("final iteration", k)
   # Store solution
   p_values_filtered = []
   for agent in agents:
@@ -223,9 +229,24 @@ def Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, 
   return k, end_time - start_time, x_values_filtered, p_values_filtered, solution_found, conflict_list
 
 if __name__ == "__main__":
-  location = '../data/locations/location_solver.json'
-  scenario = '../data/data_types_7hours/scenarios_solver/scenario_solver_25_trains_1_units30.json'
-  time_out = 1800
-  rho = 0.5
+  args = parser.parse_args()
+  random.seed(args.random_seed)
+  time_out = args.timeout
+  rho = args.rho
+  location = args.location
+  if not os.path.isfile(location):
+    location = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "locations", location)
+    if not os.path.isfile(location):
+      print(f"ERROR: could not find location {location}")
+      exit(1)
+  print("Loaded location", location)
+  scenario = args.scenario
+  if not os.path.isfile(scenario):
+    if os.path.isfile(os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", scenario)):
+      scenario = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", scenario)
+    else:
+      print(f"ERROR: could not find scenario {scenario}")
+      exit(1)
+  print("Loaded scenario", scenario)
   nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values = setup(location, scenario)
   k, time_total, x_values_filtered, p_values_filtered, solution_found, conflict_list = Lagrangian(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, train_types, time_window, lambda_values, mu_values, node_admm_values, edge_admm_values, rho=0.5, time_out=1800)

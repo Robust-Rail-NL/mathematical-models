@@ -8,11 +8,15 @@ import load_location as ll
 import load_scenario as ls
 import time
 from gurobipy import GRB
-import os
-
 import random
+import os
+import argparse
 
-random.seed(1)
+parser = argparse.ArgumentParser("MILP with Gurobi")
+parser.add_argument("-r", "--random-seed", help="An integer random seed (default=42).", type=int, default=42, required=False)
+parser.add_argument("-l", "--location", help="The name of the location file (default folder is data/location unless specified otherwise). Default=location_solver.json.", type=str, default="location_solver.json", required=False)
+parser.add_argument("-s", "--scenario", help="The path to the scenario file. Default='data/data_types_7hours/scenarios_solver/scenario_solver_25_trains_1_units30.json'.", type=str, default="data/data_types_7hours/scenarios_solver/scenario_solver_25_trains_1_units30.json", required=False)
+parser.add_argument("-t", "--timeout", help="Timeout (integer) in seconds. (default=1800)", type=int, default=1800, required=False)
 
 def objective(m):
   return sum(m.x[a, (i, j), t] for a in m.agents for t in m.time_window
@@ -59,12 +63,12 @@ def create_model(nodes, edges, conflict_edges, agents, start_nodes, arrival_time
     model.p = Var(model.agents, model.nodes, model.time_window, domain=Binary)
     model.y = Var(model.agents, model.time_window, domain=Binary)
 
-    # Objective
+    ## Objective
     model.cost = Objective(rule=objective, sense=minimize)
-    # for only feasible:
+    ## For only feasibility
     # model.cost = Objective(expr=0.0, sense=minimize)
 
-    # Constraint
+    ## Constraints
     model.initial = Constraint(model.agents, rule=c.inital_position_constraint)
     model.location = Constraint(model.agents, model.time_window, rule=c.location_constraint)
     model.node_capacity = Constraint(model.nodes, model.time_window, rule=c.node_capacity_constraint)
@@ -82,12 +86,9 @@ def solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, depar
 	model = create_model(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_window)
 	
 	# Solve using Gurobi
-	# solver = SolverFactory('gurobi')
 	solver = SolverFactory('gurobi_persistent')
 	solver.options['Seed'] = 1
-	solver.set_instance(model)
-	# solver.set_gurobi_param('Threads', 1)
-	
+	solver.set_instance(model)	
    
 	solver.set_gurobi_param('TimeLimit', time_out)
 	solver.set_callback(first_solution_callback)
@@ -121,8 +122,23 @@ def solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, depar
 	return 0, end - start, x_values_filtered, p_values_filtered, time_first_solution - start, solution_found
     
 if __name__ == "__main__":
-  location = '../../data/locations/location_solver.json'
-  scenario = '../../data/data_types_7hours/scenarios_solver/scenario_solver_5_trains_1_units30.json'
-  time_out = 1800
+  args = parser.parse_args()
+  random.seed(args.random_seed)
+  time_out = args.timeout
+  location = args.location
+  if not os.path.isfile(location):
+    location = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "locations", location)
+    if not os.path.isfile(location):
+      print(f"ERROR: could not find location {location}")
+      exit(1)
+  print("Loaded location", location)
+  scenario = args.scenario
+  if not os.path.isfile(scenario):
+    if os.path.isfile(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", scenario)):
+      scenario = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", scenario)
+    else:
+      print(f"ERROR: could not find scenario {scenario}")
+      exit(1)
+  print("Loaded scenario", scenario)
   nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types = setup(location, scenario)
   k, time, x_values_filtered, p_values_filtered, time_first_solution, solution_found = solve(nodes, edges, conflict_edges, agents, start_nodes, arrival_time, departures, start_time, end_time, train_types, time_out)
