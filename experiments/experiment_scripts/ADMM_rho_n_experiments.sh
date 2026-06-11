@@ -17,7 +17,7 @@ module load python
 module load gurobi/12.0.0
 module load pyomo
 
-cd /home/thomasverwaal/Robust-Rail-NL/mathematical-models
+cd ~/Robust-Rail-NL/mathematical-models
 source ~/pyomo_project/env/bin/activate
 
 srun python3 rho_experiment.py

@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
+repo_path="$(dirname $(realpath $file))"
+
 NUM_SEEDS=5
-TRAINS="5,10,15,20,25,30"
+TRAINS="5 10 15 20 25 30"
 
-BASE_CONFIG="../scenario-planning-inputs/Location_KleineBinckhorst/configurations/scenario_config_test.json"
-CFG_DIR="../scenario-planning-inputs/Location_KleineBinckhorst/configurations"
+BASE_CONFIG="${repo_path}/scenario-planning-inputs/Location_KleineBinckhorst/configurations/scenario_config_test.json"
+CFG_DIR="${repo_path}/scenario-planning-inputs/Location_KleineBinckhorst/configurations"
 
-EVAL_DIR="/home/thomas/projects/Robust-Rail-Nl/scenario-planning-inputs/Location_KleineBinckhorst/scenarios_eval"
-SOLVER_DIR="/home/thomas/projects/Robust-Rail-Nl/scenario-planning-inputs/Location_KleineBinckhorst/scenarios_solver"
+EVAL_DIR="${repo_path}/scenario-planning-inputs/Location_KleineBinckhorst/scenarios_eval"
+SOLVER_DIR="${repo_path}/scenario-planning-inputs/Location_KleineBinckhorst/scenarios_solver"
+
+GENERATOR_PATH="${repo_path}/robust-rail-generator/src/main.py"
 
 for n_trains in $TRAINS; do
   for ((seed=1; seed<=NUM_SEEDS; seed++)); do
@@ -17,7 +21,7 @@ for n_trains in $TRAINS; do
     jq ".seed = $seed | .number_of_trains = $n_trains" \
       "$BASE_CONFIG" > "$cfg"
 
-    python src/main.py \
+    python ${GENERATOR_PATH} \
       --config "$(basename "$cfg")" \
       --scenario-file "$scenario"
   done
@@ -28,7 +32,7 @@ mkdir -p "$EVAL_DIR"
 mkdir -p "$SOLVER_DIR"
 
 # Source directory where Python writes files
-SRC_DIR="/home/thomas/projects/Robust-Rail-Nl/scenario-planning-inputs/Location_KleineBinckhorst/scenarios"
+SRC_DIR="${repo_path}/scenario-planning-inputs/Location_KleineBinckhorst/scenarios"
 
 # Move solver files first
 mv "$SRC_DIR"/scenario_solver_*.json "$SOLVER_DIR" 2>/dev/null

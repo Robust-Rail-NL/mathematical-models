@@ -17,7 +17,7 @@ module load python
 module load gurobi/12.0.0
 module load pyomo
 
-cd /home/thomasverwaal/Robust-Rail-NL/mathematical-models
+cd ~/Robust-Rail-NL/mathematical-models
 source ~/pyomo_project/env/bin/activate
-cd /home/thomasverwaal/Robust-Rail-NL/mathematical-models/experiments/experiments_scripts
+cd ~/Robust-Rail-NL/mathematical-models/experiments/experiments_scripts
 srun python3 experiments_cluster_time.py
