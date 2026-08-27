@@ -6,13 +6,13 @@ set -euo pipefail
 NUM_SEEDS=30
 TRAINS="5 10 15 20 25 26 27 28 29 30 31 32 33"
 
-BASE_CONFIG="${repo_path}/scenario-planning-inputs/Location_KleineBinckhorst/configurations/scenario_config_test.json"
-CFG_DIR="${repo_path}/scenario-planning-inputs/Location_KleineBinckhorst/configurations"
+BASE_CONFIG="${repo_path}/robust-rail-general/Location_KleineBinckhorst/configurations/scenario_config_test.json"
+CFG_DIR="${repo_path}/robust-rail-general/Location_KleineBinckhorst/configurations"
 
-EVAL_DIR="${repo_path}/scenario-planning-inputs/Location_KleineBinckhorst/scenarios_eval"
-SOLVER_DIR="${repo_path}/scenario-planning-inputs/Location_KleineBinckhorst/scenarios_solver"
+EVAL_DIR="${repo_path}/robust-rail-general/Location_KleineBinckhorst/scenarios_eval"
+SOLVER_DIR="${repo_path}/robust-rail-general/Location_KleineBinckhorst/scenarios_solver"
 
-SRC_DIR="${repo_path}/scenario-planning-inputs/Location_KleineBinckhorst/scenarios"
+SRC_DIR="${repo_path}/robust-rail-general/Location_KleineBinckhorst/scenarios"
 
 GENERATOR_PATH="${repo_path}/robust-rail-generator/src/main.py"
 

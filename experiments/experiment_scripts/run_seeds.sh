@@ -5,11 +5,11 @@ repo_path="$(dirname $(realpath $file))"
 NUM_SEEDS=5
 TRAINS="5 10 15 20 25 30"
 
-BASE_CONFIG="${repo_path}/scenario-planning-inputs/Location_KleineBinckhorst/configurations/scenario_config_test.json"
-CFG_DIR="${repo_path}/scenario-planning-inputs/Location_KleineBinckhorst/configurations"
+BASE_CONFIG="${repo_path}/robust-rail-general/Location_KleineBinckhorst/configurations/scenario_config_test.json"
+CFG_DIR="${repo_path}/robust-rail-general/Location_KleineBinckhorst/configurations"
 
-EVAL_DIR="${repo_path}/scenario-planning-inputs/Location_KleineBinckhorst/scenarios_eval"
-SOLVER_DIR="${repo_path}/scenario-planning-inputs/Location_KleineBinckhorst/scenarios_solver"
+EVAL_DIR="${repo_path}/robust-rail-general/Location_KleineBinckhorst/scenarios_eval"
+SOLVER_DIR="${repo_path}/robust-rail-general/Location_KleineBinckhorst/scenarios_solver"
 
 GENERATOR_PATH="${repo_path}/robust-rail-generator/src/main.py"
 
@@ -32,7 +32,7 @@ mkdir -p "$EVAL_DIR"
 mkdir -p "$SOLVER_DIR"
 
 # Source directory where Python writes files
-SRC_DIR="${repo_path}/scenario-planning-inputs/Location_KleineBinckhorst/scenarios"
+SRC_DIR="${repo_path}/robust-rail-general/Location_KleineBinckhorst/scenarios"
 
 # Move solver files first
 mv "$SRC_DIR"/scenario_solver_*.json "$SOLVER_DIR" 2>/dev/null
